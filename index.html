@@ -1,0 +1,662 @@
+<!--
+================================================================================
+PROGETTO: RoCe ScriptLab - Vetrina Web Pubblica & Modulo Richieste (GitHub Pages)
+FILE: index.html
+STRUTTURA FORM:
+  1. Sezione dinamica specifica per Tab:
+     - PRIMO_CONTATTO          -> Oggetto / Argomento
+     - ASSISTENZA              -> Numero / Chiave Licenza (con lookup automatico DB)
+     - SVILUPPO_PERSONALIZZATO -> Ambito / Software + Tipo Diritti (Non Esclusivo / Esclusivo)
+     - LICENZA                 -> Nome Script / Routine + Numero Postazioni
+  2. Sezione comune Dati Scrivente:
+     - Tipologia (Privato / Azienda o Studio), Nome / Ragione Sociale, Email, Ambiente CAD / OS
+  3. Sezione comune Corpo Messaggio
+LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">RoCe ScriptLab — Routine AutoLISP, Automazione CAD &amp; Sviluppo su Misura</title>
+  <meta id="metaDesc" name="description" content="RoCe ScriptLab: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
+  <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --border: #334155;
+      --ok-bg: #064e3b;
+      --ok-text: #a7f3d0;
+      --err-bg: #7f1d1d;
+      --err-text: #fecaca;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 36px 20px 18px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .lang-btn {
+      padding: 4px 10px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 12px 20px 48px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      padding: 12px 10px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover { border-color: var(--accent); }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #062033;
+      border-color: var(--accent);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .tab-desc {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 18px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title:first-of-type { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    /* Pannelli campi specifici per ciascuna tab */
+    .tab-fields { display: none; }
+    .tab-fields.active { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #e2e8f0;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea { min-height: 115px; resize: vertical; }
+
+    .submit-btn {
+      margin-top: 18px;
+      padding: 12px 22px;
+      background: var(--accent-dark);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover { background: var(--accent); color: #062033; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .feedback {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      display: none;
+      font-size: 0.92rem;
+    }
+
+    .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok-text); }
+    .feedback.err { display: block; background: var(--err-bg); color: var(--err-text); }
+
+    footer {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 20px 32px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media (max-width: 680px) {
+      .tabs { grid-template-columns: repeat(2, 1fr); }
+      .grid, .tab-fields.active { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <span class="brand">RoCe ScriptLab</span>
+      <div class="lang-switch" role="group" aria-label="Language selector">
+        <button type="button" id="btnIT" class="lang-btn active" onclick="setLanguage('it')">IT</button>
+        <button type="button" id="btnEN" class="lang-btn" onclick="setLanguage('en')">EN</button>
+      </div>
+    </div>
+    <h1 id="mainTitle">Routine AutoLISP, Automazioni CAD e Sviluppo su Misura</h1>
+    <p id="mainSubtitle" class="subtitle">Primo contatto, assistenza tecnica, sviluppo personalizzato o richiesta licenza per postazione.</p>
+  </header>
+
+  <main>
+    <nav class="tabs" aria-label="Request sections">
+      <button type="button" class="tab-btn active" data-tab="PRIMO_CONTATTO" onclick="selectTab(this)" id="tab_PRIMO_CONTATTO">Primo contatto</button>
+      <button type="button" class="tab-btn" data-tab="ASSISTENZA" onclick="selectTab(this)" id="tab_ASSISTENZA">Assistenza</button>
+      <button type="button" class="tab-btn" data-tab="SVILUPPO_PERSONALIZZATO" onclick="selectTab(this)" id="tab_SVILUPPO_PERSONALIZZATO">Sviluppo personalizzato</button>
+      <button type="button" class="tab-btn" data-tab="LICENZA" onclick="selectTab(this)" id="tab_LICENZA">Licenza</button>
+    </nav>
+
+    <section class="card">
+      <p id="tabDescription" class="tab-desc"></p>
+
+      <form id="roceForm" onsubmit="submitForm(event)">
+        <!-- =============================================================== -->
+        <!-- 1. SEZIONE SPECIFICA IN BASE AL TAB SELEZIONATO                 -->
+        <!-- =============================================================== -->
+        <div id="secTabTitle" class="section-title">Dettagli Richiesta</div>
+
+        <!-- Campi Tab: PRIMO CONTATTO -->
+        <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
+          <div class="full">
+            <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
+            <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilità CAD">
+          </div>
+        </div>
+
+        <!-- Campi Tab: ASSISTENZA (con recupero automatico script via chiave licenza) -->
+        <div id="fields_ASSISTENZA" class="tab-fields">
+          <div class="full">
+            <label id="lblChiaveLic" for="chiave_licenza">Numero / Chiave Licenza *</label>
+            <input type="text" id="chiave_licenza" placeholder="Es. 2026_11_20_01">
+          </div>
+        </div>
+
+        <!-- Campi Tab: SVILUPPO PERSONALIZZATO -->
+        <div id="fields_SVILUPPO_PERSONALIZZATO" class="tab-fields">
+          <div>
+            <label id="lblAmbito" for="ambito">Ambito / Software Target *</label>
+            <input type="text" id="ambito" placeholder="Es. AutoLISP / Automazione cartigli">
+          </div>
+          <div>
+            <label id="lblDiritti" for="tipo_diritti">Tipologia Diritti d'Autore</label>
+            <select id="tipo_diritti">
+              <option value="Non Esclusivo" id="optNonEscl">Non Esclusivo (Licenza d'uso)</option>
+              <option value="Esclusivo" id="optEscl">Esclusivo (Cessione ad personam)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Campi Tab: LICENZA -->
+        <div id="fields_LICENZA" class="tab-fields">
+          <div>
+            <label id="lblScriptRichiesto" for="script_richiesto">Nome Script / Routine *</label>
+            <input type="text" id="script_richiesto" placeholder="Es. Gestione Blocchi">
+          </div>
+          <div>
+            <label id="lblNumPostazioni" for="num_postazioni">Numero Postazioni / PC *</label>
+            <input type="number" id="num_postazioni" value="1" min="1">
+          </div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- 2. SEZIONE COMUNE: DATI DELLO SCRIVENTE                         -->
+        <!-- =============================================================== -->
+        <div id="secSenderTitle" class="section-title">Dati dello Scrivente</div>
+        <div class="grid">
+          <div>
+            <label id="lblSoggetto" for="tipo_soggetto">Tipologia *</label>
+            <select id="tipo_soggetto">
+              <option value="Privato" id="optPrivato">Privato</option>
+              <option value="Azienda" id="optAzienda">Azienda / Studio Professionale</option>
+            </select>
+          </div>
+
+          <div>
+            <label id="lblNome" for="nome">Nome / Ragione Sociale *</label>
+            <input type="text" id="nome" required placeholder="Es. Mario Rossi / Studio Rossi Srl">
+          </div>
+
+          <div>
+            <label id="lblEmail" for="email">Email di Riscontro *</label>
+            <input type="email" id="email" required placeholder="nome@studio.it">
+          </div>
+
+          <div>
+            <label id="lblOs" for="os">Ambiente CAD / Sistema Operativo *</label>
+            <input type="text" id="os" required placeholder="Es. AutoCAD 2025 / Windows 11">
+          </div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- 3. SEZIONE COMUNE: CORPO DEL MESSAGGIO                          -->
+        <!-- =============================================================== -->
+        <div id="secMsgTitle" class="section-title">Messaggio</div>
+        <div class="grid">
+          <div class="full">
+            <label id="lblMessaggio" for="messaggio">Descrizione *</label>
+            <textarea id="messaggio" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
+        <div id="feedback" class="feedback" role="status"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <span id="footerLeft">RoCe ScriptLab — Cessione &amp; Concessione Diritti d'Autore Software</span>
+    <span>Supporto: RoCe.ScriptLab.It@gmail.com</span>
+  </footer>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6jJGPAIzVHJ-aogjHg5cUrS2_FXZ7nnTts2Iqr6dh4iLj2iuuOr4Jcl-9Z21Tk_w0ig/exec";
+
+    function detectBrowserLanguage() {
+      const candidates = Array.isArray(navigator.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || "it"];
+      return String(candidates[0] || "it").toLowerCase().startsWith("en") ? "en" : "it";
+    }
+
+    let currentLang = detectBrowserLanguage();
+    let currentTipo = "PRIMO_CONTATTO";
+
+    const i18n = {
+      it: {
+        pageTitle: "RoCe ScriptLab — Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
+        metaDesc: "RoCe ScriptLab: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
+        mainTitle: "Routine AutoLISP, Automazioni CAD e Sviluppo su Misura",
+        mainSubtitle: "Primo contatto, assistenza tecnica, sviluppo personalizzato o richiesta licenza per postazione.",
+        secTabTitle: "Dettagli Categoria",
+        secSenderTitle: "Dati dello Scrivente",
+        secMsgTitle: "Messaggio",
+        lblOggetto: "Oggetto / Argomento *",
+        phOggetto: "Es. Informazioni su routine e compatibilità CAD",
+        lblChiaveLic: "Numero / Chiave Licenza * (identifica automaticamente lo script)",
+        phChiaveLic: "Es. 2026_11_20_01",
+        lblAmbito: "Ambito / Software Target *",
+        phAmbito: "Es. AutoLISP / Automazione cartigli",
+        lblDiritti: "Tipologia Diritti d'Autore",
+        optNonEscl: "Non Esclusivo (Licenza d'uso)",
+        optEscl: "Esclusivo (Cessione ad personam)",
+        lblScriptRichiesto: "Nome Script / Routine *",
+        phScriptRichiesto: "Es. Gestione Blocchi",
+        lblNumPostazioni: "Numero Postazioni / PC *",
+        lblSoggetto: "Tipologia *",
+        optPrivato: "Privato",
+        optAzienda: "Azienda / Studio Professionale",
+        lblNome: "Nome / Ragione Sociale *",
+        phNome: "Es. Mario Rossi / Studio Rossi Srl",
+        lblEmail: "Email di Riscontro *",
+        phEmail: "nome@studio.it",
+        lblOs: "Ambiente CAD / Sistema Operativo *",
+        phOs: "Es. AutoCAD 2025 / Windows 11",
+        lblMessaggio: "Descrizione *",
+        btnSubmit: "Invia Richiesta",
+        btnSending: "Invio in corso...",
+        msgMissingUrl: "Configura prima WEB_APP_URL con l'indirizzo /exec della Web App di Google Apps Script.",
+        msgSentOk: "Richiesta inviata correttamente. Riceverai riscontro all'indirizzo indicato.",
+        msgSentErr: "Errore durante l'invio: ",
+        footerLeft: "RoCe ScriptLab — Cessione & Concessione Diritti d'Autore Software",
+        tabs: {
+          PRIMO_CONTATTO: {
+            label: "Primo contatto",
+            desc: "Scrivici per un primo contatto, chiarimenti o informazioni generali sulle routine CAD.",
+            msgPh: "Scrivi qui la tua richiesta o domanda..."
+          },
+          ASSISTENZA: {
+            label: "Assistenza",
+            desc: "Inserisci il numero/chiave licenza: il sistema collegherà automaticamente il nome dello script alla tua richiesta.",
+            msgPh: "Descrivi il comportamento riscontrato, eventuali messaggi di errore o aggiornamenti richiesti..."
+          },
+          SVILUPPO_PERSONALIZZATO: {
+            label: "Sviluppo personalizzato",
+            desc: "Richiedi una routine o un'automazione su misura indicando ambito e tipologia di diritti.",
+            msgPh: "Descrivi input, output atteso, flusso di lavoro e tempistiche desiderate..."
+          },
+          LICENZA: {
+            label: "Licenza",
+            desc: "Richiedi una licenza d'uso indicando la routine e il numero di postazioni da attivare.",
+            msgPh: "Aggiungi eventuali note per l'attivazione o per l'intestazione fiscale..."
+          }
+        }
+      },
+      en: {
+        pageTitle: "RoCe ScriptLab — AutoLISP Routines, CAD Automation & Custom Development",
+        metaDesc: "RoCe ScriptLab: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
+        mainTitle: "AutoLISP Routines, CAD Automation & Custom Development",
+        mainSubtitle: "First contact, technical support, custom development, or per-seat software licensing.",
+        secTabTitle: "Request Details",
+        secSenderTitle: "Sender Information",
+        secMsgTitle: "Message",
+        lblOggetto: "Subject / Topic *",
+        phOggetto: "e.g. Routine capabilities and CAD compatibility",
+        lblChiaveLic: "License Number / Key * (automatically identifies your script)",
+        phChiaveLic: "e.g. 2026_11_20_01",
+        lblAmbito: "Scope / Target Software *",
+        phAmbito: "e.g. AutoLISP / Title block automation",
+        lblDiritti: "Copyright / Licensing Type",
+        optNonEscl: "Non-Exclusive (Usage License)",
+        optEscl: "Exclusive (Custom Copyright Assignment)",
+        lblScriptRichiesto: "Script / Routine Name *",
+        phScriptRichiesto: "e.g. Block Manager",
+        lblNumPostazioni: "Number of Seats / PCs *",
+        lblSoggetto: "Account Type *",
+        optPrivato: "Private Individual",
+        optAzienda: "Company / Engineering Studio",
+        lblNome: "Name / Company Name *",
+        phNome: "e.g. John Doe / Acme Studio Ltd",
+        lblEmail: "Reply Email *",
+        phEmail: "name@studio.com",
+        lblOs: "CAD Environment / Operating System *",
+        phOs: "e.g. AutoCAD 2025 / Windows 11",
+        lblMessaggio: "Description *",
+        btnSubmit: "Send Request",
+        btnSending: "Sending...",
+        msgMissingUrl: "Please set WEB_APP_URL to your Google Apps Script /exec Web App URL first.",
+        msgSentOk: "Request sent successfully. We will reply to your email address.",
+        msgSentErr: "Error while sending: ",
+        footerLeft: "RoCe ScriptLab — Software Copyright Licensing & Custom Development",
+        tabs: {
+          PRIMO_CONTATTO: {
+            label: "First contact",
+            desc: "Reach out for an initial inquiry, questions, or general details about our CAD routines.",
+            msgPh: "Write your inquiry or message here..."
+          },
+          ASSISTENZA: {
+            label: "Support",
+            desc: "Enter your license number/key: the system will automatically link the script name to your request.",
+            msgPh: "Describe the observed behavior, error messages, or update needed..."
+          },
+          SVILUPPO_PERSONALIZZATO: {
+            label: "Custom development",
+            desc: "Request a tailored routine or workflow automation specifying scope and copyright option.",
+            msgPh: "Describe inputs, expected outputs, workflow, and desired timeline..."
+          },
+          LICENZA: {
+            label: "License",
+            desc: "Request a usage license specifying the routine and number of seats to activate.",
+            msgPh: "Add activation notes or billing details..."
+          }
+        }
+      }
+    };
+
+    function updateRequiredAttributes() {
+      document.getElementById("oggetto_contatto").required = (currentTipo === "PRIMO_CONTATTO");
+      document.getElementById("chiave_licenza").required = (currentTipo === "ASSISTENZA");
+      document.getElementById("ambito").required = (currentTipo === "SVILUPPO_PERSONALIZZATO");
+      document.getElementById("script_richiesto").required = (currentTipo === "LICENZA");
+      document.getElementById("num_postazioni").required = (currentTipo === "LICENZA");
+    }
+
+    function applyTranslations() {
+      const dict = i18n[currentLang] || i18n.it;
+      document.documentElement.lang = currentLang;
+      document.getElementById("pageTitle").textContent = dict.pageTitle;
+      document.getElementById("metaDesc").setAttribute("content", dict.metaDesc);
+      document.getElementById("mainTitle").textContent = dict.mainTitle;
+      document.getElementById("mainSubtitle").textContent = dict.mainSubtitle;
+
+      document.getElementById("secTabTitle").textContent = dict.secTabTitle;
+      document.getElementById("secSenderTitle").textContent = dict.secSenderTitle;
+      document.getElementById("secMsgTitle").textContent = dict.secMsgTitle;
+
+      document.getElementById("lblOggetto").textContent = dict.lblOggetto;
+      document.getElementById("oggetto_contatto").placeholder = dict.phOggetto;
+      document.getElementById("lblChiaveLic").textContent = dict.lblChiaveLic;
+      document.getElementById("chiave_licenza").placeholder = dict.phChiaveLic;
+      document.getElementById("lblAmbito").textContent = dict.lblAmbito;
+      document.getElementById("ambito").placeholder = dict.phAmbito;
+      document.getElementById("lblDiritti").textContent = dict.lblDiritti;
+      document.getElementById("optNonEscl").textContent = dict.optNonEscl;
+      document.getElementById("optEscl").textContent = dict.optEscl;
+      document.getElementById("lblScriptRichiesto").textContent = dict.lblScriptRichiesto;
+      document.getElementById("script_richiesto").placeholder = dict.phScriptRichiesto;
+      document.getElementById("lblNumPostazioni").textContent = dict.lblNumPostazioni;
+
+      document.getElementById("lblSoggetto").textContent = dict.lblSoggetto;
+      document.getElementById("optPrivato").textContent = dict.optPrivato;
+      document.getElementById("optAzienda").textContent = dict.optAzienda;
+      document.getElementById("lblNome").textContent = dict.lblNome;
+      document.getElementById("nome").placeholder = dict.phNome;
+      document.getElementById("lblEmail").textContent = dict.lblEmail;
+      document.getElementById("email").placeholder = dict.phEmail;
+      document.getElementById("lblOs").textContent = dict.lblOs;
+      document.getElementById("os").placeholder = dict.phOs;
+      document.getElementById("lblMessaggio").textContent = dict.lblMessaggio;
+
+      const btn = document.getElementById("submitBtn");
+      if (!btn.disabled) btn.textContent = dict.btnSubmit;
+      document.getElementById("footerLeft").textContent = dict.footerLeft;
+
+      Object.keys(dict.tabs).forEach(key => {
+        const tabEl = document.getElementById("tab_" + key);
+        if (tabEl) tabEl.textContent = dict.tabs[key].label;
+      });
+
+      const tMeta = dict.tabs[currentTipo];
+      document.getElementById("tabDescription").textContent = tMeta.desc;
+      document.getElementById("messaggio").placeholder = tMeta.msgPh;
+    }
+
+    function setLanguage(lang) {
+      currentLang = (lang === "en") ? "en" : "it";
+      document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
+      document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
+      hideFeedback();
+      applyTranslations();
+    }
+
+    function selectTab(btn) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentTipo = btn.dataset.tab;
+
+      document.querySelectorAll(".tab-fields").forEach(el => el.classList.remove("active"));
+      const activeBox = document.getElementById("fields_" + currentTipo);
+      if (activeBox) activeBox.classList.add("active");
+
+      updateRequiredAttributes();
+      hideFeedback();
+      applyTranslations();
+    }
+
+    function hideFeedback() {
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback";
+      fb.textContent = "";
+    }
+
+    function showFeedback(isOk, text) {
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback " + (isOk ? "ok" : "err");
+      fb.textContent = text;
+    }
+
+    async function submitForm(event) {
+      event.preventDefault();
+      hideFeedback();
+      const dict = i18n[currentLang] || i18n.it;
+
+      if (!WEB_APP_URL || WEB_APP_URL.includes("INCOLLA_QUI_IL_TUO_URL_WEB_APP_EXEC")) {
+        showFeedback(false, dict.msgMissingUrl);
+        return;
+      }
+
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.textContent = dict.btnSending;
+
+      const payload = {
+        tipo_richiesta: currentTipo,
+        lingua: currentLang,
+        // Campi specifici delle 4 tab
+        oggetto_contatto: document.getElementById("oggetto_contatto").value.trim(),
+        chiave_licenza: document.getElementById("chiave_licenza").value.trim(),
+        ambito: document.getElementById("ambito").value.trim(),
+        tipo_diritti: document.getElementById("tipo_diritti").value,
+        script_richiesto: document.getElementById("script_richiesto").value.trim(),
+        num_postazioni: document.getElementById("num_postazioni").value,
+        // Dati scrivente comuni
+        tipo_soggetto: document.getElementById("tipo_soggetto").value,
+        nome: document.getElementById("nome").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        os: document.getElementById("os").value.trim(),
+        // Corpo messaggio comune
+        messaggio: document.getElementById("messaggio").value.trim()
+      };
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        showFeedback(true, dict.msgSentOk);
+        document.getElementById("roceForm").reset();
+      } catch (err) {
+        showFeedback(false, dict.msgSentErr + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = dict.btnSubmit;
+      }
+    }
+
+    updateRequiredAttributes();
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>
+Come funziona il flusso adesso
+In Assistenza: l'utente inserisce la chiave 2026_11_20_01 -> doPost(e) cerca la chiave nel foglio Licenze -> trova ad esempio AutoLISP - Gestione Blocchi -> l'email ti arriva con oggetto [ASSISTENZA #101] [AutoLISP - Gestione Blocchi] [IT] Studio Rossi (Azienda) e nel riepilogo mostra anche l'intestatario registrato nel DB.
+
+Nelle altre 3 tab: ogni tab mostra solo i suoi campi dedicati in cima, mentre i dati dello scrivente (Privato / Azienda, Nome, Email, OS) e il campo messaggio restano comuni e coerenti in entrambe le lingue.
+
+Vuoi che aggiorniamo l'intero blocco commentato di Codice.gs con questa nuova doPost o passiamo al template ThinLoader per AutoLISP?
