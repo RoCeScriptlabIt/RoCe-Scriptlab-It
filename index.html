@@ -1,17 +1,9 @@
 <!--
 ================================================================================
-PROGETTO: RoCe ScriptLab - Vetrina Web Pubblica & Modulo Richieste (GitHub Pages)
+PROGETTO: RoCe ScriptLab - Vetrina Web & Modulo Richieste (GitHub Pages)
 FILE: index.html
-STRUTTURA FORM:
-  1. Sezione dinamica specifica per Tab:
-     - PRIMO_CONTATTO          -> Oggetto / Argomento
-     - ASSISTENZA              -> Numero / Chiave Licenza (con lookup automatico DB)
-     - SVILUPPO_PERSONALIZZATO -> Ambito / Software + Tipo Diritti (Non Esclusivo / Esclusivo)
-     - LICENZA                 -> Nome Script / Routine + Numero Postazioni
-  2. Sezione comune Dati Scrivente:
-     - Tipologia (Privato / Azienda o Studio), Nome / Ragione Sociale, Email, Ambiente CAD / OS
-  3. Sezione comune Corpo Messaggio
-LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
+STATO INVIO: Sito in manutenzione (FORM_PUBLIC_ENABLED = false),
+              sbloccabile nei test includendo il token di script nel messaggio.
 ================================================================================
 -->
 <!DOCTYPE html>
@@ -38,6 +30,9 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       --ok-text: #a7f3d0;
       --err-bg: #7f1d1d;
       --err-text: #fecaca;
+      --warn-bg: #451a03;
+      --warn-text: #fde68a;
+      --warn-border: #d97706;
     }
 
     * { box-sizing: border-box; }
@@ -50,27 +45,43 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       line-height: 1.5;
     }
 
-    header {
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 36px 20px 18px;
+    /* Barra superiore con dicitura principale, supporto e selettore lingua */
+    .top-strip {
+      border-bottom: 1px solid var(--border);
+      background: #0b1220;
     }
 
-    .topbar {
+    .top-strip-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.84rem;
     }
 
-    .brand {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
+    .rights-line {
+      color: #cbd5e1;
+      font-weight: 500;
     }
+
+    .support-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .support-mail {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .support-mail:hover { text-decoration: underline; }
 
     .lang-switch {
       display: inline-flex;
@@ -95,39 +106,124 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       color: #062033;
     }
 
+    /* Box grande per Sito in Manutenzione */
+    .maintenance-wrap {
+      max-width: 1220px;
+      margin: 18px auto 0;
+      padding: 0 20px;
+    }
+
+    .maintenance-box {
+      background: var(--warn-bg);
+      border: 2px solid var(--warn-border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+    }
+
+    .maintenance-title {
+      margin: 0 0 6px;
+      font-size: clamp(1.45rem, 3.2vw, 2.35rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fef3c7;
+      line-height: 1.15;
+    }
+
+    .maintenance-sub {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--warn-text);
+    }
+
+    header {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 22px 20px 14px;
+    }
+
+    .brand {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 2.8vw, 2.15rem);
       line-height: 1.2;
     }
 
     .subtitle {
       margin: 0;
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 0.98rem;
     }
 
-    main {
-      max-width: 920px;
+    /* Layout a due colonne: colonna sinistra descrittiva/scorrimento, destra modulo */
+    .workspace {
+      max-width: 1220px;
       margin: 0 auto;
       padding: 12px 20px 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 470px);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .info-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      color: var(--text);
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .form-col .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
     }
 
     .tabs {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .tab-btn {
-      padding: 12px 10px;
-      background: var(--surface);
+      padding: 10px 10px;
+      background: var(--surface-2);
       color: var(--text);
       border: 1px solid var(--border);
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -140,27 +236,20 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       border-color: var(--accent);
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-    }
-
     .tab-desc {
-      margin: 0 0 18px;
+      margin: 0 0 16px;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .section-title {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--accent);
       font-weight: 700;
-      margin: 18px 0 10px;
-      padding-bottom: 6px;
+      margin: 16px 0 10px;
+      padding-bottom: 5px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -169,31 +258,30 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
 
     .full { grid-column: 1 / -1; }
 
-    /* Pannelli campi specifici per ciascuna tab */
     .tab-fields { display: none; }
-    .tab-fields.active { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .tab-fields.active { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
     label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       color: #e2e8f0;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 11px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-family: inherit;
     }
 
@@ -202,17 +290,18 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       border-color: var(--accent);
     }
 
-    textarea { min-height: 115px; resize: vertical; }
+    textarea { min-height: 98px; resize: vertical; }
 
     .submit-btn {
-      margin-top: 18px;
-      padding: 12px 22px;
+      margin-top: 16px;
+      width: 100%;
+      padding: 11px 18px;
       background: var(--accent-dark);
       color: #fff;
       border: none;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       cursor: pointer;
     }
 
@@ -220,160 +309,177 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .feedback {
-      margin-top: 16px;
-      padding: 12px 14px;
+      margin-top: 14px;
+      padding: 11px 13px;
       border-radius: 8px;
       display: none;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
 
     .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok-text); }
     .feedback.err { display: block; background: var(--err-bg); color: var(--err-text); }
 
-    footer {
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 0 20px 32px;
-      color: var(--muted);
-      font-size: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+    @media (max-width: 920px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
     }
 
-    @media (max-width: 680px) {
-      .tabs { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 560px) {
       .grid, .tab-fields.active { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="topbar">
-      <span class="brand">RoCe ScriptLab</span>
-      <div class="lang-switch" role="group" aria-label="Language selector">
-        <button type="button" id="btnIT" class="lang-btn active" onclick="setLanguage('it')">IT</button>
-        <button type="button" id="btnEN" class="lang-btn" onclick="setLanguage('en')">EN</button>
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab — Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
+      <div class="support-right">
+        <a class="support-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">Supporto: RoCe.ScriptLab.It@gmail.com</a>
+        <div class="lang-switch" role="group" aria-label="Language selector">
+          <button type="button" id="btnIT" class="lang-btn active" onclick="setLanguage('it')">IT</button>
+          <button type="button" id="btnEN" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div id="maintenanceWrap" class="maintenance-wrap">
+    <div class="maintenance-box" role="alert">
+      <p id="maintenanceTitle" class="maintenance-title">Sito in manutenzione</p>
+      <p id="maintenanceSub" class="maintenance-sub">Aggiornamenti e collaudo in corso. L'invio pubblico del modulo è temporaneamente sospeso.</p>
+    </div>
+  </div>
+
+  <header>
+    <span class="brand">RoCe ScriptLab</span>
     <h1 id="mainTitle">Routine AutoLISP, Automazioni CAD e Sviluppo su Misura</h1>
-    <p id="mainSubtitle" class="subtitle">Primo contatto, assistenza tecnica, sviluppo personalizzato o richiesta licenza per postazione.</p>
+    <p id="mainSubtitle" class="subtitle">Spazio descrittivo a scorrimento per routine, flusso di lavoro e modulo richieste affiancato.</p>
   </header>
 
-  <main>
-    <nav class="tabs" aria-label="Request sections">
-      <button type="button" class="tab-btn active" data-tab="PRIMO_CONTATTO" onclick="selectTab(this)" id="tab_PRIMO_CONTATTO">Primo contatto</button>
-      <button type="button" class="tab-btn" data-tab="ASSISTENZA" onclick="selectTab(this)" id="tab_ASSISTENZA">Assistenza</button>
-      <button type="button" class="tab-btn" data-tab="SVILUPPO_PERSONALIZZATO" onclick="selectTab(this)" id="tab_SVILUPPO_PERSONALIZZATO">Sviluppo personalizzato</button>
-      <button type="button" class="tab-btn" data-tab="LICENZA" onclick="selectTab(this)" id="tab_LICENZA">Licenza</button>
-    </nav>
+  <div class="workspace">
+    <!-- Colonna sinistra: area descrittiva / contenuti che scorrono -->
+    <main class="content-col" aria-label="Informazioni e descrizioni">
+      <article class="info-card">
+        <h2 id="info1Title">Automazione CAD e Routine AutoLISP</h2>
+        <p id="info1Body">Spazio riservato alla descrizione delle routine disponibili, casi d'uso reali, compatibilità con le versioni CAD e vantaggi operativi per studi tecnici e aziende.</p>
+      </article>
 
-    <section class="card">
-      <p id="tabDescription" class="tab-desc"></p>
+      <article class="info-card">
+        <h2 id="info2Title">Licenze per Postazione e Sviluppo su Misura</h2>
+        <p id="info2Body">Qui potrai inserire schede dedicate a singole routine, pacchetti multi-postazione, modalità di attivazione e sviluppo personalizzato con diritti d'uso o esclusivi.</p>
+      </article>
 
-      <form id="roceForm" onsubmit="submitForm(event)">
-        <!-- =============================================================== -->
-        <!-- 1. SEZIONE SPECIFICA IN BASE AL TAB SELEZIONATO                 -->
-        <!-- =============================================================== -->
-        <div id="secTabTitle" class="section-title">Dettagli Richiesta</div>
+      <article class="info-card">
+        <h2 id="info3Title">Assistenza Tecnica Tracciata</h2>
+        <p id="info3Body">Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per accelerare diagnosi, aggiornamenti e supporto.</p>
+      </article>
+    </main>
 
-        <!-- Campi Tab: PRIMO CONTATTO -->
-        <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
-          <div class="full">
-            <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
-            <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilità CAD">
-          </div>
-        </div>
+    <!-- Colonna destra: modulo a 4 tab -->
+    <aside class="form-col" aria-label="Modulo richieste">
+      <section class="card">
+        <nav class="tabs" aria-label="Request sections">
+          <button type="button" class="tab-btn active" data-tab="PRIMO_CONTATTO" onclick="selectTab(this)" id="tab_PRIMO_CONTATTO">Primo contatto</button>
+          <button type="button" class="tab-btn" data-tab="ASSISTENZA" onclick="selectTab(this)" id="tab_ASSISTENZA">Assistenza</button>
+          <button type="button" class="tab-btn" data-tab="SVILUPPO_PERSONALIZZATO" onclick="selectTab(this)" id="tab_SVILUPPO_PERSONALIZZATO">Sviluppo personalizzato</button>
+          <button type="button" class="tab-btn" data-tab="LICENZA" onclick="selectTab(this)" id="tab_LICENZA">Licenza</button>
+        </nav>
 
-        <!-- Campi Tab: ASSISTENZA (con recupero automatico script via chiave licenza) -->
-        <div id="fields_ASSISTENZA" class="tab-fields">
-          <div class="full">
-            <label id="lblChiaveLic" for="chiave_licenza">Numero / Chiave Licenza *</label>
-            <input type="text" id="chiave_licenza" placeholder="Es. 2026_11_20_01">
-          </div>
-        </div>
+        <p id="tabDescription" class="tab-desc"></p>
 
-        <!-- Campi Tab: SVILUPPO PERSONALIZZATO -->
-        <div id="fields_SVILUPPO_PERSONALIZZATO" class="tab-fields">
-          <div>
-            <label id="lblAmbito" for="ambito">Ambito / Software Target *</label>
-            <input type="text" id="ambito" placeholder="Es. AutoLISP / Automazione cartigli">
-          </div>
-          <div>
-            <label id="lblDiritti" for="tipo_diritti">Tipologia Diritti d'Autore</label>
-            <select id="tipo_diritti">
-              <option value="Non Esclusivo" id="optNonEscl">Non Esclusivo (Licenza d'uso)</option>
-              <option value="Esclusivo" id="optEscl">Esclusivo (Cessione ad personam)</option>
-            </select>
-          </div>
-        </div>
+        <form id="roceForm" onsubmit="submitForm(event)">
+          <!-- 1. Campi specifici per tab -->
+          <div id="secTabTitle" class="section-title">Dettagli Categoria</div>
 
-        <!-- Campi Tab: LICENZA -->
-        <div id="fields_LICENZA" class="tab-fields">
-          <div>
-            <label id="lblScriptRichiesto" for="script_richiesto">Nome Script / Routine *</label>
-            <input type="text" id="script_richiesto" placeholder="Es. Gestione Blocchi">
-          </div>
-          <div>
-            <label id="lblNumPostazioni" for="num_postazioni">Numero Postazioni / PC *</label>
-            <input type="number" id="num_postazioni" value="1" min="1">
-          </div>
-        </div>
-
-        <!-- =============================================================== -->
-        <!-- 2. SEZIONE COMUNE: DATI DELLO SCRIVENTE                         -->
-        <!-- =============================================================== -->
-        <div id="secSenderTitle" class="section-title">Dati dello Scrivente</div>
-        <div class="grid">
-          <div>
-            <label id="lblSoggetto" for="tipo_soggetto">Tipologia *</label>
-            <select id="tipo_soggetto">
-              <option value="Privato" id="optPrivato">Privato</option>
-              <option value="Azienda" id="optAzienda">Azienda / Studio Professionale</option>
-            </select>
+          <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
+            <div class="full">
+              <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
+              <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilità CAD">
+            </div>
           </div>
 
-          <div>
-            <label id="lblNome" for="nome">Nome / Ragione Sociale *</label>
-            <input type="text" id="nome" required placeholder="Es. Mario Rossi / Studio Rossi Srl">
+          <div id="fields_ASSISTENZA" class="tab-fields">
+            <div class="full">
+              <label id="lblChiaveLic" for="chiave_licenza">Numero / Chiave Licenza *</label>
+              <input type="text" id="chiave_licenza" placeholder="Es. 2026_11_20_01">
+            </div>
           </div>
 
-          <div>
-            <label id="lblEmail" for="email">Email di Riscontro *</label>
-            <input type="email" id="email" required placeholder="nome@studio.it">
+          <div id="fields_SVILUPPO_PERSONALIZZATO" class="tab-fields">
+            <div>
+              <label id="lblAmbito" for="ambito">Ambito / Software Target *</label>
+              <input type="text" id="ambito" placeholder="Es. AutoLISP / Automazione cartigli">
+            </div>
+            <div>
+              <label id="lblDiritti" for="tipo_diritti">Tipologia Diritti d'Autore</label>
+              <select id="tipo_diritti">
+                <option value="Non Esclusivo" id="optNonEscl">Non Esclusivo (Licenza d'uso)</option>
+                <option value="Esclusivo" id="optEscl">Esclusivo (Cessione ad personam)</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label id="lblOs" for="os">Ambiente CAD / Sistema Operativo *</label>
-            <input type="text" id="os" required placeholder="Es. AutoCAD 2025 / Windows 11">
+          <div id="fields_LICENZA" class="tab-fields">
+            <div>
+              <label id="lblScriptRichiesto" for="script_richiesto">Nome Script / Routine *</label>
+              <input type="text" id="script_richiesto" placeholder="Es. Gestione Blocchi">
+            </div>
+            <div>
+              <label id="lblNumPostazioni" for="num_postazioni">Numero Postazioni / PC *</label>
+              <input type="number" id="num_postazioni" value="1" min="1">
+            </div>
           </div>
-        </div>
 
-        <!-- =============================================================== -->
-        <!-- 3. SEZIONE COMUNE: CORPO DEL MESSAGGIO                          -->
-        <!-- =============================================================== -->
-        <div id="secMsgTitle" class="section-title">Messaggio</div>
-        <div class="grid">
-          <div class="full">
-            <label id="lblMessaggio" for="messaggio">Descrizione *</label>
-            <textarea id="messaggio" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+          <!-- 2. Dati scrivente comuni (default su Azienda / Studio Professionale) -->
+          <div id="secSenderTitle" class="section-title">Dati dello Scrivente</div>
+          <div class="grid">
+            <div>
+              <label id="lblSoggetto" for="tipo_soggetto">Tipologia *</label>
+              <select id="tipo_soggetto">
+                <option value="Azienda" id="optAzienda" selected>Azienda / Studio Professionale</option>
+                <option value="Privato" id="optPrivato">Privato</option>
+              </select>
+            </div>
+
+            <div>
+              <label id="lblNome" for="nome">Nome / Ragione Sociale *</label>
+              <input type="text" id="nome" required placeholder="Es. Studio Rossi Srl / Mario Rossi">
+            </div>
+
+            <div>
+              <label id="lblEmail" for="email">Email di Riscontro *</label>
+              <input type="email" id="email" required placeholder="nome@studio.it">
+            </div>
+
+            <div>
+              <label id="lblOs" for="os">Ambiente CAD / Sistema Operativo *</label>
+              <input type="text" id="os" required placeholder="Es. AutoCAD 2025 / Windows 11">
+            </div>
           </div>
-        </div>
 
-        <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
-        <div id="feedback" class="feedback" role="status"></div>
-      </form>
-    </section>
-  </main>
+          <!-- 3. Corpo messaggio comune -->
+          <div id="secMsgTitle" class="section-title">Messaggio</div>
+          <div class="grid">
+            <div class="full">
+              <label id="lblMessaggio" for="messaggio">Descrizione *</label>
+              <textarea id="messaggio" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+            </div>
+          </div>
 
-  <footer>
-    <span id="footerLeft">RoCe ScriptLab — Cessione &amp; Concessione Diritti d'Autore Software</span>
-    <span>Supporto: RoCe.ScriptLab.It@gmail.com</span>
-  </footer>
+          <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
+          <div id="feedback" class="feedback" role="status"></div>
+        </form>
+      </section>
+    </aside>
+  </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6jJGPAIzVHJ-aogjHg5cUrS2_FXZ7nnTts2Iqr6dh4iLj2iuuOr4Jcl-9Z21Tk_w0ig/exec";
+    const WEB_APP_URL = "INCOLLA_QUI_IL_TUO_URL_WEB_APP_EXEC";
+    // Imposta su true solo quando vorrai riattivare l'invio pubblico per tutti
+    const FORM_PUBLIC_ENABLED = false;
+    // Parola in codice per sbloccare l'invio durante i test includendola nel campo Messaggio
+    const TEST_BYPASS_TOKEN = "TEST_ROCE_2026";
 
     function detectBrowserLanguage() {
       const candidates = Array.isArray(navigator.languages) && navigator.languages.length
@@ -389,14 +495,23 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       it: {
         pageTitle: "RoCe ScriptLab — Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
         metaDesc: "RoCe ScriptLab: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
+        topRightsText: "RoCe ScriptLab — Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
+        maintenanceTitle: "Sito in manutenzione",
+        maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo è temporaneamente sospeso.",
         mainTitle: "Routine AutoLISP, Automazioni CAD e Sviluppo su Misura",
-        mainSubtitle: "Primo contatto, assistenza tecnica, sviluppo personalizzato o richiesta licenza per postazione.",
+        mainSubtitle: "Spazio descrittivo a scorrimento per routine, flusso di lavoro e modulo richieste affiancato.",
+        info1Title: "Automazione CAD e Routine AutoLISP",
+        info1Body: "Spazio riservato alla descrizione delle routine disponibili, casi d'uso reali, compatibilità con le versioni CAD e vantaggi operativi per studi tecnici e aziende.",
+        info2Title: "Licenze per Postazione e Sviluppo su Misura",
+        info2Body: "Qui potrai inserire schede dedicate a singole routine, pacchetti multi-postazione, modalità di attivazione e sviluppo personalizzato con diritti d'uso o esclusivi.",
+        info3Title: "Assistenza Tecnica Tracciata",
+        info3Body: "Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per accelerare diagnosi, aggiornamenti e supporto.",
         secTabTitle: "Dettagli Categoria",
         secSenderTitle: "Dati dello Scrivente",
         secMsgTitle: "Messaggio",
         lblOggetto: "Oggetto / Argomento *",
         phOggetto: "Es. Informazioni su routine e compatibilità CAD",
-        lblChiaveLic: "Numero / Chiave Licenza * (identifica automaticamente lo script)",
+        lblChiaveLic: "Numero / Chiave Licenza * (recupero automatico script)",
         phChiaveLic: "Es. 2026_11_20_01",
         lblAmbito: "Ambito / Software Target *",
         phAmbito: "Es. AutoLISP / Automazione cartigli",
@@ -407,10 +522,10 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
         phScriptRichiesto: "Es. Gestione Blocchi",
         lblNumPostazioni: "Numero Postazioni / PC *",
         lblSoggetto: "Tipologia *",
-        optPrivato: "Privato",
         optAzienda: "Azienda / Studio Professionale",
+        optPrivato: "Privato",
         lblNome: "Nome / Ragione Sociale *",
-        phNome: "Es. Mario Rossi / Studio Rossi Srl",
+        phNome: "Es. Studio Rossi Srl / Mario Rossi",
         lblEmail: "Email di Riscontro *",
         phEmail: "nome@studio.it",
         lblOs: "Ambiente CAD / Sistema Operativo *",
@@ -418,10 +533,10 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
         lblMessaggio: "Descrizione *",
         btnSubmit: "Invia Richiesta",
         btnSending: "Invio in corso...",
+        msgDisabled: "Sito in manutenzione: invio disattivato per chi non usa il codice di test.",
         msgMissingUrl: "Configura prima WEB_APP_URL con l'indirizzo /exec della Web App di Google Apps Script.",
         msgSentOk: "Richiesta inviata correttamente. Riceverai riscontro all'indirizzo indicato.",
         msgSentErr: "Errore durante l'invio: ",
-        footerLeft: "RoCe ScriptLab — Cessione & Concessione Diritti d'Autore Software",
         tabs: {
           PRIMO_CONTATTO: {
             label: "Primo contatto",
@@ -448,14 +563,23 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       en: {
         pageTitle: "RoCe ScriptLab — AutoLISP Routines, CAD Automation & Custom Development",
         metaDesc: "RoCe ScriptLab: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
+        topRightsText: "RoCe ScriptLab — Copyright Licensing & Assignment for Software Optimizations",
+        maintenanceTitle: "Site under maintenance",
+        maintenanceSub: "Updates and testing in progress. Public form submission is temporarily suspended.",
         mainTitle: "AutoLISP Routines, CAD Automation & Custom Development",
-        mainSubtitle: "First contact, technical support, custom development, or per-seat software licensing.",
+        mainSubtitle: "Scrollable description area for routines and workflows alongside the request form.",
+        info1Title: "CAD Automation & AutoLISP Routines",
+        info1Body: "Dedicated space for routine descriptions, real-world workflows, CAD version compatibility, and operational benefits for engineering firms and companies.",
+        info2Title: "Per-Seat Licenses & Custom Development",
+        info2Body: "Use this area for routine cards, multi-seat licensing details, activation notes, and custom development with usage or exclusive rights.",
+        info3Title: "Tracked Technical Support",
+        info3Body: "Support requests with a license key automatically link the corresponding routine to speed up diagnostics, updates, and follow-up.",
         secTabTitle: "Request Details",
         secSenderTitle: "Sender Information",
         secMsgTitle: "Message",
         lblOggetto: "Subject / Topic *",
         phOggetto: "e.g. Routine capabilities and CAD compatibility",
-        lblChiaveLic: "License Number / Key * (automatically identifies your script)",
+        lblChiaveLic: "License Number / Key * (auto-links script name)",
         phChiaveLic: "e.g. 2026_11_20_01",
         lblAmbito: "Scope / Target Software *",
         phAmbito: "e.g. AutoLISP / Title block automation",
@@ -466,10 +590,10 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
         phScriptRichiesto: "e.g. Block Manager",
         lblNumPostazioni: "Number of Seats / PCs *",
         lblSoggetto: "Account Type *",
-        optPrivato: "Private Individual",
         optAzienda: "Company / Engineering Studio",
+        optPrivato: "Private Individual",
         lblNome: "Name / Company Name *",
-        phNome: "e.g. John Doe / Acme Studio Ltd",
+        phNome: "e.g. Acme Studio Ltd / John Doe",
         lblEmail: "Reply Email *",
         phEmail: "name@studio.com",
         lblOs: "CAD Environment / Operating System *",
@@ -477,10 +601,10 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
         lblMessaggio: "Description *",
         btnSubmit: "Send Request",
         btnSending: "Sending...",
+        msgDisabled: "Site under maintenance: submission is disabled without the test code.",
         msgMissingUrl: "Please set WEB_APP_URL to your Google Apps Script /exec Web App URL first.",
         msgSentOk: "Request sent successfully. We will reply to your email address.",
         msgSentErr: "Error while sending: ",
-        footerLeft: "RoCe ScriptLab — Software Copyright Licensing & Custom Development",
         tabs: {
           PRIMO_CONTATTO: {
             label: "First contact",
@@ -519,8 +643,19 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       document.documentElement.lang = currentLang;
       document.getElementById("pageTitle").textContent = dict.pageTitle;
       document.getElementById("metaDesc").setAttribute("content", dict.metaDesc);
+      document.getElementById("topRightsText").textContent = dict.topRightsText;
+      document.getElementById("maintenanceWrap").style.display = FORM_PUBLIC_ENABLED ? "none" : "block";
+      document.getElementById("maintenanceTitle").textContent = dict.maintenanceTitle;
+      document.getElementById("maintenanceSub").textContent = dict.maintenanceSub;
       document.getElementById("mainTitle").textContent = dict.mainTitle;
       document.getElementById("mainSubtitle").textContent = dict.mainSubtitle;
+
+      document.getElementById("info1Title").textContent = dict.info1Title;
+      document.getElementById("info1Body").textContent = dict.info1Body;
+      document.getElementById("info2Title").textContent = dict.info2Title;
+      document.getElementById("info2Body").textContent = dict.info2Body;
+      document.getElementById("info3Title").textContent = dict.info3Title;
+      document.getElementById("info3Body").textContent = dict.info3Body;
 
       document.getElementById("secTabTitle").textContent = dict.secTabTitle;
       document.getElementById("secSenderTitle").textContent = dict.secSenderTitle;
@@ -540,8 +675,8 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       document.getElementById("lblNumPostazioni").textContent = dict.lblNumPostazioni;
 
       document.getElementById("lblSoggetto").textContent = dict.lblSoggetto;
-      document.getElementById("optPrivato").textContent = dict.optPrivato;
       document.getElementById("optAzienda").textContent = dict.optAzienda;
+      document.getElementById("optPrivato").textContent = dict.optPrivato;
       document.getElementById("lblNome").textContent = dict.lblNome;
       document.getElementById("nome").placeholder = dict.phNome;
       document.getElementById("lblEmail").textContent = dict.lblEmail;
@@ -552,7 +687,6 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
 
       const btn = document.getElementById("submitBtn");
       if (!btn.disabled) btn.textContent = dict.btnSubmit;
-      document.getElementById("footerLeft").textContent = dict.footerLeft;
 
       Object.keys(dict.tabs).forEach(key => {
         const tabEl = document.getElementById("tab_" + key);
@@ -592,9 +726,9 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       fb.textContent = "";
     }
 
-    function showFeedback(isOk, text) {
+    function showFeedback(type, text) {
       const fb = document.getElementById("feedback");
-      fb.className = "feedback " + (isOk ? "ok" : "err");
+      fb.className = "feedback " + type;
       fb.textContent = text;
     }
 
@@ -603,8 +737,16 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       hideFeedback();
       const dict = i18n[currentLang] || i18n.it;
 
+      const rawMessaggio = document.getElementById("messaggio").value.trim();
+      const isAuthorizedTest = FORM_PUBLIC_ENABLED || rawMessaggio.includes(TEST_BYPASS_TOKEN);
+
+      if (!isAuthorizedTest) {
+        showFeedback("err", dict.msgDisabled);
+        return;
+      }
+
       if (!WEB_APP_URL || WEB_APP_URL.includes("INCOLLA_QUI_IL_TUO_URL_WEB_APP_EXEC")) {
-        showFeedback(false, dict.msgMissingUrl);
+        showFeedback("err", dict.msgMissingUrl);
         return;
       }
 
@@ -612,23 +754,22 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
       btn.disabled = true;
       btn.textContent = dict.btnSending;
 
+      const cleanMessaggio = rawMessaggio.split(TEST_BYPASS_TOKEN).join("").trim();
+
       const payload = {
         tipo_richiesta: currentTipo,
         lingua: currentLang,
-        // Campi specifici delle 4 tab
         oggetto_contatto: document.getElementById("oggetto_contatto").value.trim(),
         chiave_licenza: document.getElementById("chiave_licenza").value.trim(),
         ambito: document.getElementById("ambito").value.trim(),
         tipo_diritti: document.getElementById("tipo_diritti").value,
         script_richiesto: document.getElementById("script_richiesto").value.trim(),
         num_postazioni: document.getElementById("num_postazioni").value,
-        // Dati scrivente comuni
         tipo_soggetto: document.getElementById("tipo_soggetto").value,
         nome: document.getElementById("nome").value.trim(),
         email: document.getElementById("email").value.trim(),
         os: document.getElementById("os").value.trim(),
-        // Corpo messaggio comune
-        messaggio: document.getElementById("messaggio").value.trim()
+        messaggio: cleanMessaggio
       };
 
       try {
@@ -639,10 +780,11 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
           body: JSON.stringify(payload)
         });
 
-        showFeedback(true, dict.msgSentOk);
+        showFeedback("ok", dict.msgSentOk);
         document.getElementById("roceForm").reset();
+        document.getElementById("tipo_soggetto").value = "Azienda";
       } catch (err) {
-        showFeedback(false, dict.msgSentErr + err.message);
+        showFeedback("err", dict.msgSentErr + err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = dict.btnSubmit;
@@ -654,4 +796,3 @@ LINGUA: Rilevamento automatico browser (IT / EN) + selettore manuale IT | EN
   </script>
 </body>
 </html>
-
