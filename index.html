@@ -48,7 +48,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       line-height: 1.45;
     }
 
-    /* 1. Barra superiore realmente fissa in alto */
     .top-strip {
       position: fixed;
       top: 0;
@@ -121,14 +120,12 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       color: #062033;
     }
 
-    /* 2. Contenitore principale sotto la barra fissa */
     .page-shell {
       max-width: 1320px;
       margin: 0 auto;
       padding: calc(var(--header-h) + 18px) 20px 60px;
     }
 
-    /* Area sinistra scorrevole: lascia spazio fisso a destra per il modulo (320px + 24px gap) */
     .content-col {
       margin-right: calc(var(--form-w) + 24px);
       display: flex;
@@ -204,7 +201,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       font-size: 0.92rem;
     }
 
-    /* 3. Pannello destro stretto (320px) e realmente fisso rispetto allo scorrimento */
     .form-col {
       position: fixed;
       top: calc(var(--header-h) + 18px);
@@ -337,7 +333,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
     .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok-text); }
     .feedback.err { display: block; background: var(--err-bg); color: var(--err-text); }
 
-    /* Su tablet/mobile torna impilato per evitare sovrapposizioni */
     @media (max-width: 920px) {
       .top-strip {
         position: static;
@@ -371,7 +366,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
   </style>
 </head>
 <body>
-  <!-- Intestazione fissa -->
   <div class="top-strip">
     <div class="top-strip-inner">
       <span id="topRightsText" class="rights-line">RoCe ScriptLab — Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
@@ -386,7 +380,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
   </div>
 
   <div class="page-shell">
-    <!-- Colonna sinistra scorrevole -->
     <main class="content-col" aria-label="Informazioni e descrizioni">
       <div id="maintenanceWrap">
         <div class="maintenance-box" role="alert">
@@ -417,7 +410,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       </article>
     </main>
 
-    <!-- Pannello destro stretto (320px) e fisso -->
     <aside class="form-col" aria-label="Modulo richieste">
       <section class="card">
         <nav class="tabs" aria-label="Request sections">
