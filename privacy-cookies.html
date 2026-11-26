@@ -1,0 +1,375 @@
+<!--
+================================================================================
+PROGETTO: RoCe ScriptLab It - Informativa Privacy (GDPR) & Cookie Policy
+FILE: privacy-cookies.html
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">RoCe ScriptLab It — Informativa Privacy (GDPR) &amp; Cookie Policy</title>
+  <meta id="metaDesc" name="description" content="Informativa Privacy (GDPR) e Cookie Policy di RoCe ScriptLab It: trattamento dati, conservazione a 90 giorni, mailing list e cookie tecnici.">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --border: #334155;
+      --header-h: 46px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .top-strip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 18, 32, 0.97);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+    }
+
+    .top-strip-inner {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+    }
+
+    .rights-line {
+      color: #cbd5e1;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .back-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .lang-btn {
+      padding: 3px 9px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    .page-wrap {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: calc(var(--header-h) + 24px) 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+    }
+
+    .brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+      line-height: 1.25;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+      color: var(--text);
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      margin: 6px 0 10px;
+      padding-left: 20px;
+      color: #cbd5e1;
+      font-size: 0.91rem;
+    }
+
+    li { margin-bottom: 5px; }
+
+    a.inline-mail {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    a.inline-mail:hover { text-decoration: underline; }
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 4px;
+    }
+
+    .btn-home {
+      display: inline-block;
+      padding: 8px 14px;
+      background: var(--accent-dark);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .btn-home:hover {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    @media (max-width: 760px) {
+      .top-strip {
+        position: static;
+        height: auto;
+        padding: 8px 0;
+      }
+
+      .top-strip-inner { flex-wrap: wrap; }
+      .rights-line { white-space: normal; }
+      .page-wrap { padding-top: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab It — Informativa Privacy (GDPR) &amp; Cookie Policy</span>
+      <div class="top-right">
+        <a id="topBackLink" href="index.html" class="back-link">&larr; Torna al sito</a>
+        <div class="lang-switch" role="group" aria-label="Language selector">
+          <button type="button" id="btnIT" class="lang-btn active" onclick="setLanguage('it')">IT</button>
+          <button type="button" id="btnEN" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="page-wrap">
+    <header class="card">
+      <span class="brand">RoCe ScriptLab It</span>
+      <h1 id="h1Title">Informativa Privacy (GDPR — Reg. UE 2016/679) &amp; Cookie Policy</h1>
+      <p id="leadText" class="lead">Informazioni trasparenti sul trattamento dei dati personali, sui tempi di conservazione a 90 giorni, sulla mailing list e sull'utilizzo dei cookie tecnici.</p>
+    </header>
+
+    <section class="card">
+      <h2 id="s1Title">1. Titolare del trattamento</h2>
+      <p id="s1Body">Il Titolare del trattamento dei dati personali è <strong>RoCe ScriptLab It</strong>. Per qualunque richiesta relativa alla privacy, all'esercizio dei diritti o alla disiscrizione è possibile scrivere a <a class="inline-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">RoCe.ScriptLab.It@gmail.com</a>.</p>
+    </section>
+
+    <section class="card">
+      <h2 id="s2Title">2. Categorie di dati trattati, finalità e basi giuridiche</h2>
+      <ul>
+        <li id="s2Li1"><strong>Richieste di contatto, assistenza, sviluppo su misura e licenze:</strong> vengono trattati nominativo/ragione sociale, tipologia soggetto, indirizzo email, ambiente CAD / sistema operativo, dettagli del messaggio ed eventuali chiavi licenza o dati per preventivo/fatturazione, al fine di fornire riscontro e dare esecuzione a misure precontrattuali o contrattuali (art. 6, par. 1, lett. b e c GDPR).</li>
+        <li id="s2Li2"><strong>Mailing list (facoltativa):</strong> vengono trattati indirizzo email, nominativo (se indicato) e lingua preferita (IT/EN) per inviare aggiornamenti tecnici e novità sui software di RoCe ScriptLab It, esclusivamente previo consenso libero ed esplicito dell'interessato (art. 6, par. 1, lett. a GDPR).</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2 id="s3Title">3. Tempi di conservazione dei dati (Regola dei 90 giorni)</h2>
+      <ul>
+        <li id="s3Li1"><strong>Richieste non confermate da ordine:</strong> le richieste di informazioni, assistenza o preventivo a cui non fa seguito un ordine o una licenza vengono rimosse trascorsi 90 giorni solari.</li>
+        <li id="s3Li2"><strong>Ordini e licenze:</strong> i dati relativi a ordini, licenze e cessioni/concessioni di diritti sono conservati per il tempo necessario alla gestione del rapporto e agli obblighi di legge.</li>
+        <li id="s3Li3"><strong>Mailing list e disiscrizione:</strong> il consenso può essere revocato in qualsiasi momento tramite il link "Disiscrivi" / "Unsubscribe" presente nelle comunicazioni o scrivendo a RoCe.ScriptLab.It@gmail.com. A seguito della disiscrizione (stato DISATTIVO), alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2 id="s4Title">4. Modalità di trattamento e diritti dell'interessato</h2>
+      <p id="s4Body">Il trattamento avviene con strumenti informatici e telematici (inclusi servizi Google Workspace / Apps Script / Gmail / Drive) con adeguate misure di sicurezza; i dati non sono ceduti a terzi per finalità promozionali. L'interessato ha il diritto di chiedere a RoCe ScriptLab It l'accesso ai dati, la rettifica, la cancellazione, la limitazione o l'opposizione al trattamento, la portabilità ove applicabile, la revoca del consenso e il reclamo all'Autorità di controllo competente.</p>
+    </section>
+
+    <section class="card">
+      <h2 id="s5Title">5. Cookie Policy</h2>
+      <p id="s5Body">Questo sito utilizza esclusivamente strumenti tecnici essenziali e di archiviazione locale strettamente necessari al funzionamento delle pagine e al salvataggio delle preferenze (come la lingua selezionata e la chiusura dell'avviso tecnico). Non vengono installati cookie di profilazione né strumenti di tracciamento pubblicitario di terze parti. L'utente può comunque gestire o eliminare i dati di navigazione dalle impostazioni del proprio browser.</p>
+    </section>
+
+    <div class="footer-actions">
+      <a id="bottomBackLink" href="index.html" class="btn-home">&larr; Torna alla home</a>
+      <a class="inline-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">RoCe.ScriptLab.It@gmail.com</a>
+    </div>
+  </main>
+
+  <script>
+    function getInitialLang() {
+      try {
+        const saved = localStorage.getItem("roce_lang");
+        if (saved === "en" || saved === "it") return saved;
+      } catch (e) {}
+      const navLang = (navigator.language || "it").toLowerCase();
+      return navLang.startsWith("en") ? "en" : "it";
+    }
+
+    let currentLang = getInitialLang();
+
+    const copy = {
+      it: {
+        pageTitle: "RoCe ScriptLab It — Informativa Privacy (GDPR) & Cookie Policy",
+        metaDesc: "Informativa Privacy (GDPR) e Cookie Policy di RoCe ScriptLab It: trattamento dati, conservazione a 90 giorni, mailing list e cookie tecnici.",
+        topRightsText: "RoCe ScriptLab It — Informativa Privacy (GDPR) & Cookie Policy",
+        topBackLink: "← Torna al sito",
+        h1Title: "Informativa Privacy (GDPR — Reg. UE 2016/679) & Cookie Policy",
+        leadText: "Informazioni trasparenti sul trattamento dei dati personali, sui tempi di conservazione a 90 giorni, sulla mailing list e sull'utilizzo dei cookie tecnici.",
+        s1Title: "1. Titolare del trattamento",
+        s1Body: 'Il Titolare del trattamento dei dati personali è <strong>RoCe ScriptLab It</strong>. Per qualunque richiesta relativa alla privacy, all\'esercizio dei diritti o alla disiscrizione è possibile scrivere a <a class="inline-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">RoCe.ScriptLab.It@gmail.com</a>.',
+        s2Title: "2. Categorie di dati trattati, finalità e basi giuridiche",
+        s2Li1: "<strong>Richieste di contatto, assistenza, sviluppo su misura e licenze:</strong> vengono trattati nominativo/ragione sociale, tipologia soggetto, indirizzo email, ambiente CAD / sistema operativo, dettagli del messaggio ed eventuali chiavi licenza o dati per preventivo/fatturazione, al fine di fornire riscontro e dare esecuzione a misure precontrattuali o contrattuali (art. 6, par. 1, lett. b e c GDPR).",
+        s2Li2: "<strong>Mailing list (facoltativa):</strong> vengono trattati indirizzo email, nominativo (se indicato) e lingua preferita (IT/EN) per inviare aggiornamenti tecnici e novità sui software di RoCe ScriptLab It, esclusivamente previo consenso libero ed esplicito dell'interessato (art. 6, par. 1, lett. a GDPR).",
+        s3Title: "3. Tempi di conservazione dei dati (Regola dei 90 giorni)",
+        s3Li1: "<strong>Richieste non confermate da ordine:</strong> le richieste di informazioni, assistenza o preventivo a cui non fa seguito un ordine o una licenza vengono rimosse trascorsi 90 giorni solari.",
+        s3Li2: "<strong>Ordini e licenze:</strong> i dati relativi a ordini, licenze e cessioni/concessioni di diritti sono conservati per il tempo necessario alla gestione del rapporto e agli obblighi di legge.",
+        s3Li3: "<strong>Mailing list e disiscrizione:</strong> il consenso può essere revocato in qualsiasi momento tramite il link \"Disiscrivi\" / \"Unsubscribe\" presente nelle comunicazioni o scrivendo a RoCe.ScriptLab.It@gmail.com. A seguito della disiscrizione (stato DISATTIVO), alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
+        s4Title: "4. Modalità di trattamento e diritti dell'interessato",
+        s4Body: "Il trattamento avviene con strumenti informatici e telematici (inclusi servizi Google Workspace / Apps Script / Gmail / Drive) con adeguate misure di sicurezza; i dati non sono ceduti a terzi per finalità promozionali. L'interessato ha il diritto di chiedere a RoCe ScriptLab It l'accesso ai dati, la rettifica, la cancellazione, la limitazione o l'opposizione al trattamento, la portabilità ove applicabile, la revoca del consenso e il reclamo all'Autorità di controllo competente.",
+        s5Title: "5. Cookie Policy",
+        s5Body: "Questo sito utilizza esclusivamente strumenti tecnici essenziali e di archiviazione locale strettamente necessari al funzionamento delle pagine e al salvataggio delle preferenze (come la lingua selezionata e la chiusura dell'avviso tecnico). Non vengono installati cookie di profilazione né strumenti di tracciamento pubblicitario di terze parti. L'utente può comunque gestire o eliminare i dati di navigazione dalle impostazioni del proprio browser.",
+        bottomBackLink: "← Torna alla home"
+      },
+      en: {
+        pageTitle: "RoCe ScriptLab It — Privacy Notice (GDPR) & Cookie Policy",
+        metaDesc: "Privacy Notice (GDPR) and Cookie Policy of RoCe ScriptLab It: data processing, 90-day retention, mailing list, and technical cookies.",
+        topRightsText: "RoCe ScriptLab It — Privacy Notice (GDPR) & Cookie Policy",
+        topBackLink: "← Back to site",
+        h1Title: "Privacy Notice (GDPR — EU Reg. 2016/679) & Cookie Policy",
+        leadText: "Clear information on personal data processing, 90-day retention rules, mailing list subscription, and essential technical cookies.",
+        s1Title: "1. Data Controller",
+        s1Body: 'The Data Controller for personal data is <strong>RoCe ScriptLab It</strong>. For any privacy inquiry, rights request, or unsubscription request, please write to <a class="inline-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">RoCe.ScriptLab.It@gmail.com</a>.',
+        s2Title: "2. Categories of Data Processed, Purposes and Legal Bases",
+        s2Li1: "<strong>Contact, support, custom development, and license requests:</strong> name/company name, account type, email address, CAD environment / operating system, message details, and license keys or quotation/billing details (if applicable) are processed to respond and carry out pre-contractual or contractual measures (Art. 6(1)(b) and (c) GDPR).",
+        s2Li2: "<strong>Mailing list (optional):</strong> email address, name (if provided), and language preference (IT/EN) are processed to send technical updates and news regarding RoCe ScriptLab It software, solely based on the data subject's free and explicit consent (Art. 6(1)(a) GDPR).",
+        s3Title: "3. Data Retention Periods (90-Day Rule)",
+        s3Li1: "<strong>Inquiries without a confirmed order:</strong> information, support, or quotation requests that do not result in an order or license are deleted after 90 solar days.",
+        s3Li2: "<strong>Orders and licenses:</strong> records relating to orders, licenses, and copyright assignments/licenses are retained for the period required to manage the relationship and comply with legal obligations.",
+        s3Li3: "<strong>Mailing list and unsubscription:</strong> consent can be withdrawn at any time via the \"Disiscrivi\" / \"Unsubscribe\" link in emails or by writing to RoCe.ScriptLab.It@gmail.com. Following unsubscription (DISATTIVO status), on the day following the expiry of 90 days from unsubscription, your data will be deleted from the RoCe ScriptLab It database.",
+        s4Title: "4. Processing Methods and Data Subject Rights",
+        s4Body: "Processing is carried out using IT and electronic tools (including Google Workspace / Apps Script / Gmail / Drive) with appropriate security measures; data is not shared with third parties for promotional purposes. Data subjects have the right to request access to, rectification, erasure, restriction, or objection to processing, data portability where applicable, withdrawal of consent, and to lodge a complaint with the competent supervisory authority.",
+        s5Title: "5. Cookie Policy",
+        s5Body: "This website uses only essential technical tools and local storage strictly necessary for page operation and saving preferences (such as selected language and dismissing the technical notice). No profiling cookies or third-party advertising trackers are used. You can manage or delete browser storage from your browser settings at any time.",
+        bottomBackLink: "← Back to home"
+      }
+    };
+
+    function applyLang() {
+      const d = copy[currentLang] || copy.it;
+      document.documentElement.lang = currentLang;
+      document.getElementById("pageTitle").textContent = d.pageTitle;
+      document.getElementById("metaDesc").setAttribute("content", d.metaDesc);
+      document.getElementById("topRightsText").textContent = d.topRightsText;
+      document.getElementById("topBackLink").textContent = d.topBackLink;
+      document.getElementById("h1Title").textContent = d.h1Title;
+      document.getElementById("leadText").textContent = d.leadText;
+      document.getElementById("s1Title").textContent = d.s1Title;
+      document.getElementById("s1Body").innerHTML = d.s1Body;
+      document.getElementById("s2Title").textContent = d.s2Title;
+      document.getElementById("s2Li1").innerHTML = d.s2Li1;
+      document.getElementById("s2Li2").innerHTML = d.s2Li2;
+      document.getElementById("s3Title").textContent = d.s3Title;
+      document.getElementById("s3Li1").innerHTML = d.s3Li1;
+      document.getElementById("s3Li2").innerHTML = d.s3Li2;
+      document.getElementById("s3Li3").innerHTML = d.s3Li3;
+      document.getElementById("s4Title").textContent = d.s4Title;
+      document.getElementById("s4Body").textContent = d.s4Body;
+      document.getElementById("s5Title").textContent = d.s5Title;
+      document.getElementById("s5Body").textContent = d.s5Body;
+      document.getElementById("bottomBackLink").textContent = d.bottomBackLink;
+    }
+
+    function setLanguage(lang) {
+      currentLang = (lang === "en") ? "en" : "it";
+      document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
+      document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
+      try {
+        localStorage.setItem("roce_lang", currentLang);
+      } catch (e) {}
+      applyLang();
+    }
+
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>
