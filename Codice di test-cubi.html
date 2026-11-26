@@ -1,0 +1,770 @@
+<!--
+================================================================================
+PROGETTO: RoCe ScriptLab It - Prototipo Isolato 4 Cubi (Chiuso -> Svolto 90°)
+FILE: test-cubi.html
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">RoCe ScriptLab It — Test 4 Cubi (Chiuso / Svolto 90°)</title>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --border: #334155;
+      --work-bg: rgba(15, 23, 42, 0.88);
+      --work-border: #f59e0b;
+      --work-text: #fde68a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .test-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 18, 32, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      padding: 10px 18px;
+    }
+
+    .test-bar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+
+    .brand-tag {
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-mini {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-mini:hover { border-color: var(--accent); }
+    .btn-mini.active { background: var(--accent); color: #062033; border-color: var(--accent); }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 20px 18px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .intro-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .intro-box h1 {
+      margin: 4px 0 6px;
+      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    }
+
+    .intro-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* Blocco isolato dei 4 cubi */
+    .rc-cubes-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .rc-cube-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      transition: border-color 0.25s ease;
+    }
+
+    .rc-cube-block.is-open {
+      border-color: var(--accent);
+    }
+
+    .rc-cube-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .rc-cube-title {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .rc-cube-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .rc-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      min-height: 152px;
+      justify-content: center;
+    }
+
+    /* Cubo chiuso con angolazione isometrica a spigolo superiore */
+    .rc-closed-cube-btn {
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+    }
+
+    .rc-closed-cube-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+
+    .rc-iso-svg {
+      width: 118px;
+      height: 118px;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.42));
+    }
+
+    .rc-closed-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Sviluppo a 6 facce ruotato di 90° su desktop con transizione graduale */
+    .rc-unfolded-panel {
+      width: 100%;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateY(10px) scale(0.96);
+      transform-origin: center top;
+      transition:
+        max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.4s ease,
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .rc-cube-block.is-open .rc-unfolded-panel {
+      max-height: 780px;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .rc-panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rc-close-btn {
+      padding: 5px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .rc-close-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /*
+      Schema a 6 quadrati della seconda foto ruotato di 90°:
+      - Fila 1: quadrato 5 (in alto a sinistra)
+      - Fila 2..5: colonna orizzontale di 4 quadrati (1, 2, 3, 4)
+      - Fila 6: quadrato 6 (in basso a destra)
+      Il contenitore viene ruotato di 90deg e ogni faccia contro-ruota di -90deg
+      così il testo e le immagini restano dritti e leggibili.
+    */
+    .rc-net-viewport {
+      width: 100%;
+      overflow-x: auto;
+      padding: 12px 6px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .rc-net-rotator {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      margin: 92px 0;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .rc-net-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 108px);
+      grid-template-rows: repeat(6, 108px);
+      gap: 6px;
+    }
+
+    .rc-face-slot {
+      position: relative;
+      width: 108px;
+      height: 108px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      overflow: hidden;
+      transform: rotate(-90deg);
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .rc-face-slot:hover {
+      transform: rotate(-90deg) scale(1.04);
+      border-color: var(--accent);
+      z-index: 3;
+    }
+
+    /* Posizionamento delle 6 facce secondo lo sviluppo ruotato di 90° */
+    .slot-5 { grid-column: 1; grid-row: 1; }
+    .slot-1 { grid-column: 2; grid-row: 2; }
+    .slot-2 { grid-column: 2; grid-row: 3; }
+    .slot-3 { grid-column: 2; grid-row: 4; }
+    .slot-4 { grid-column: 2; grid-row: 5; }
+    .slot-6 { grid-column: 3; grid-row: 6; }
+
+    .rc-face-link {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: var(--text);
+      position: relative;
+    }
+
+    .rc-face-link img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+    }
+
+    .rc-face-caption {
+      position: relative;
+      z-index: 2;
+      padding: 6px;
+      background: linear-gradient(to top, rgba(2, 6, 23, 0.94), rgba(2, 6, 23, 0.25));
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .rc-face-work {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8px;
+      background: var(--work-bg);
+      border: 1px dashed var(--work-border);
+      color: var(--work-text);
+      font-size: 0.7rem;
+      font-weight: 700;
+      gap: 4px;
+    }
+
+    .rc-face-more-btn {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.35), rgba(15, 23, 42, 0.95));
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      gap: 4px;
+    }
+
+    /* Elenco espanso quando una categoria supera la 6ª scheda */
+    .rc-overflow-list {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .rc-overflow-list.open {
+      display: block;
+    }
+
+    .rc-overflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .rc-overflow-item {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 7px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .rc-overflow-item:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Modalità leggera per smartphone */
+    body.mobile-lite .rc-net-rotator {
+      transform: none;
+      margin: 0;
+    }
+
+    body.mobile-lite .rc-net-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      gap: 10px;
+      width: 100%;
+    }
+
+    body.mobile-lite .rc-face-slot {
+      width: 100%;
+      height: 112px;
+      grid-column: auto !important;
+      grid-row: auto !important;
+      transform: none;
+    }
+
+    body.mobile-lite .rc-face-slot:hover {
+      transform: none;
+    }
+
+    @media (max-width: 760px) {
+      body:not(.force-desktop) .rc-net-rotator {
+        transform: none;
+        margin: 0;
+      }
+
+      body:not(.force-desktop) .rc-net-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        gap: 10px;
+        width: 100%;
+      }
+
+      body:not(.force-desktop) .rc-face-slot {
+        width: 100%;
+        height: 112px;
+        grid-column: auto !important;
+        grid-row: auto !important;
+        transform: none;
+      }
+
+      body:not(.force-desktop) .rc-face-slot:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="test-bar">
+    <div class="test-bar-inner">
+      <div>
+        <span class="brand-tag">RoCe ScriptLab It</span>
+        <strong id="barSubtitle">Prototipo 4 Cubi (Chiusi all'avvio / Svolti a 90°)</strong>
+      </div>
+      <div class="controls">
+        <button type="button" class="btn-mini" id="btnCloseAll" onclick="closeAllCubes()">Chiudi tutti</button>
+        <button type="button" class="btn-mini" id="btnModeToggle" onclick="toggleViewMode()">Modalità smartphone leggera</button>
+        <button type="button" class="btn-mini active" id="btnIT" onclick="setLang('it')">IT</button>
+        <button type="button" class="btn-mini" id="btnEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro-box">
+      <span class="brand-tag">Anteprima Isolata</span>
+      <h1 id="mainHeading">4 Cubi per Categoria — Chiusi all'apertura, Svolti a 90° al clic</h1>
+      <p id="mainDesc">Premi un cubo per svolgerlo: se un altro cubo era aperto si chiude automaticamente. Le schede incomplete mostrano "In lavorazione"; oltre la 6ª voce compare l'apertura all'elenco completo.</p>
+    </section>
+
+    <section id="rcCubesContainer" class="rc-cubes-zone" aria-label="Cubi per categoria"></section>
+  </main>
+
+  <script src="catalogo.js"></script>
+  <script>
+    const FALLBACK_CATEGORIE = [
+      { id: "AUTOCAD", it: "AutoCAD", en: "AutoCAD" },
+      { id: "OFFICE", it: "Office", en: "Office" },
+      { id: "MODELLI_EW", it: "Modelli Excel e Word", en: "Excel & Word Templates" },
+      { id: "ALTRI", it: "Altri programmi", en: "Other Software" }
+    ];
+
+    const FALLBACK_CATALOGO = [
+      {
+        id: "gestione-blocchi",
+        categoria: "AUTOCAD",
+        stato: "pronto",
+        immagine: "img/schede/autocad-blocchi.jpg",
+        titolo: { it: "Gestione Blocchi", en: "Block Manager" }
+      },
+      {
+        id: "automazione-cartigli",
+        categoria: "AUTOCAD",
+        stato: "pronto",
+        immagine: "img/schede/autocad-cartigli.jpg",
+        titolo: { it: "Automazione Cartigli", en: "Title Block Automation" }
+      },
+      {
+        id: "report-distinte-office",
+        categoria: "OFFICE",
+        stato: "pronto",
+        immagine: "img/schede/office-report.jpg",
+        titolo: { it: "Distinte Office", en: "Office Schedule" }
+      },
+      {
+        id: "modello-preventivo-licenze",
+        categoria: "MODELLI_EW",
+        stato: "pronto",
+        immagine: "img/schede/modello-offerta.jpg",
+        titolo: { it: "Modello Offerta", en: "Quote Template" }
+      },
+      {
+        id: "rhino-estrazione-curve",
+        categoria: "ALTRI",
+        stato: "pronto",
+        immagine: "img/schede/rhino-curve.jpg",
+        titolo: { it: "Curve Rhino", en: "Rhino Curves" }
+      }
+    ];
+
+    const CATEGORIE_DATA = (typeof CATEGORIE_ROCE !== "undefined" && Array.isArray(CATEGORIE_ROCE) && CATEGORIE_ROCE.length)
+      ? CATEGORIE_ROCE
+      : FALLBACK_CATEGORIE;
+
+    const CATALOGO_DATA = (typeof CATALOGO_ROCE !== "undefined" && Array.isArray(CATALOGO_ROCE) && CATALOGO_ROCE.length)
+      ? CATALOGO_ROCE
+      : FALLBACK_CATALOGO;
+
+    let currentLang = "it";
+    let openCubeId = null;
+    let forceLiteMobile = false;
+
+    const labels = {
+      it: {
+        mainHeading: "4 Cubi per Categoria — Chiusi all'apertura, Svolti a 90° al clic",
+        mainDesc: "Premi un cubo per svolgerlo: se un altro cubo era aperto si chiude automaticamente. Le schede incomplete mostrano \"In lavorazione\"; oltre la 6ª voce si apre l'elenco completo.",
+        closeAll: "Chiudi tutti",
+        closeOne: "Chiudi cubo",
+        openCube: "Premi per svolgere (90°)",
+        inLavorazione: "In lavorazione",
+        apriElenco: "Apri elenco completo",
+        totVoci: "voci in categoria",
+        modeLite: "Modalità smartphone leggera",
+        modeDesktop: "Forza vista desktop"
+      },
+      en: {
+        mainHeading: "4 Category Cubes — Closed on Load, Unfolded at 90° on Click",
+        mainDesc: "Click a cube to unfold it: any other open cube closes automatically. Draft items display \"In lavorazione\"; beyond the 6th item it opens the full list.",
+        closeAll: "Close all",
+        closeOne: "Close cube",
+        openCube: "Click to unfold (90°)",
+        inLavorazione: "In lavorazione",
+        apriElenco: "Open full list",
+        totVoci: "items in category",
+        modeLite: "Mobile lite mode",
+        modeDesktop: "Force desktop view"
+      }
+    };
+
+    const slotOrder = ["slot-1", "slot-2", "slot-3", "slot-4", "slot-5", "slot-6"];
+
+    function renderIsoCubeSvg() {
+      return `
+        <svg class="rc-iso-svg" viewBox="0 0 120 120" aria-hidden="true">
+          <polygon points="60,12 106,38 60,64 14,38" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+          <polygon points="14,38 60,64 60,108 14,82" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+          <polygon points="106,38 60,64 60,108 106,82" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
+        </svg>
+      `;
+    }
+
+    function renderCubes() {
+      const t = labels[currentLang] || labels.it;
+      const container = document.getElementById("rcCubesContainer");
+      container.innerHTML = "";
+
+      document.getElementById("mainHeading").textContent = t.mainHeading;
+      document.getElementById("mainDesc").textContent = t.mainDesc;
+      document.getElementById("btnCloseAll").textContent = t.closeAll;
+      document.getElementById("btnModeToggle").textContent = forceLiteMobile ? t.modeDesktop : t.modeLite;
+
+      CATEGORIE_DATA.forEach(cat => {
+        const catTitle = cat[currentLang] || cat.it;
+        const allItems = CATALOGO_DATA.filter(item => item.categoria === cat.id);
+        const isOpen = (openCubeId === cat.id);
+        const hasOverflow = allItems.length > 6;
+
+        const block = document.createElement("article");
+        block.className = "rc-cube-block" + (isOpen ? " is-open" : "");
+        block.id = "cube-block-" + cat.id;
+
+        const header = document.createElement("div");
+        header.className = "rc-cube-header";
+        header.innerHTML = `
+          <h2 class="rc-cube-title">${escapeHtml(catTitle)}</h2>
+          <span class="rc-cube-meta">${allItems.length} ${escapeHtml(t.totVoci)}</span>
+        `;
+        block.appendChild(header);
+
+        const stage = document.createElement("div");
+        stage.className = "rc-stage";
+
+        if (!isOpen) {
+          const closedBtn = document.createElement("button");
+          closedBtn.type = "button";
+          closedBtn.className = "rc-closed-cube-btn";
+          closedBtn.setAttribute("aria-expanded", "false");
+          closedBtn.onclick = () => selectCube(cat.id);
+          closedBtn.innerHTML = `
+            ${renderIsoCubeSvg()}
+            <span class="rc-closed-label">${escapeHtml(catTitle)} — ${escapeHtml(t.openCube)}</span>
+          `;
+          stage.appendChild(closedBtn);
+        }
+
+        const panel = document.createElement("div");
+        panel.className = "rc-unfolded-panel";
+
+        const panelTop = document.createElement("div");
+        panelTop.className = "rc-panel-top";
+
+        const panelInfo = document.createElement("span");
+        panelInfo.className = "rc-cube-meta";
+        panelInfo.textContent = catTitle + " (90°)";
+
+        const closeBtn = document.createElement("button");
+        closeBtn.type = "button";
+        closeBtn.className = "rc-close-btn";
+        closeBtn.textContent = t.closeOne;
+        closeBtn.onclick = () => closeAllCubes();
+
+        panelTop.appendChild(panelInfo);
+        panelTop.appendChild(closeBtn);
+        panel.appendChild(panelTop);
+
+        const viewport = document.createElement("div");
+        viewport.className = "rc-net-viewport";
+
+        const rotator = document.createElement("div");
+        rotator.className = "rc-net-rotator";
+
+        const netGrid = document.createElement("div");
+        netGrid.className = "rc-net-grid";
+
+        for (let i = 0; i < 6; i++) {
+          const slot = document.createElement("div");
+          slot.className = "rc-face-slot " + slotOrder[i];
+
+          if (i === 5 && hasOverflow) {
+            const moreBtn = document.createElement("button");
+            moreBtn.type = "button";
+            moreBtn.className = "rc-face-more-btn";
+            moreBtn.innerHTML = `<span>+</span><span>${escapeHtml(t.apriElenco)}</span>`;
+            moreBtn.onclick = () => toggleOverflowList(cat.id);
+            slot.appendChild(moreBtn);
+          } else {
+            const entry = allItems[i];
+            const isReady = entry && entry.stato !== "in_lavorazione" && entry.titolo && (entry.titolo.it || entry.titolo.en);
+
+            if (isReady) {
+              const titleText = entry.titolo[currentLang] || entry.titolo.it;
+              const a = document.createElement("a");
+              a.className = "rc-face-link";
+              a.href = "scheda.html?id=" + encodeURIComponent(entry.id);
+              if (entry.immagine) {
+                const img = document.createElement("img");
+                img.src = entry.immagine;
+                img.alt = titleText;
+                img.loading = "lazy";
+                a.appendChild(img);
+              }
+              const cap = document.createElement("span");
+              cap.className = "rc-face-caption";
+              cap.textContent = titleText;
+              a.appendChild(cap);
+              slot.appendChild(a);
+            } else {
+              const workBox = document.createElement("div");
+              workBox.className = "rc-face-work";
+              workBox.innerHTML = `<span>${escapeHtml(t.inLavorazione)}</span>`;
+              slot.appendChild(workBox);
+            }
+          }
+
+          netGrid.appendChild(slot);
+        }
+
+        rotator.appendChild(netGrid);
+        viewport.appendChild(rotator);
+        panel.appendChild(viewport);
+
+        const overflowBox = document.createElement("div");
+        overflowBox.className = "rc-overflow-list";
+        overflowBox.id = "overflow-" + cat.id;
+
+        const ovTitle = document.createElement("strong");
+        ovTitle.textContent = catTitle + " — " + t.apriElenco;
+        overflowBox.appendChild(ovTitle);
+
+        const ovGrid = document.createElement("div");
+        ovGrid.className = "rc-overflow-grid";
+
+        allItems.forEach(item => {
+          const itemTitle = (item.titolo && (item.titolo[currentLang] || item.titolo.it)) || item.id;
+          const link = document.createElement("a");
+          link.className = "rc-overflow-item";
+          link.href = "scheda.html?id=" + encodeURIComponent(item.id);
+          link.textContent = itemTitle + (item.stato === "in_lavorazione" ? " (" + t.inLavorazione + ")" : "");
+          ovGrid.appendChild(link);
+        });
+
+        overflowBox.appendChild(ovGrid);
+        panel.appendChild(overflowBox);
+
+        stage.appendChild(panel);
+        block.appendChild(stage);
+        container.appendChild(block);
+      });
+    }
+
+    function selectCube(catId) {
+      openCubeId = (openCubeId === catId) ? null : catId;
+      renderCubes();
+    }
+
+    function closeAllCubes() {
+      openCubeId = null;
+      renderCubes();
+    }
+
+    function toggleOverflowList(catId) {
+      const box = document.getElementById("overflow-" + catId);
+      if (box) box.classList.toggle("open");
+    }
+
+    function toggleViewMode() {
+      forceLiteMobile = !forceLiteMobile;
+      document.body.classList.toggle("mobile-lite", forceLiteMobile);
+      document.body.classList.toggle("force-desktop", !forceLiteMobile);
+      renderCubes();
+    }
+
+    function setLang(lang) {
+      currentLang = (lang === "en") ? "en" : "it";
+      document.documentElement.lang = currentLang;
+      document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
+      document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
+      renderCubes();
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    renderCubes();
+  </script>
+</body>
+</html>
