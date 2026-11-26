@@ -1,6 +1,6 @@
 <!--
 ================================================================================
-PROGETTO: RoCe ScriptLab - Vetrina Web & Modulo Richieste (GitHub Pages)
+PROGETTO: RoCe ScriptLab It - Vetrina Web & Modulo Richieste (GitHub Pages)
 FILE: index.html
 LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         area sinistra scorrevole. Nessun token esposto nel codice client.
@@ -11,9 +11,9 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">RoCe ScriptLab — Routine per Automazione CAD & OFFICE &amp; Sviluppo su Misura</title>
-  <meta id="metaDesc" name="description" content="RoCe ScriptLab: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
-  <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab">
+  <title id="pageTitle">RoCe ScriptLab It — Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
+  <meta id="metaDesc" name="description" content="RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
+  <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab It">
   <meta name="robots" content="index, follow">
 
   <style>
@@ -123,7 +123,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
     .page-shell {
       max-width: 1320px;
       margin: 0 auto;
-      padding: calc(var(--header-h) + 18px) 20px 60px;
+      padding: calc(var(--header-h) + 18px) 20px 90px;
     }
 
     .content-col {
@@ -160,7 +160,8 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
     }
 
     .hero-card,
-    .info-card {
+    .info-card,
+    .legal-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -189,16 +190,40 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       font-size: 0.94rem;
     }
 
-    .info-card h2 {
+    .info-card h2,
+    .legal-card h2 {
       margin: 0 0 8px;
       font-size: 1.05rem;
       color: var(--text);
     }
 
-    .info-card p {
-      margin: 0;
+    .info-card p,
+    .legal-card p {
+      margin: 0 0 8px;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+    }
+
+    .legal-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .legal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+    }
+
+    .legal-links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .legal-links a:hover {
+      text-decoration: underline;
     }
 
     .form-col {
@@ -296,6 +321,33 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       font-family: inherit;
     }
 
+    input[type="checkbox"] {
+      width: auto;
+      margin: 2px 0 0 0;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 7px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .checkbox-label {
+      margin: 0;
+      font-size: 0.73rem;
+      font-weight: 400;
+      color: #cbd5e1;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
@@ -333,6 +385,43 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
     .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok-text); }
     .feedback.err { display: block; background: var(--err-bg); color: var(--err-text); }
 
+    .cookie-banner {
+      position: fixed;
+      bottom: 14px;
+      left: 20px;
+      max-width: 720px;
+      z-index: 120;
+      background: var(--surface-2);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+    }
+
+    .cookie-banner a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .cookie-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #062033;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
     @media (max-width: 920px) {
       .top-strip {
         position: static;
@@ -362,13 +451,21 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         max-height: none;
         margin-top: 20px;
       }
+
+      .cookie-banner {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <div class="top-strip">
     <div class="top-strip-inner">
-      <span id="topRightsText" class="rights-line">RoCe ScriptLab — Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab It — Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
       <div class="support-right">
         <a class="support-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">Supporto: RoCe.ScriptLab.It@gmail.com</a>
         <div class="lang-switch" role="group" aria-label="Language selector">
@@ -389,7 +486,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       </div>
 
       <header class="hero-card">
-        <span class="brand">RoCe ScriptLab</span>
+        <span class="brand">RoCe ScriptLab It</span>
         <h1 id="mainTitle">Routine AutoLISP, Automazioni CAD e Sviluppo su Misura</h1>
         <p id="mainSubtitle" class="subtitle">Spazio descrittivo a scorrimento per routine, flusso di lavoro e modulo richieste fisso a lato.</p>
       </header>
@@ -408,6 +505,16 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         <h2 id="info3Title">Assistenza Tecnica Tracciata</h2>
         <p id="info3Body">Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per accelerare diagnosi, aggiornamenti e supporto.</p>
       </article>
+
+      <section id="privacy-cookies" class="legal-card" aria-label="Informativa Privacy e Cookie">
+        <h2 id="privacyTitle">Informativa Privacy (GDPR) &amp; Cookie Policy</h2>
+        <p id="privacyBody1">Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo (nominativo, tipologia soggetto, email, ambiente/OS, dettagli della richiesta ed eventuali dati di licenza/fatturazione) sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze e per i relativi adempimenti.</p>
+        <p id="privacyBody2">Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari; i dati relativi a ordini e licenze sono conservati secondo i termini di legge. L'iscrizione alla mailing list è facoltativa e revocabile in qualsiasi momento tramite il link "Disiscrivi" / "Unsubscribe" presente nelle email o scrivendo a RoCe.ScriptLab.It@gmail.com: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</p>
+        <p id="cookieBody">Cookie Policy: questo sito utilizza esclusivamente strumenti tecnici essenziali (come l'archiviazione locale per la lingua selezionata e la chiusura dell'avviso tecnico) e non impiega cookie di profilazione o tracciamento pubblicitario di terze parti.</p>
+        <div class="legal-links">
+          <a href="mailto:RoCe.ScriptLab.It@gmail.com" id="linkPrivacyMail">Contatta il Titolare: RoCe.ScriptLab.It@gmail.com</a>
+        </div>
+      </section>
     </main>
 
     <aside class="form-col" aria-label="Modulo richieste">
@@ -497,11 +604,26 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
             </div>
           </div>
 
+          <div class="checkbox-wrap">
+            <input type="checkbox" id="consenso_mailing_list" name="consenso_mailing_list">
+            <label for="consenso_mailing_list" id="lblMailingList" class="checkbox-label">
+              Desidero iscrivermi alla mailing list di RoCe ScriptLab It per ricevere aggiornamenti e novità (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).
+            </label>
+          </div>
+
           <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
           <div id="feedback" class="feedback" role="status"></div>
         </form>
       </section>
     </aside>
+  </div>
+
+  <div id="cookieBanner" class="cookie-banner" role="region" aria-label="Cookie notice">
+    <span id="cookieBannerText">
+      Questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione.
+      <a href="#privacy-cookies" id="cookieBannerLink">Privacy &amp; Cookie Policy</a>
+    </span>
+    <button type="button" id="cookieAcceptBtn" class="cookie-btn" onclick="accettaCookieTecnici()">OK</button>
   </div>
 
   <script>
@@ -520,9 +642,9 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
 
     const i18n = {
       it: {
-        pageTitle: "RoCe ScriptLab — Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
-        metaDesc: "RoCe ScriptLab: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
-        topRightsText: "RoCe ScriptLab — Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
+        pageTitle: "RoCe ScriptLab It — Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
+        metaDesc: "RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
+        topRightsText: "RoCe ScriptLab It — Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
         maintenanceTitle: "Sito in manutenzione",
         maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo è temporaneamente sospeso.",
         mainTitle: "Routine AutoLISP, Automazioni CAD e Sviluppo su Misura",
@@ -533,6 +655,13 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         info2Body: "Qui potrai inserire schede dedicate a singole routine, pacchetti multi-postazione, modalità di attivazione e sviluppo personalizzato con diritti d'uso o esclusivi.",
         info3Title: "Assistenza Tecnica Tracciata",
         info3Body: "Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per accelerare diagnosi, aggiornamenti e supporto.",
+        privacyTitle: "Informativa Privacy (GDPR) & Cookie Policy",
+        privacyBody1: "Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo (nominativo, tipologia soggetto, email, ambiente/OS, dettagli della richiesta ed eventuali dati di licenza/fatturazione) sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze e per i relativi adempimenti.",
+        privacyBody2: "Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari; i dati relativi a ordini e licenze sono conservati secondo i termini di legge. L'iscrizione alla mailing list è facoltativa e revocabile in qualsiasi momento tramite il link \"Disiscrivi\" / \"Unsubscribe\" presente nelle email o scrivendo a RoCe.ScriptLab.It@gmail.com: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
+        cookieBody: "Cookie Policy: questo sito utilizza esclusivamente strumenti tecnici essenziali (come l'archiviazione locale per la lingua selezionata e la chiusura dell'avviso tecnico) e non impiega cookie di profilazione o tracciamento pubblicitario di terze parti.",
+        linkPrivacyMail: "Contatta il Titolare: RoCe.ScriptLab.It@gmail.com",
+        cookieBannerText: "Questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione.",
+        cookieBannerLink: "Privacy & Cookie Policy",
         secTabTitle: "Dettagli Categoria",
         secSenderTitle: "Dati dello Scrivente",
         secMsgTitle: "Messaggio",
@@ -558,6 +687,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         lblOs: "Ambiente CAD / Sistema Operativo *",
         phOs: "Es. AutoCAD 2025 / Windows 11",
         lblMessaggio: "Descrizione *",
+        lblMailingList: "Desidero iscrivermi alla mailing list di RoCe ScriptLab It per ricevere aggiornamenti e novità (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).",
         btnSubmit: "Invia Richiesta",
         btnSending: "Invio in corso...",
         msgMissingUrl: "Configura prima WEB_APP_URL con l'indirizzo /exec della Web App di Google Apps Script.",
@@ -587,9 +717,9 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         }
       },
       en: {
-        pageTitle: "RoCe ScriptLab — AutoLISP Routines, CAD Automation & Custom Development",
-        metaDesc: "RoCe ScriptLab: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
-        topRightsText: "RoCe ScriptLab — Copyright Licensing & Assignment for Software Optimizations",
+        pageTitle: "RoCe ScriptLab It — AutoLISP Routines, CAD Automation & Custom Development",
+        metaDesc: "RoCe ScriptLab It: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
+        topRightsText: "RoCe ScriptLab It — Copyright Licensing & Assignment for Software Optimizations",
         maintenanceTitle: "Site under maintenance",
         maintenanceSub: "Updates and testing in progress. Public form submission is temporarily suspended.",
         mainTitle: "AutoLISP Routines, CAD Automation & Custom Development",
@@ -600,6 +730,13 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         info2Body: "Use this area for routine cards, multi-seat licensing details, activation notes, and custom development with usage or exclusive rights.",
         info3Title: "Tracked Technical Support",
         info3Body: "Support requests with a license key automatically link the corresponding routine to speed up diagnostics, updates, and follow-up.",
+        privacyTitle: "Privacy Notice (GDPR) & Cookie Policy",
+        privacyBody1: "Data Controller: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). Data submitted through the form (name, account type, email, environment/OS, request details, and licensing/billing details if applicable) is processed to handle contact, support, quotation, or license requests and related obligations.",
+        privacyBody2: "Data retention: inquiries without a confirmed order are deleted after 90 solar days; order and license records are kept as required by law. Mailing list subscription is optional and can be withdrawn anytime via the \"Disiscrivi\" / \"Unsubscribe\" link in emails or by writing to RoCe.ScriptLab.It@gmail.com: on the day following the expiry of 90 days from unsubscription, your data will be deleted from the RoCe ScriptLab It database.",
+        cookieBody: "Cookie Policy: this website uses only essential technical storage (such as saving selected language and dismissing the technical notice) and does not use profiling or third-party advertising cookies.",
+        linkPrivacyMail: "Contact Data Controller: RoCe.ScriptLab.It@gmail.com",
+        cookieBannerText: "This website uses only essential technical cookies for operation and language, without profiling cookies.",
+        cookieBannerLink: "Privacy & Cookie Policy",
         secTabTitle: "Request Details",
         secSenderTitle: "Sender Information",
         secMsgTitle: "Message",
@@ -625,6 +762,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         lblOs: "CAD Environment / Operating System *",
         phOs: "e.g. AutoCAD 2025 / Windows 11",
         lblMessaggio: "Description *",
+        lblMailingList: "I would like to subscribe to the RoCe ScriptLab It mailing list to receive software updates and news (optional; on the day following the expiry of 90 days from unsubscription, your data will be deleted from the RoCe ScriptLab It database).",
         btnSubmit: "Send Request",
         btnSending: "Sending...",
         msgMissingUrl: "Please set WEB_APP_URL to your Google Apps Script /exec Web App URL first.",
@@ -682,6 +820,15 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       document.getElementById("info3Title").textContent = dict.info3Title;
       document.getElementById("info3Body").textContent = dict.info3Body;
 
+      document.getElementById("privacyTitle").textContent = dict.privacyTitle;
+      document.getElementById("privacyBody1").textContent = dict.privacyBody1;
+      document.getElementById("privacyBody2").textContent = dict.privacyBody2;
+      document.getElementById("cookieBody").textContent = dict.cookieBody;
+      document.getElementById("linkPrivacyMail").textContent = dict.linkPrivacyMail;
+
+      document.getElementById("cookieBannerText").innerHTML =
+        dict.cookieBannerText + ' <a href="#privacy-cookies" id="cookieBannerLink">' + dict.cookieBannerLink + "</a>";
+
       document.getElementById("secTabTitle").textContent = dict.secTabTitle;
       document.getElementById("secSenderTitle").textContent = dict.secSenderTitle;
       document.getElementById("secMsgTitle").textContent = dict.secMsgTitle;
@@ -709,6 +856,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       document.getElementById("lblOs").textContent = dict.lblOs;
       document.getElementById("os").placeholder = dict.phOs;
       document.getElementById("lblMessaggio").textContent = dict.lblMessaggio;
+      document.getElementById("lblMailingList").textContent = dict.lblMailingList;
 
       const btn = document.getElementById("submitBtn");
       if (!btn.disabled) btn.textContent = dict.btnSubmit;
@@ -727,6 +875,9 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       currentLang = (lang === "en") ? "en" : "it";
       document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
       document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
+      try {
+        localStorage.setItem("roce_lang", currentLang);
+      } catch (e) {}
       hideFeedback();
       applyTranslations();
     }
@@ -756,6 +907,21 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       fb.className = "feedback " + type;
       fb.textContent = text;
     }
+
+    function accettaCookieTecnici() {
+      try {
+        localStorage.setItem("roce_cookie_notice_ok", "1");
+      } catch (e) {}
+      document.getElementById("cookieBanner").style.display = "none";
+    }
+
+    (function initCookieBanner() {
+      try {
+        if (localStorage.getItem("roce_cookie_notice_ok") === "1") {
+          document.getElementById("cookieBanner").style.display = "none";
+        }
+      } catch (e) {}
+    })();
 
     async function submitForm(event) {
       event.preventDefault();
@@ -787,7 +953,8 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         nome: document.getElementById("nome").value.trim(),
         email: document.getElementById("email").value.trim(),
         os: document.getElementById("os").value.trim(),
-        messaggio: messaggio
+        messaggio: messaggio,
+        consenso_mailing_list: document.getElementById("consenso_mailing_list").checked
       };
 
       try {
@@ -801,6 +968,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         showFeedback("ok", dict.msgSentOk);
         document.getElementById("roceForm").reset();
         document.getElementById("tipo_soggetto").value = "Azienda";
+        document.getElementById("consenso_mailing_list").checked = false;
       } catch (err) {
         showFeedback("err", dict.msgSentErr + err.message);
       } finally {
