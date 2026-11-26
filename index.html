@@ -328,11 +328,17 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       cursor: pointer;
     }
 
+    .ml-quick-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
     .checkbox-wrap {
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      margin-top: 10px;
       padding: 8px;
       border-radius: 7px;
       background: var(--surface-2);
@@ -341,11 +347,45 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
 
     .checkbox-label {
       margin: 0;
-      font-size: 0.73rem;
+      font-size: 0.72rem;
       font-weight: 400;
       color: #cbd5e1;
       line-height: 1.35;
       cursor: pointer;
+    }
+
+    .ml-action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ml-sub-btn {
+      padding: 5px 12px;
+      background: var(--surface-2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .ml-sub-btn:hover {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    .ml-sub-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .ml-quick-status {
+      font-size: 0.73rem;
+      color: var(--muted);
+      line-height: 1.3;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -590,6 +630,19 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
               <input type="email" id="email" required placeholder="nome@studio.it">
             </div>
 
+            <div class="full ml-quick-box">
+              <div class="checkbox-wrap">
+                <input type="checkbox" id="consenso_mailing_list" name="consenso_mailing_list">
+                <label for="consenso_mailing_list" id="lblMailingList" class="checkbox-label">
+                  Desidero iscrivermi alla mailing list di RoCe ScriptLab It per ricevere aggiornamenti e novità (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).
+                </label>
+              </div>
+              <div class="ml-action-row">
+                <button type="button" id="btnSubscribeQuick" class="ml-sub-btn" onclick="subscribeMailingListDirect()">Iscrivi</button>
+                <span id="mlQuickStatus" class="ml-quick-status" role="status"></span>
+              </div>
+            </div>
+
             <div>
               <label id="lblOs" for="os">Ambiente CAD / Sistema Operativo *</label>
               <input type="text" id="os" required placeholder="Es. AutoCAD 2025 / Windows 11">
@@ -602,13 +655,6 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
               <label id="lblMessaggio" for="messaggio">Descrizione *</label>
               <textarea id="messaggio" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
             </div>
-          </div>
-
-          <div class="checkbox-wrap">
-            <input type="checkbox" id="consenso_mailing_list" name="consenso_mailing_list">
-            <label for="consenso_mailing_list" id="lblMailingList" class="checkbox-label">
-              Desidero iscrivermi alla mailing list di RoCe ScriptLab It per ricevere aggiornamenti e novità (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).
-            </label>
           </div>
 
           <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
@@ -688,6 +734,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         phOs: "Es. AutoCAD 2025 / Windows 11",
         lblMessaggio: "Descrizione *",
         lblMailingList: "Desidero iscrivermi alla mailing list di RoCe ScriptLab It per ricevere aggiornamenti e novità (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).",
+        btnSubscribeQuick: "Iscrivi",
         btnSubmit: "Invia Richiesta",
         btnSending: "Invio in corso...",
         msgMissingUrl: "Configura prima WEB_APP_URL con l'indirizzo /exec della Web App di Google Apps Script.",
@@ -763,6 +810,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         phOs: "e.g. AutoCAD 2025 / Windows 11",
         lblMessaggio: "Description *",
         lblMailingList: "I would like to subscribe to the RoCe ScriptLab It mailing list to receive software updates and news (optional; on the day following the expiry of 90 days from unsubscription, your data will be deleted from the RoCe ScriptLab It database).",
+        btnSubscribeQuick: "Subscribe",
         btnSubmit: "Send Request",
         btnSending: "Sending...",
         msgMissingUrl: "Please set WEB_APP_URL to your Google Apps Script /exec Web App URL first.",
@@ -857,6 +905,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
       document.getElementById("os").placeholder = dict.phOs;
       document.getElementById("lblMessaggio").textContent = dict.lblMessaggio;
       document.getElementById("lblMailingList").textContent = dict.lblMailingList;
+      document.getElementById("btnSubscribeQuick").textContent = dict.btnSubscribeQuick;
 
       const btn = document.getElementById("submitBtn");
       if (!btn.disabled) btn.textContent = dict.btnSubmit;
@@ -879,6 +928,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         localStorage.setItem("roce_lang", currentLang);
       } catch (e) {}
       hideFeedback();
+      document.getElementById("mlQuickStatus").textContent = "";
       applyTranslations();
     }
 
@@ -922,6 +972,68 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         }
       } catch (e) {}
     })();
+
+    async function subscribeMailingListDirect() {
+      const dict = i18n[currentLang] || i18n.it;
+      const emailEl = document.getElementById("email");
+      const nomeEl = document.getElementById("nome");
+      const checkEl = document.getElementById("consenso_mailing_list");
+      const statusEl = document.getElementById("mlQuickStatus");
+      const btnEl = document.getElementById("btnSubscribeQuick");
+
+      const email = (emailEl.value || "").trim();
+      if (!email || !emailEl.checkValidity()) {
+        statusEl.style.color = "#fca5a5";
+        statusEl.textContent = currentLang === "en"
+          ? "Enter a valid email address above first."
+          : "Inserisci prima un indirizzo email valido qui sopra.";
+        emailEl.focus();
+        return;
+      }
+
+      if (!checkEl.checked) {
+        statusEl.style.color = "#fde68a";
+        statusEl.textContent = currentLang === "en"
+          ? "Tick the mailing list consent box first."
+          : "Spunta prima la casella di consenso alla mailing list.";
+        return;
+      }
+
+      if (!WEB_APP_URL || !WEB_APP_URL.startsWith("https://script.google.com/macros/s/")) {
+        statusEl.style.color = "#fca5a5";
+        statusEl.textContent = dict.msgMissingUrl;
+        return;
+      }
+
+      btnEl.disabled = true;
+      statusEl.style.color = "#93c5fd";
+      statusEl.textContent = currentLang === "en" ? "Subscribing..." : "Iscrizione in corso...";
+
+      const payload = {
+        azione: "ISCRIZIONE_MAILING_LIST",
+        lingua: currentLang.toUpperCase(),
+        nome: (nomeEl.value || "").trim(),
+        email: email
+      };
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        statusEl.style.color = "#a7f3d0";
+        statusEl.textContent = currentLang === "en"
+          ? "Subscribed to RoCe ScriptLab It mailing list."
+          : "Iscrizione alla mailing list di RoCe ScriptLab It registrata.";
+      } catch (err) {
+        statusEl.style.color = "#fca5a5";
+        statusEl.textContent = dict.msgSentErr + err.message;
+      } finally {
+        btnEl.disabled = false;
+      }
+    }
 
     async function submitForm(event) {
       event.preventDefault();
@@ -969,6 +1081,7 @@ LAYOUT: Barra superiore fissa + colonna destra fissa e stretta (320px) +
         document.getElementById("roceForm").reset();
         document.getElementById("tipo_soggetto").value = "Azienda";
         document.getElementById("consenso_mailing_list").checked = false;
+        document.getElementById("mlQuickStatus").textContent = "";
       } catch (err) {
         showFeedback("err", dict.msgSentErr + err.message);
       } finally {
