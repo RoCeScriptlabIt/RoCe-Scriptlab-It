@@ -9,7 +9,7 @@ FILE: index.html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">RoCe ScriptLab It — Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
+  <title id="pageTitle">RoCe ScriptLab It â€” Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
   <meta id="metaDesc" name="description" content="RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
   <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab It">
   <meta name="robots" content="index, follow">
@@ -168,11 +168,15 @@ FILE: index.html
 
     .rc-showcase-bar {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 14px;
+    }
+
+    .rc-showcase-heading-wrap {
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     .rc-showcase-heading-wrap .brand {
@@ -191,11 +195,13 @@ FILE: index.html
       font-size: 0.85rem;
     }
 
+    /* Mantiene posizione stabile al cambio modalitÃ  */
     .rc-showcase-actions {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     .rc-mini-btn {
@@ -207,6 +213,7 @@ FILE: index.html
       font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
       transition: border-color 0.15s ease, background 0.15s ease;
     }
 
@@ -269,20 +276,21 @@ FILE: index.html
     .rc-cube-scene {
       --cube-size: 62px;
       --half: 31px;
-      width: 100px;
-      height: 100px;
-      perspective: 480px;
+      width: 104px;
+      height: 104px;
+      perspective: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: visible;
       transition: width 0.3s ease, height 0.3s ease;
     }
 
     .rc-workspace.is-unfolding .rc-cube-scene {
       --cube-size: 42px;
       --half: 21px;
-      width: 68px;
-      height: 68px;
+      width: 76px;
+      height: 76px;
     }
 
     .rc-cube-3d {
@@ -298,9 +306,10 @@ FILE: index.html
       transform: rotateX(-27deg) rotateY(-34deg) scale(1.06);
     }
 
+    /* Cubo evidenziato: apertura verso l'esterno con facce marroni e bordo/bagliore azzurro */
     .rc-cube-trigger.is-active .rc-cube-3d {
-      transform: rotateX(-22deg) rotateY(-24deg) scale(1.14);
-      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+      transform: rotateX(-26deg) rotateY(-32deg) scale(1.1);
+      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.72));
     }
 
     .rc-cface {
@@ -312,12 +321,13 @@ FILE: index.html
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.56rem;
+      font-size: 0.54rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       text-transform: uppercase;
       backface-visibility: visible;
-      transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+      transform-origin: center;
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
     }
 
     .rc-cface-top {
@@ -354,23 +364,43 @@ FILE: index.html
       box-shadow: 0 14px 22px rgba(0, 0, 0, 0.68);
     }
 
+    /* Evidenziazione marrone a petalo aperto + colori di evidenziazione azzurri */
     .rc-cube-trigger.is-active .rc-cface {
       border-color: var(--accent);
     }
 
     .rc-cube-trigger.is-active .rc-cface-top {
-      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-      color: #062033;
+      background: rgba(180, 83, 9, 0.82);
+      color: #fef3c7;
+      transform: rotateX(118deg) translateZ(calc(var(--half) + 4px));
     }
 
     .rc-cube-trigger.is-active .rc-cface-front {
-      background: linear-gradient(160deg, #0c4a6e 0%, #082f49 100%);
+      background: rgba(146, 64, 14, 0.84);
       color: #7dd3fc;
+      transform: rotateX(28deg) translateZ(calc(var(--half) + 4px));
     }
 
     .rc-cube-trigger.is-active .rc-cface-right {
-      background: linear-gradient(160deg, #082f49 0%, #0f172a 100%);
+      background: rgba(120, 53, 15, 0.84);
       color: #bae6fd;
+      transform: rotateY(118deg) translateZ(calc(var(--half) + 4px));
+    }
+
+    .rc-cube-trigger.is-active .rc-cface-left {
+      background: rgba(146, 64, 14, 0.8);
+      transform: rotateY(-118deg) translateZ(calc(var(--half) + 4px));
+    }
+
+    .rc-cube-trigger.is-active .rc-cface-back {
+      background: rgba(120, 53, 15, 0.78);
+      transform: rotateY(180deg) rotateX(-22deg) translateZ(calc(var(--half) + 4px));
+    }
+
+    .rc-cube-trigger.is-active .rc-cface-bottom {
+      background: rgba(92, 38, 10, 0.88);
+      transform: rotateX(-118deg) translateZ(calc(var(--half) + 3px));
+      box-shadow: 0 12px 20px rgba(2, 6, 23, 0.65);
     }
 
     .rc-cube-label {
@@ -407,15 +437,16 @@ FILE: index.html
     }
 
     /* =========================================================================
-       PALCO SVILUPPO A 6 FACCE (4 IN COLONNA + 1 IN ALTO A DX + 1 IN BASSO A SX)
-       Bordi ravvicinati + fattore 1.5 su hover / pressione / focus
+       PALCO SVILUPPO ALLUNGATO â€” SCHEMA ESATTO (3 COLONNE x 4 RIGHE)
+       Colonna centrale di 4 facce + 1 a destra in riga 1 + 1 a sinistra in riga 4
        ========================================================================= */
     .rc-unfold-stage {
       display: none;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 16px;
+      padding: 18px 16px 24px;
+      min-height: 620px;
       opacity: 0;
       transform: translateY(8px) scale(0.985);
       transition: opacity 0.34s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -440,7 +471,7 @@ FILE: index.html
       gap: 10px;
       flex-wrap: wrap;
       padding-bottom: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -470,44 +501,37 @@ FILE: index.html
       width: 100%;
       overflow-x: auto;
       overflow-y: visible;
-      padding: 28px 28px 30px;
+      padding: 36px 36px 40px;
       display: flex;
       justify-content: center;
     }
 
     /*
-      Griglia 2 colonne x 4 righe con bordi ravvicinati (gap: 1px):
-      Riga 1: [ Faccia 1 ] [ Faccia 5 ]
-      Riga 2: [ Faccia 2 ] [ vuoto    ]
-      Riga 3: [ Faccia 3 ] [ vuoto    ]
-      Riga 4: [ Faccia 6 ] [ Faccia 4 ]
+      Griglia 3 colonne x 4 righe conforme all'immagine di riferimento:
+      Riga 1: [ vuota ]    [ Faccia 1 ] [ Faccia 5 ]
+      Riga 2: [ vuota ]    [ Faccia 2 ] [ vuota    ]
+      Riga 3: [ vuota ]    [ Faccia 3 ] [ vuota    ]
+      Riga 4: [ Faccia 6 ] [ Faccia 4 ] [ vuota    ]
     */
-    .rc-net-custom {
+    .rc-net-exact {
       display: grid;
-      grid-template-columns: repeat(2, minmax(124px, 146px));
-      grid-template-rows: repeat(4, minmax(124px, 146px));
+      grid-template-columns: repeat(3, minmax(114px, 134px));
+      grid-template-rows: repeat(4, minmax(126px, 148px));
       gap: 1px;
       justify-content: center;
-      background: rgba(148, 163, 184, 0.25);
     }
 
-    .rc-slot-1 { grid-column: 1; grid-row: 1; }
-    .rc-slot-5 { grid-column: 2; grid-row: 1; }
-    .rc-slot-2 { grid-column: 1; grid-row: 2; }
-    .rc-slot-3 { grid-column: 1; grid-row: 3; }
+    .rc-slot-1 { grid-column: 2; grid-row: 1; }
+    .rc-slot-5 { grid-column: 3; grid-row: 1; }
+    .rc-slot-2 { grid-column: 2; grid-row: 2; }
+    .rc-slot-3 { grid-column: 2; grid-row: 3; }
     .rc-slot-6 { grid-column: 1; grid-row: 4; }
     .rc-slot-4 { grid-column: 2; grid-row: 4; }
-
-    /* Celle vuote trasparenti così i lati svolti adiacenti restano uniti */
-    .rc-empty-cell {
-      background: var(--surface);
-      pointer-events: none;
-    }
 
     .rc-face-card {
       position: relative;
       border-radius: 0;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.52);
       background: var(--surface-2);
       overflow: hidden;
       z-index: 1;
@@ -722,14 +746,10 @@ FILE: index.html
       grid-column: 1 / -1;
     }
 
-    body.mobile-lite .rc-net-custom {
+    body.mobile-lite .rc-net-exact {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: repeat(3, minmax(108px, 124px));
       width: 100%;
-    }
-
-    body.mobile-lite .rc-empty-cell {
-      display: none;
     }
 
     body.mobile-lite .rc-face-card {
@@ -765,8 +785,8 @@ FILE: index.html
       .rc-workspace.is-unfolding .rc-cube-scene {
         --cube-size: 48px;
         --half: 24px;
-        width: 78px;
-        height: 78px;
+        width: 82px;
+        height: 82px;
       }
 
       .rc-workspace.is-unfolding .rc-cube-label {
@@ -774,14 +794,10 @@ FILE: index.html
         max-width: none;
       }
 
-      body:not(.force-desktop) .rc-net-custom {
+      body:not(.force-desktop) .rc-net-exact {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-rows: repeat(3, minmax(108px, 124px));
         width: 100%;
-      }
-
-      body:not(.force-desktop) .rc-empty-cell {
-        display: none;
       }
 
       body:not(.force-desktop) .rc-face-card {
@@ -1105,7 +1121,7 @@ FILE: index.html
 <body>
   <div class="top-strip">
     <div class="top-strip-inner">
-      <span id="topRightsText" class="rights-line">RoCe ScriptLab It — Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab It â€” Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
       <div class="support-right">
         <a class="support-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">Supporto: RoCe.ScriptLab.It@gmail.com</a>
         <div class="lang-switch" role="group" aria-label="Language selector">
@@ -1121,7 +1137,7 @@ FILE: index.html
       <div id="maintenanceWrap">
         <div class="maintenance-box" role="alert">
           <p id="maintenanceTitle" class="maintenance-title">Sito in manutenzione</p>
-          <p id="maintenanceSub" class="maintenance-sub">Aggiornamenti e collaudo in corso. L'invio pubblico del modulo è temporaneamente sospeso.</p>
+          <p id="maintenanceSub" class="maintenance-sub">Aggiornamenti e collaudo in corso. L'invio pubblico del modulo Ã¨ temporaneamente sospeso.</p>
         </div>
       </div>
 
@@ -1131,11 +1147,11 @@ FILE: index.html
           <div class="rc-showcase-heading-wrap">
             <span class="brand">RoCe ScriptLab It</span>
             <h1 id="mainTitle" class="rc-showcase-title">Routine per Automazione CAD, Office e Sviluppo su Misura</h1>
-            <p id="mainSubtitle" class="rc-showcase-sub">Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5×, e chiudendo torni alla griglia 2×2.</p>
+            <p id="mainSubtitle" class="rc-showcase-sub">Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5Ã—, e chiudendo torni alla griglia 2Ã—2.</p>
           </div>
           <div class="rc-showcase-actions">
             <button type="button" class="rc-mini-btn" id="btnCloseCube" onclick="closeAllCubes()">Chiudi cubo</button>
-            <button type="button" class="rc-mini-btn" id="btnModeToggle" onclick="toggleViewMode()">Modalità mobile leggera</button>
+            <button type="button" class="rc-mini-btn" id="btnModeToggle" onclick="toggleViewMode()">ModalitÃ  mobile leggera</button>
           </div>
         </div>
 
@@ -1163,7 +1179,7 @@ FILE: index.html
       <section id="privacy-cookies" class="legal-card" aria-label="Informativa Privacy e Cookie">
         <h2 id="privacyTitle">Informativa Privacy (GDPR) &amp; Cookie Policy</h2>
         <p id="privacyBody1">Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze.</p>
-        <p id="privacyBody2">Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list è facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</p>
+        <p id="privacyBody2">Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list Ã¨ facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</p>
         <p id="cookieBody">Cookie Policy: questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione; per informativa estesa su trattamento dati e cookie visita (premi su) Privacy &amp; Cookie Policy.</p>
         <div class="legal-links">
           <a href="privacy-cookies.html" id="linkExtendedPolicy">Informativa estesa Privacy &amp; Cookie</a>
@@ -1189,7 +1205,7 @@ FILE: index.html
           <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
             <div class="full">
               <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
-              <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilità CAD">
+              <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilitÃ  CAD">
             </div>
           </div>
 
@@ -1363,21 +1379,21 @@ FILE: index.html
 
     const i18n = {
       it: {
-        pageTitle: "RoCe ScriptLab It — Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
+        pageTitle: "RoCe ScriptLab It â€” Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
         metaDesc: "RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
-        topRightsText: "RoCe ScriptLab It — Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
+        topRightsText: "RoCe ScriptLab It â€” Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
         maintenanceTitle: "Sito in manutenzione",
-        maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo è temporaneamente sospeso.",
+        maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo Ã¨ temporaneamente sospeso.",
         mainTitle: "Routine per Automazione CAD, Office e Sviluppo su Misura",
-        mainSubtitle: "Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5×, e chiudendo torni alla griglia 2×2.",
+        mainSubtitle: "Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5Ã—, e chiudendo torni alla griglia 2Ã—2.",
         closeCube: "Chiudi cubo",
-        modeLite: "Modalità mobile leggera",
+        modeLite: "ModalitÃ  mobile leggera",
         modeDesktop: "Forza vista desktop",
         openHint: "Svolgi cubo",
         activeHint: "Aperto",
         inLavorazione: "In lavorazione",
         apriElenco: "Apri elenco",
-        previewTag: "1.5×",
+        previewTag: "1.5Ã—",
         info1Title: "Automazione CAD e Routine AutoLISP",
         info1Body: "Routine pronte o dedicate per ispezionare blocchi, gestire cartigli, velocizzare flussi tecnici e ridurre le operazioni ripetitive in ambiente CAD.",
         info2Title: "Licenze per Postazione e Sviluppo su Misura",
@@ -1386,7 +1402,7 @@ FILE: index.html
         info3Body: "Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per velocizzare il supporto.",
         privacyTitle: "Informativa Privacy (GDPR) & Cookie Policy",
         privacyBody1: "Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze.",
-        privacyBody2: "Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list è facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
+        privacyBody2: "Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list Ã¨ facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
         cookieBody: "Cookie Policy: questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione; per informativa estesa su trattamento dati e cookie visita (premi su) Privacy & Cookie Policy.",
         linkExtendedPolicy: "Informativa estesa Privacy & Cookie",
         linkPrivacyMail: "Contatta il Titolare: RoCe.ScriptLab.It@gmail.com",
@@ -1396,7 +1412,7 @@ FILE: index.html
         secSenderTitle: "Dati dello Scrivente",
         secMsgTitle: "Messaggio",
         lblOggetto: "Oggetto / Argomento *",
-        phOggetto: "Es. Informazioni su routine e compatibilità CAD",
+        phOggetto: "Es. Informazioni su routine e compatibilitÃ  CAD",
         lblChiaveLic: "Numero / Chiave Licenza *",
         phChiaveLic: "Es. 2026_11_20_01",
         lblAmbito: "Ambito / Software Target *",
@@ -1432,7 +1448,7 @@ FILE: index.html
           },
           ASSISTENZA: {
             label: "Assistenza",
-            desc: "Inserisci il numero/chiave licenza: il sistema collegherà automaticamente il nome dello script alla tua richiesta.",
+            desc: "Inserisci il numero/chiave licenza: il sistema collegherÃ  automaticamente il nome dello script alla tua richiesta.",
             msgPh: "Descrivi il comportamento riscontrato, eventuali messaggi di errore o aggiornamenti richiesti..."
           },
           SVILUPPO_PERSONALIZZATO: {
@@ -1448,13 +1464,13 @@ FILE: index.html
         }
       },
       en: {
-        pageTitle: "RoCe ScriptLab It — AutoLISP Routines, CAD Automation & Custom Development",
+        pageTitle: "RoCe ScriptLab It â€” AutoLISP Routines, CAD Automation & Custom Development",
         metaDesc: "RoCe ScriptLab It: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
-        topRightsText: "RoCe ScriptLab It — Copyright Licensing & Assignment for Software Optimizations",
+        topRightsText: "RoCe ScriptLab It â€” Copyright Licensing & Assignment for Software Optimizations",
         maintenanceTitle: "Site under maintenance",
         maintenanceSub: "Updates and testing in progress. Public form submission is temporarily suspended.",
         mainTitle: "CAD Automation, Office Routines & Custom Development",
-        mainSubtitle: "Click a cube to unfold it; hover or press a face to scale it 1.5×, and closing returns to the 2×2 grid.",
+        mainSubtitle: "Click a cube to unfold it; hover or press a face to scale it 1.5Ã—, and closing returns to the 2Ã—2 grid.",
         closeCube: "Close cube",
         modeLite: "Mobile lite mode",
         modeDesktop: "Force desktop view",
@@ -1462,7 +1478,7 @@ FILE: index.html
         activeHint: "Open",
         inLavorazione: "In lavorazione",
         apriElenco: "Open list",
-        previewTag: "1.5×",
+        previewTag: "1.5Ã—",
         info1Title: "CAD Automation & AutoLISP Routines",
         info1Body: "Ready-to-use or tailored routines to inspect blocks, automate title blocks, speed up technical workflows, and reduce repetitive tasks.",
         info2Title: "Per-Seat Licenses & Custom Development",
@@ -1571,8 +1587,8 @@ FILE: index.html
           <div class="rc-cube-scene" aria-hidden="true">
             <div class="rc-cube-3d">
               <div class="rc-cface rc-cface-top">${escapeHtml(sigla)}</div>
-              <div class="rc-cface rc-cface-front">6</div>
-              <div class="rc-cface rc-cface-right">90°</div>
+              <div class="rc-cface rc-cface-front"></div>
+              <div class="rc-cface rc-cface-right"></div>
               <div class="rc-cface rc-cface-back"></div>
               <div class="rc-cface rc-cface-left"></div>
               <div class="rc-cface rc-cface-bottom"></div>
@@ -1622,20 +1638,7 @@ FILE: index.html
       scrollWrap.className = "rc-net-scroll";
 
       const netGrid = document.createElement("div");
-      netGrid.className = "rc-net-custom";
-
-      // Celle vuote per mantenere uniti i bordi lungo la colonna centrale e gli agganci laterali[cite: 1]
-      const emptyR2C2 = document.createElement("div");
-      emptyR2C2.className = "rc-empty-cell";
-      emptyR2C2.style.gridColumn = "2";
-      emptyR2C2.style.gridRow = "2";
-      netGrid.appendChild(emptyR2C2);
-
-      const emptyR3C2 = document.createElement("div");
-      emptyR3C2.className = "rc-empty-cell";
-      emptyR3C2.style.gridColumn = "2";
-      emptyR3C2.style.gridRow = "3";
-      netGrid.appendChild(emptyR3C2);
+      netGrid.className = "rc-net-exact";
 
       for (let i = 0; i < 6; i++) {
         const card = document.createElement("div");
@@ -1704,7 +1707,7 @@ FILE: index.html
       ovPanel.id = "rcOverflowPanel";
 
       const ovHeading = document.createElement("strong");
-      ovHeading.textContent = catTitle + " — " + dict.apriElenco;
+      ovHeading.textContent = catTitle + " â€” " + dict.apriElenco;
       ovPanel.appendChild(ovHeading);
 
       const ovGrid = document.createElement("div");
