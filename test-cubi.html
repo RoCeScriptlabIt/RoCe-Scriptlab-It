@@ -9,7 +9,7 @@ FILE: index.html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">RoCe ScriptLab It â€” Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
+  <title id="pageTitle">RoCe ScriptLab It &mdash; Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
   <meta id="metaDesc" name="description" content="RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
   <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab It">
   <meta name="robots" content="index, follow">
@@ -31,8 +31,8 @@ FILE: index.html
       --warn-bg: #451a03;
       --warn-text: #fde68a;
       --warn-border: #d97706;
-      --work-border: #f59e0b;
-      --work-text: #fde68a;
+      --work-border: rgba(148, 163, 184, 0.55);
+      --work-text: #fef3c7;
       --header-h: 46px;
       --form-w: 312px;
     }
@@ -195,23 +195,16 @@ FILE: index.html
       font-size: 0.85rem;
     }
 
-    /* Mantiene posizione stabile al cambio modalitÃ  */
-    .rc-showcase-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-
     .rc-mini-btn {
-      padding: 5px 10px;
-      border-radius: 7px;
+      min-height: 36px;
+      padding: 8px 14px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      font-size: 0.74rem;
+      font-size: 0.84rem;
       font-weight: 700;
+      text-align: left;
       cursor: pointer;
       white-space: nowrap;
       transition: border-color 0.15s ease, background 0.15s ease;
@@ -225,7 +218,7 @@ FILE: index.html
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
       align-items: start;
-      transition: grid-template-columns 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: grid-template-columns 0.35s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.35s ease;
     }
 
     .rc-cubes-col {
@@ -235,19 +228,21 @@ FILE: index.html
       gap: 18px 14px;
       justify-items: center;
       padding: 6px 0;
+      transition: padding-top 0.3s ease;
     }
 
     .rc-workspace.is-unfolding {
-      grid-template-columns: 124px minmax(0, 1fr);
+      grid-template-columns: 128px minmax(0, 1fr);
       gap: 14px;
+      margin-top: 28px;
     }
 
     .rc-workspace.is-unfolding .rc-cubes-col {
       grid-column: 1;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 14px;
       justify-items: center;
-      padding: 0;
+      padding: 44px 0 0;
     }
 
     .rc-cube-trigger {
@@ -274,133 +269,34 @@ FILE: index.html
     }
 
     .rc-cube-scene {
-      --cube-size: 62px;
-      --half: 31px;
-      width: 104px;
-      height: 104px;
-      perspective: 520px;
+      width: 112px;
+      height: 112px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: visible;
-      transition: width 0.3s ease, height 0.3s ease;
+      transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
     }
 
     .rc-workspace.is-unfolding .rc-cube-scene {
-      --cube-size: 42px;
-      --half: 21px;
-      width: 76px;
-      height: 76px;
+      width: 96px;
+      height: 96px;
     }
 
-    .rc-cube-3d {
-      width: var(--cube-size);
-      height: var(--cube-size);
-      position: relative;
-      transform-style: preserve-3d;
-      transform: rotateX(-32deg) rotateY(-42deg);
-      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    .rc-cube-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
     }
 
-    .rc-cube-trigger:hover .rc-cube-3d {
-      transform: rotateX(-27deg) rotateY(-34deg) scale(1.06);
+    .rc-cube-trigger:hover .rc-cube-svg {
+      transform: scale(1.06);
     }
 
-    /* Cubo evidenziato: apertura verso l'esterno con facce marroni e bordo/bagliore azzurro */
-    .rc-cube-trigger.is-active .rc-cube-3d {
-      transform: rotateX(-26deg) rotateY(-32deg) scale(1.1);
-      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.72));
-    }
-
-    .rc-cface {
-      position: absolute;
-      width: var(--cube-size);
-      height: var(--cube-size);
-      border-radius: 5px;
-      border: 1px solid rgba(148, 163, 184, 0.42);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.54rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      backface-visibility: visible;
-      transform-origin: center;
-      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
-    }
-
-    .rc-cface-top {
-      background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-      color: #f8fafc;
-      transform: rotateX(90deg) translateZ(var(--half));
-    }
-
-    .rc-cface-front {
-      background: linear-gradient(160deg, #334155 0%, #1e293b 100%);
-      color: var(--accent);
-      transform: translateZ(var(--half));
-    }
-
-    .rc-cface-right {
-      background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
-      color: #cbd5e1;
-      transform: rotateY(90deg) translateZ(var(--half));
-    }
-
-    .rc-cface-back {
-      background: #0f172a;
-      transform: rotateY(180deg) translateZ(var(--half));
-    }
-
-    .rc-cface-left {
-      background: #1e293b;
-      transform: rotateY(-90deg) translateZ(var(--half));
-    }
-
-    .rc-cface-bottom {
-      background: #090e1a;
-      transform: rotateX(-90deg) translateZ(var(--half));
-      box-shadow: 0 14px 22px rgba(0, 0, 0, 0.68);
-    }
-
-    /* Evidenziazione marrone a petalo aperto + colori di evidenziazione azzurri */
-    .rc-cube-trigger.is-active .rc-cface {
-      border-color: var(--accent);
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-top {
-      background: rgba(180, 83, 9, 0.82);
-      color: #fef3c7;
-      transform: rotateX(118deg) translateZ(calc(var(--half) + 4px));
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-front {
-      background: rgba(146, 64, 14, 0.84);
-      color: #7dd3fc;
-      transform: rotateX(28deg) translateZ(calc(var(--half) + 4px));
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-right {
-      background: rgba(120, 53, 15, 0.84);
-      color: #bae6fd;
-      transform: rotateY(118deg) translateZ(calc(var(--half) + 4px));
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-left {
-      background: rgba(146, 64, 14, 0.8);
-      transform: rotateY(-118deg) translateZ(calc(var(--half) + 4px));
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-back {
-      background: rgba(120, 53, 15, 0.78);
-      transform: rotateY(180deg) rotateX(-22deg) translateZ(calc(var(--half) + 4px));
-    }
-
-    .rc-cube-trigger.is-active .rc-cface-bottom {
-      background: rgba(92, 38, 10, 0.88);
-      transform: rotateX(-118deg) translateZ(calc(var(--half) + 3px));
-      box-shadow: 0 12px 20px rgba(2, 6, 23, 0.65);
+    .rc-cube-trigger.is-active .rc-cube-svg {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.72));
     }
 
     .rc-cube-label {
@@ -413,7 +309,7 @@ FILE: index.html
 
     .rc-workspace.is-unfolding .rc-cube-label {
       font-size: 0.72rem;
-      max-width: 114px;
+      max-width: 118px;
     }
 
     .rc-cube-trigger.is-active .rc-cube-label {
@@ -437,16 +333,15 @@ FILE: index.html
     }
 
     /* =========================================================================
-       PALCO SVILUPPO ALLUNGATO â€” SCHEMA ESATTO (3 COLONNE x 4 RIGHE)
-       Colonna centrale di 4 facce + 1 a destra in riga 1 + 1 a sinistra in riga 4
+       PALCO SVILUPPO SENZA SFONDO, SCHEDE INGRANDITE & BORDO GRIGIO CHIARO
        ========================================================================= */
     .rc-unfold-stage {
       display: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 16px 24px;
-      min-height: 620px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 18px 4px 24px;
+      min-height: 700px;
       opacity: 0;
       transform: translateY(8px) scale(0.985);
       transition: opacity 0.34s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -455,8 +350,6 @@ FILE: index.html
     .rc-workspace.is-unfolding .rc-unfold-stage {
       display: block;
       grid-column: 2;
-      border-color: rgba(56, 189, 248, 0.65);
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
     }
 
     .rc-workspace.is-unfolding .rc-unfold-stage.is-visible {
@@ -477,61 +370,68 @@ FILE: index.html
 
     .rc-stage-title {
       margin: 0;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       color: var(--text);
     }
 
+    .rc-stage-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .rc-close-btn {
-      padding: 5px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
+      min-height: 36px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: var(--surface);
       color: var(--text);
-      font-size: 0.74rem;
+      font-size: 0.84rem;
       font-weight: 700;
+      text-align: left;
       cursor: pointer;
     }
 
     .rc-close-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+      background: var(--accent);
+      color: #062033;
     }
 
     .rc-net-scroll {
       width: 100%;
       overflow-x: auto;
       overflow-y: visible;
-      padding: 36px 36px 40px;
+      padding: 64px 44px 48px;
       display: flex;
       justify-content: center;
     }
 
-    /*
-      Griglia 3 colonne x 4 righe conforme all'immagine di riferimento:
-      Riga 1: [ vuota ]    [ Faccia 1 ] [ Faccia 5 ]
-      Riga 2: [ vuota ]    [ Faccia 2 ] [ vuota    ]
-      Riga 3: [ vuota ]    [ Faccia 3 ] [ vuota    ]
-      Riga 4: [ Faccia 6 ] [ Faccia 4 ] [ vuota    ]
-    */
+    /* Schema 4 righe x 2 colonne con ordine:
+       Riga 1: 1 (col 1), 2 (col 2)
+       Riga 2: 3 (col 1)
+       Riga 3: 4 (col 1)
+       Riga 4: 6 (col 1), 5 (col 2) */
     .rc-net-exact {
       display: grid;
-      grid-template-columns: repeat(3, minmax(114px, 134px));
-      grid-template-rows: repeat(4, minmax(126px, 148px));
+      grid-template-columns: repeat(2, minmax(156px, 184px));
+      grid-template-rows: repeat(4, minmax(150px, 176px));
       gap: 1px;
       justify-content: center;
     }
 
-    .rc-slot-1 { grid-column: 2; grid-row: 1; }
-    .rc-slot-5 { grid-column: 3; grid-row: 1; }
-    .rc-slot-2 { grid-column: 2; grid-row: 2; }
-    .rc-slot-3 { grid-column: 2; grid-row: 3; }
+    .rc-slot-1 { grid-column: 1; grid-row: 1; }
+    .rc-slot-2 { grid-column: 2; grid-row: 1; }
+    .rc-slot-3 { grid-column: 1; grid-row: 2; }
+    .rc-slot-4 { grid-column: 1; grid-row: 3; }
     .rc-slot-6 { grid-column: 1; grid-row: 4; }
-    .rc-slot-4 { grid-column: 2; grid-row: 4; }
+    .rc-slot-5 { grid-column: 2; grid-row: 4; }
 
     .rc-face-card {
       position: relative;
       border-radius: 0;
-      border: 1px solid rgba(148, 163, 184, 0.52);
+      border: 1px solid rgba(148, 163, 184, 0.45);
       background: var(--surface-2);
       overflow: hidden;
       z-index: 1;
@@ -571,49 +471,8 @@ FILE: index.html
       transform: scale(1.5);
       border-radius: 8px;
       border-color: var(--accent);
-      box-shadow: 0 22px 38px rgba(2, 6, 23, 0.88), 0 0 0 1px rgba(56, 189, 248, 0.65);
+      box-shadow: 0 22px 38px rgba(2, 6, 23, 0.9), 0 0 0 2px rgba(56, 189, 248, 0.7);
       z-index: 30;
-    }
-
-    .rc-face-preview-tag {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      z-index: 4;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.94);
-      color: #062033;
-      font-size: 0.56rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      opacity: 0;
-      transition: opacity 0.18s ease;
-      pointer-events: none;
-    }
-
-    .rc-face-card.is-settled:hover .rc-face-preview-tag,
-    .rc-face-card.is-settled:active .rc-face-preview-tag,
-    .rc-face-card.is-settled:focus-within .rc-face-preview-tag {
-      opacity: 1;
-    }
-
-    .rc-face-num {
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      z-index: 3;
-      width: 18px;
-      height: 18px;
-      border-radius: 3px;
-      background: rgba(11, 18, 32, 0.88);
-      border: 1px solid var(--border);
-      color: var(--accent);
-      font-size: 0.62rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .rc-face-link {
@@ -633,17 +492,17 @@ FILE: index.html
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.65;
+      opacity: 0.7;
     }
 
     .rc-face-caption {
       position: relative;
       z-index: 2;
-      padding: 7px;
-      background: linear-gradient(to top, rgba(2, 6, 23, 0.96) 0%, rgba(2, 6, 23, 0.55) 70%, transparent 100%);
-      font-size: 0.74rem;
-      font-weight: 700;
-      line-height: 1.2;
+      padding: 10px;
+      background: linear-gradient(to top, rgba(2, 6, 23, 0.96) 0%, rgba(2, 6, 23, 0.65) 75%, transparent 100%);
+      font-size: 0.92rem;
+      font-weight: 800;
+      line-height: 1.25;
     }
 
     .rc-face-work {
@@ -653,7 +512,7 @@ FILE: index.html
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 8px;
+      padding: 10px;
       background: repeating-linear-gradient(
         -45deg,
         rgba(15, 23, 42, 0.95),
@@ -661,10 +520,9 @@ FILE: index.html
         rgba(30, 41, 59, 0.85) 9px,
         rgba(30, 41, 59, 0.85) 18px
       );
-      border: 1px dashed var(--work-border);
       color: var(--work-text);
-      font-size: 0.74rem;
-      font-weight: 700;
+      font-size: 0.9rem;
+      font-weight: 800;
     }
 
     .rc-face-more-btn {
@@ -678,23 +536,23 @@ FILE: index.html
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 10px;
       text-align: center;
-      font-size: 0.74rem;
+      font-size: 0.9rem;
       font-weight: 800;
-      gap: 5px;
+      gap: 6px;
     }
 
     .rc-more-plus {
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
       background: var(--accent);
       color: #062033;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 900;
     }
 
@@ -733,6 +591,7 @@ FILE: index.html
       color: var(--accent);
     }
 
+    /* Versione semplificata / leggera: schede base snelle per non uscire dal bordo quando ingrandite */
     body.mobile-lite .rc-workspace.is-unfolding {
       grid-template-columns: 1fr;
     }
@@ -740,34 +599,48 @@ FILE: index.html
     body.mobile-lite .rc-workspace.is-unfolding .rc-cubes-col {
       grid-column: 1 / -1;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding-top: 0;
     }
 
     body.mobile-lite .rc-workspace.is-unfolding .rc-unfold-stage {
       grid-column: 1 / -1;
     }
 
+    body.mobile-lite .rc-net-scroll {
+      padding: 28px 20px 28px;
+    }
+
     body.mobile-lite .rc-net-exact {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(3, minmax(108px, 124px));
-      width: 100%;
+      grid-template-columns: repeat(2, minmax(96px, 132px));
+      grid-template-rows: repeat(3, minmax(104px, 124px));
+      gap: 4px;
+      width: auto;
     }
 
     body.mobile-lite .rc-face-card {
       grid-column: auto !important;
       grid-row: auto !important;
-      min-height: 108px;
+      min-height: 104px;
+    }
+
+    body.mobile-lite .rc-face-caption,
+    body.mobile-lite .rc-face-work,
+    body.mobile-lite .rc-face-more-btn {
+      font-size: 0.78rem;
+      padding: 7px;
     }
 
     body.mobile-lite .rc-face-card.is-settled:hover,
     body.mobile-lite .rc-face-card.is-settled:active,
     body.mobile-lite .rc-face-card.is-settled:focus-within {
-      transform: scale(1.25);
+      transform: scale(1.18);
     }
 
     @media (max-width: 820px) {
       .rc-workspace,
       .rc-workspace.is-unfolding {
         grid-template-columns: 1fr;
+        margin-top: 12px;
       }
 
       .rc-cubes-col,
@@ -775,18 +648,21 @@ FILE: index.html
         grid-column: 1 / -1;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
+        padding-top: 0;
       }
 
       .rc-workspace.is-unfolding .rc-unfold-stage {
         grid-column: 1 / -1;
       }
 
+      .rc-net-scroll {
+        padding: 32px 18px 28px;
+      }
+
       .rc-cube-scene,
       .rc-workspace.is-unfolding .rc-cube-scene {
-        --cube-size: 48px;
-        --half: 24px;
-        width: 82px;
-        height: 82px;
+        width: 88px;
+        height: 88px;
       }
 
       .rc-workspace.is-unfolding .rc-cube-label {
@@ -795,21 +671,29 @@ FILE: index.html
       }
 
       body:not(.force-desktop) .rc-net-exact {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: repeat(3, minmax(108px, 124px));
-        width: 100%;
+        grid-template-columns: repeat(2, minmax(96px, 134px));
+        grid-template-rows: repeat(3, minmax(106px, 126px));
+        gap: 4px;
+        width: auto;
       }
 
       body:not(.force-desktop) .rc-face-card {
         grid-column: auto !important;
         grid-row: auto !important;
-        min-height: 108px;
+        min-height: 106px;
+      }
+
+      body:not(.force-desktop) .rc-face-caption,
+      body:not(.force-desktop) .rc-face-work,
+      body:not(.force-desktop) .rc-face-more-btn {
+        font-size: 0.78rem;
+        padding: 7px;
       }
 
       body:not(.force-desktop) .rc-face-card.is-settled:hover,
       body:not(.force-desktop) .rc-face-card.is-settled:active,
       body:not(.force-desktop) .rc-face-card.is-settled:focus-within {
-        transform: scale(1.25);
+        transform: scale(1.18);
       }
     }
 
@@ -892,13 +776,15 @@ FILE: index.html
     }
 
     .tab-btn {
-      padding: 7px 6px;
+      min-height: 36px;
+      padding: 7px 9px;
       background: var(--surface-2);
       color: var(--text);
       border: 1px solid var(--border);
       border-radius: 7px;
       font-weight: 600;
-      font-size: 0.76rem;
+      font-size: 0.8rem;
+      text-align: left;
       cursor: pointer;
     }
 
@@ -1000,13 +886,15 @@ FILE: index.html
     }
 
     .ml-sub-btn {
-      padding: 5px 12px;
+      min-height: 34px;
+      padding: 6px 14px;
       background: var(--surface-2);
       color: var(--accent);
       border: 1px solid var(--accent);
       border-radius: 6px;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
+      text-align: left;
       cursor: pointer;
     }
 
@@ -1028,6 +916,7 @@ FILE: index.html
 
     .submit-btn {
       margin-top: 11px;
+      min-height: 38px;
       width: 100%;
       padding: 9px 14px;
       background: var(--accent-dark);
@@ -1035,7 +924,8 @@ FILE: index.html
       border: none;
       border-radius: 7px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
+      text-align: left;
       cursor: pointer;
     }
 
@@ -1078,13 +968,15 @@ FILE: index.html
     }
 
     .cookie-btn {
-      padding: 6px 12px;
+      min-height: 34px;
+      padding: 6px 14px;
       border: none;
       border-radius: 6px;
       background: var(--accent);
       color: #062033;
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
+      text-align: left;
       cursor: pointer;
       flex-shrink: 0;
     }
@@ -1121,7 +1013,7 @@ FILE: index.html
 <body>
   <div class="top-strip">
     <div class="top-strip-inner">
-      <span id="topRightsText" class="rights-line">RoCe ScriptLab It â€” Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab It &mdash; Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
       <div class="support-right">
         <a class="support-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">Supporto: RoCe.ScriptLab.It@gmail.com</a>
         <div class="lang-switch" role="group" aria-label="Language selector">
@@ -1137,7 +1029,7 @@ FILE: index.html
       <div id="maintenanceWrap">
         <div class="maintenance-box" role="alert">
           <p id="maintenanceTitle" class="maintenance-title">Sito in manutenzione</p>
-          <p id="maintenanceSub" class="maintenance-sub">Aggiornamenti e collaudo in corso. L'invio pubblico del modulo Ã¨ temporaneamente sospeso.</p>
+          <p id="maintenanceSub" class="maintenance-sub">Aggiornamenti e collaudo in corso. L'invio pubblico del modulo &egrave; temporaneamente sospeso.</p>
         </div>
       </div>
 
@@ -1147,11 +1039,7 @@ FILE: index.html
           <div class="rc-showcase-heading-wrap">
             <span class="brand">RoCe ScriptLab It</span>
             <h1 id="mainTitle" class="rc-showcase-title">Routine per Automazione CAD, Office e Sviluppo su Misura</h1>
-            <p id="mainSubtitle" class="rc-showcase-sub">Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5Ã—, e chiudendo torni alla griglia 2Ã—2.</p>
-          </div>
-          <div class="rc-showcase-actions">
-            <button type="button" class="rc-mini-btn" id="btnCloseCube" onclick="closeAllCubes()">Chiudi cubo</button>
-            <button type="button" class="rc-mini-btn" id="btnModeToggle" onclick="toggleViewMode()">ModalitÃ  mobile leggera</button>
+            <p id="mainSubtitle" class="rc-showcase-sub"></p>
           </div>
         </div>
 
@@ -1179,7 +1067,7 @@ FILE: index.html
       <section id="privacy-cookies" class="legal-card" aria-label="Informativa Privacy e Cookie">
         <h2 id="privacyTitle">Informativa Privacy (GDPR) &amp; Cookie Policy</h2>
         <p id="privacyBody1">Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze.</p>
-        <p id="privacyBody2">Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list Ã¨ facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</p>
+        <p id="privacyBody2">Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list &egrave; facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.</p>
         <p id="cookieBody">Cookie Policy: questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione; per informativa estesa su trattamento dati e cookie visita (premi su) Privacy &amp; Cookie Policy.</p>
         <div class="legal-links">
           <a href="privacy-cookies.html" id="linkExtendedPolicy">Informativa estesa Privacy &amp; Cookie</a>
@@ -1188,7 +1076,7 @@ FILE: index.html
       </section>
     </main>
 
-    <aside class="form-col" aria-label="Modulo richieste">
+    <aside id="formCol" class="form-col" aria-label="Modulo richieste">
       <section class="card">
         <nav class="tabs" aria-label="Request sections">
           <button type="button" class="tab-btn active" data-tab="PRIMO_CONTATTO" onclick="selectTab(this)" id="tab_PRIMO_CONTATTO">Primo contatto</button>
@@ -1205,7 +1093,7 @@ FILE: index.html
           <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
             <div class="full">
               <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
-              <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilitÃ  CAD">
+              <input type="text" id="oggetto_contatto" placeholder="Es. Informazioni su routine e compatibilit&agrave; CAD">
             </div>
           </div>
 
@@ -1311,7 +1199,7 @@ FILE: index.html
     const FALLBACK_CATEGORIE = [
       { id: "AUTOCAD", it: "AutoCAD", en: "AutoCAD", sigla: "CAD" },
       { id: "OFFICE", it: "Office", en: "Office", sigla: "OFF" },
-      { id: "MODELLI_EW", it: "Modelli Excel e Word", en: "Excel & Word Templates", sigla: "XLS/DOC" },
+      { id: "MODELLI_EW", it: "Modelli Excel e Word", en: "Excel & Word Templates", sigla: "XLS" },
       { id: "ALTRI", it: "Altri programmi", en: "Other Software", sigla: "APP" }
     ];
 
@@ -1379,21 +1267,22 @@ FILE: index.html
 
     const i18n = {
       it: {
-        pageTitle: "RoCe ScriptLab It â€” Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
+        pageTitle: "RoCe ScriptLab It &mdash; Routine AutoLISP, Automazione CAD & Sviluppo su Misura",
         metaDesc: "RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.",
-        topRightsText: "RoCe ScriptLab It â€” Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
+        topRightsText: "RoCe ScriptLab It &mdash; Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
         maintenanceTitle: "Sito in manutenzione",
-        maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo Ã¨ temporaneamente sospeso.",
+        maintenanceSub: "Aggiornamenti e collaudo in corso. L'invio pubblico del modulo &egrave; temporaneamente sospeso.",
         mainTitle: "Routine per Automazione CAD, Office e Sviluppo su Misura",
-        mainSubtitle: "Premi un cubo per svolgerlo; passa o premi su una faccia per ingrandirla 1.5Ã—, e chiudendo torni alla griglia 2Ã—2.",
-        closeCube: "Chiudi cubo",
-        modeLite: "ModalitÃ  mobile leggera",
+        mainSubtitle: "Premi su un cubo per svolgerlo; passa su una faccia per ingrandirla 1.5&times;, e premila per accedere alla scheda dedicata. Premendo su \"Avvolgi sviluppo\" torni alla griglia 2&times;2.",
+        closeCube: "Avvolgi sviluppo",
+        modeLite: "Versione mobile leggera",
         modeDesktop: "Forza vista desktop",
         openHint: "Svolgi cubo",
         activeHint: "Aperto",
         inLavorazione: "In lavorazione",
         apriElenco: "Apri elenco",
-        previewTag: "1.5Ã—",
+        vediAltre: "Vedi {k} altre",
+        elencoCompleto: "Elenco completo categoria",
         info1Title: "Automazione CAD e Routine AutoLISP",
         info1Body: "Routine pronte o dedicate per ispezionare blocchi, gestire cartigli, velocizzare flussi tecnici e ridurre le operazioni ripetitive in ambiente CAD.",
         info2Title: "Licenze per Postazione e Sviluppo su Misura",
@@ -1402,7 +1291,7 @@ FILE: index.html
         info3Body: "Ogni richiesta di assistenza legata a una chiave licenza abbina automaticamente la routine di riferimento per velocizzare il supporto.",
         privacyTitle: "Informativa Privacy (GDPR) & Cookie Policy",
         privacyBody1: "Titolare del trattamento: RoCe ScriptLab It (RoCe.ScriptLab.It@gmail.com). I dati inseriti nel modulo sono trattati per rispondere a richieste di contatto, assistenza, preventivi o licenze.",
-        privacyBody2: "Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list Ã¨ facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
+        privacyBody2: "Conservazione dati: le richieste senza ordine confermato vengono rimosse trascorsi 90 giorni solari. L'iscrizione alla mailing list &egrave; facoltativa e revocabile in qualsiasi momento: alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It.",
         cookieBody: "Cookie Policy: questo sito utilizza esclusivamente cookie tecnici essenziali per il funzionamento e la lingua, senza cookie di profilazione; per informativa estesa su trattamento dati e cookie visita (premi su) Privacy & Cookie Policy.",
         linkExtendedPolicy: "Informativa estesa Privacy & Cookie",
         linkPrivacyMail: "Contatta il Titolare: RoCe.ScriptLab.It@gmail.com",
@@ -1412,7 +1301,7 @@ FILE: index.html
         secSenderTitle: "Dati dello Scrivente",
         secMsgTitle: "Messaggio",
         lblOggetto: "Oggetto / Argomento *",
-        phOggetto: "Es. Informazioni su routine e compatibilitÃ  CAD",
+        phOggetto: "Es. Informazioni su routine e compatibilit&agrave; CAD",
         lblChiaveLic: "Numero / Chiave Licenza *",
         phChiaveLic: "Es. 2026_11_20_01",
         lblAmbito: "Ambito / Software Target *",
@@ -1448,7 +1337,7 @@ FILE: index.html
           },
           ASSISTENZA: {
             label: "Assistenza",
-            desc: "Inserisci il numero/chiave licenza: il sistema collegherÃ  automaticamente il nome dello script alla tua richiesta.",
+            desc: "Inserisci il numero/chiave licenza: il sistema collegher&agrave; automaticamente il nome dello script alla tua richiesta.",
             msgPh: "Descrivi il comportamento riscontrato, eventuali messaggi di errore o aggiornamenti richiesti..."
           },
           SVILUPPO_PERSONALIZZATO: {
@@ -1464,13 +1353,13 @@ FILE: index.html
         }
       },
       en: {
-        pageTitle: "RoCe ScriptLab It â€” AutoLISP Routines, CAD Automation & Custom Development",
+        pageTitle: "RoCe ScriptLab It &mdash; AutoLISP Routines, CAD Automation & Custom Development",
         metaDesc: "RoCe ScriptLab It: ready-to-use or custom AutoLISP routines and CAD automation, per-seat license activation, and technical support.",
-        topRightsText: "RoCe ScriptLab It â€” Copyright Licensing & Assignment for Software Optimizations",
+        topRightsText: "RoCe ScriptLab It &mdash; Copyright Licensing & Assignment for Software Optimizations",
         maintenanceTitle: "Site under maintenance",
         maintenanceSub: "Updates and testing in progress. Public form submission is temporarily suspended.",
         mainTitle: "CAD Automation, Office Routines & Custom Development",
-        mainSubtitle: "Click a cube to unfold it; hover or press a face to scale it 1.5Ã—, and closing returns to the 2Ã—2 grid.",
+        mainSubtitle: "Click a cube to unfold it; hover or press a face to scale it 1.5&times;, and click it to open its page. Clicking \"Close cube\" returns to the 2&times;2 grid.",
         closeCube: "Close cube",
         modeLite: "Mobile lite mode",
         modeDesktop: "Force desktop view",
@@ -1478,7 +1367,8 @@ FILE: index.html
         activeHint: "Open",
         inLavorazione: "In lavorazione",
         apriElenco: "Open list",
-        previewTag: "1.5Ã—",
+        vediAltre: "See {k} more",
+        elencoCompleto: "Full category list",
         info1Title: "CAD Automation & AutoLISP Routines",
         info1Body: "Ready-to-use or tailored routines to inspect blocks, automate title blocks, speed up technical workflows, and reduce repetitive tasks.",
         info2Title: "Per-Seat Licenses & Custom Development",
@@ -1550,27 +1440,83 @@ FILE: index.html
       }
     };
 
+    /* Ordine delle 6 facce: 1, 2 (riga 1), 3 (riga 2), 4 (riga 3), 6, 5 (riga 4) */
     const slotClasses = ["rc-slot-1", "rc-slot-2", "rc-slot-3", "rc-slot-4", "rc-slot-5", "rc-slot-6"];
 
     function getCatSigla(cat) {
-      if (cat.sigla) return cat.sigla;
       if (cat.id === "AUTOCAD") return "CAD";
       if (cat.id === "OFFICE") return "OFF";
-      if (cat.id === "MODELLI_EW") return "XLS/DOC";
+      if (cat.id === "MODELLI_EW") return "XLS";
       return "APP";
     }
 
     function syncWorkspaceMode() {
-      document.getElementById("rcWorkspace").classList.toggle("is-unfolding", Boolean(openCubeId));
+      const isOpen = Boolean(openCubeId);
+      document.getElementById("rcWorkspace").classList.toggle("is-unfolding", isOpen);
+    }
+
+    function buildCubeSvg(sigla, isOpen) {
+      if (!isOpen) {
+        return `
+          <svg class="rc-cube-svg" viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+              <linearGradient id="cTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#64748b"/>
+                <stop offset="100%" stop-color="#475569"/>
+              </linearGradient>
+              <linearGradient id="cLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#334155"/>
+                <stop offset="100%" stop-color="#1e293b"/>
+              </linearGradient>
+              <linearGradient id="cRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#1e293b"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+            </defs>
+            <polygon points="60,104 24,84 60,64 96,84" fill="rgba(2,6,23,0.75)"/>
+            <polygon points="24,42 60,62 60,102 24,82" fill="url(#cLeft)" stroke="#94a3b8" stroke-width="1.4" stroke-linejoin="round"/>
+            <polygon points="60,62 96,42 96,82 60,102" fill="url(#cRight)" stroke="#94a3b8" stroke-width="1.4" stroke-linejoin="round"/>
+            <polygon points="60,22 96,42 60,62 24,42" fill="url(#cTop)" stroke="#cbd5e1" stroke-width="1.5" stroke-linejoin="round"/>
+            <text x="60" y="45" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800" letter-spacing="0.5">${escapeHtml(sigla)}</text>
+          </svg>
+        `;
+      }
+
+      return `
+        <svg class="rc-cube-svg" viewBox="0 0 124 114" aria-hidden="true">
+          <defs>
+            <linearGradient id="uAzLight" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.72"/>
+              <stop offset="100%" stop-color="#0284c7" stop-opacity="0.56"/>
+            </linearGradient>
+            <linearGradient id="uAzMid" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0284c7" stop-opacity="0.76"/>
+              <stop offset="100%" stop-color="#0369a1" stop-opacity="0.82"/>
+            </linearGradient>
+            <linearGradient id="uAzDeep" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0369a1" stop-opacity="0.72"/>
+              <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.84"/>
+            </linearGradient>
+          </defs>
+
+          <polygon points="34,78 56,67 82,78 60,89" fill="url(#uAzLight)" stroke="#94a3b8" stroke-width="1.4" stroke-linejoin="round"/>
+          <polygon points="34,78 60,89 38,100 12,89" fill="url(#uAzMid)" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round"/>
+          <polygon points="60,89 82,78 104,89 82,100" fill="url(#uAzDeep)" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round"/>
+          <polygon points="56,67 82,78 95,47 69,36" fill="url(#uAzLight)" stroke="#cbd5e1" stroke-width="1.6" stroke-linejoin="round"/>
+          <polygon points="34,78 56,67 47,39 25,50" fill="url(#uAzDeep)" stroke="#94a3b8" stroke-width="1.3" stroke-linejoin="round"/>
+          <polygon points="25,50 47,39 65,18 43,29" fill="url(#uAzLight)" stroke="#cbd5e1" stroke-width="1.5" stroke-linejoin="round"/>
+
+          <circle cx="34" cy="78" r="2.1" fill="#cbd5e1"/>
+          <circle cx="60" cy="89" r="2.1" fill="#cbd5e1"/>
+          <circle cx="82" cy="78" r="2.1" fill="#cbd5e1"/>
+        </svg>
+      `;
     }
 
     function renderHomeCubes() {
       const dict = i18n[currentLang] || i18n.it;
       const dock = document.getElementById("rcCubesDock");
       dock.innerHTML = "";
-
-      document.getElementById("btnCloseCube").textContent = dict.closeCube;
-      document.getElementById("btnModeToggle").textContent = forceLiteMobile ? dict.modeDesktop : dict.modeLite;
 
       CATEGORIE_DATA.forEach(cat => {
         const catTitle = cat[currentLang] || cat.it;
@@ -1584,15 +1530,8 @@ FILE: index.html
         btn.onclick = () => selectCube(cat.id);
 
         btn.innerHTML = `
-          <div class="rc-cube-scene" aria-hidden="true">
-            <div class="rc-cube-3d">
-              <div class="rc-cface rc-cface-top">${escapeHtml(sigla)}</div>
-              <div class="rc-cface rc-cface-front"></div>
-              <div class="rc-cface rc-cface-right"></div>
-              <div class="rc-cface rc-cface-back"></div>
-              <div class="rc-cface rc-cface-left"></div>
-              <div class="rc-cface rc-cface-bottom"></div>
-            </div>
+          <div class="rc-cube-scene">
+            ${buildCubeSvg(sigla, isOpen)}
           </div>
           <span class="rc-cube-label">${escapeHtml(catTitle)}</span>
           <span class="rc-cube-sub">${escapeHtml(isOpen ? dict.activeHint : dict.openHint)}</span>
@@ -1618,6 +1557,8 @@ FILE: index.html
       const catTitle = cat[currentLang] || cat.it;
       const allItems = CATALOGO_DATA.filter(x => x.categoria === cat.id);
       const hasOverflow = allItems.length > 6;
+      const remainingCount = Math.max(0, allItems.length - 5);
+      const seeMoreLabel = dict.vediAltre.replace("{k}", String(remainingCount));
 
       stage.classList.remove("is-visible");
       stage.innerHTML = "";
@@ -1626,12 +1567,24 @@ FILE: index.html
       header.className = "rc-stage-header";
       header.innerHTML = `<h2 class="rc-stage-title">${escapeHtml(catTitle)}</h2>`;
 
+      const actions = document.createElement("div");
+      actions.className = "rc-stage-actions";
+
+      const modeBtn = document.createElement("button");
+      modeBtn.type = "button";
+      modeBtn.className = "rc-mini-btn";
+      modeBtn.textContent = forceLiteMobile ? dict.modeDesktop : dict.modeLite;
+      modeBtn.onclick = () => toggleViewMode();
+      actions.appendChild(modeBtn);
+
       const closeBtn = document.createElement("button");
       closeBtn.type = "button";
       closeBtn.className = "rc-close-btn";
       closeBtn.textContent = dict.closeCube;
       closeBtn.onclick = () => closeAllCubes();
-      header.appendChild(closeBtn);
+      actions.appendChild(closeBtn);
+
+      header.appendChild(actions);
       stage.appendChild(header);
 
       const scrollWrap = document.createElement("div");
@@ -1644,16 +1597,6 @@ FILE: index.html
         const card = document.createElement("div");
         card.className = "rc-face-card " + slotClasses[i];
 
-        const badgeNum = document.createElement("span");
-        badgeNum.className = "rc-face-num";
-        badgeNum.textContent = String(i + 1);
-        card.appendChild(badgeNum);
-
-        const previewTag = document.createElement("span");
-        previewTag.className = "rc-face-preview-tag";
-        previewTag.textContent = dict.previewTag;
-        card.appendChild(previewTag);
-
         card.addEventListener("animationend", () => {
           card.classList.add("is-settled");
         }, { once: true });
@@ -1662,8 +1605,14 @@ FILE: index.html
           const moreBtn = document.createElement("button");
           moreBtn.type = "button";
           moreBtn.className = "rc-face-more-btn";
-          moreBtn.innerHTML = `<span class="rc-more-plus">+</span><span>${escapeHtml(dict.apriElenco)}</span>`;
-          moreBtn.onclick = () => toggleOverflowList();
+          moreBtn.innerHTML = `<span class="rc-more-plus">+${remainingCount}</span><span>${escapeHtml(seeMoreLabel)}</span>`;
+          moreBtn.onclick = () => {
+            toggleOverflowList();
+            const panel = document.getElementById("rcOverflowPanel");
+            if (panel && panel.classList.contains("open")) {
+              panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+          };
           card.appendChild(moreBtn);
         } else {
           const entry = allItems[i];
@@ -1707,7 +1656,7 @@ FILE: index.html
       ovPanel.id = "rcOverflowPanel";
 
       const ovHeading = document.createElement("strong");
-      ovHeading.textContent = catTitle + " â€” " + dict.apriElenco;
+      ovHeading.textContent = catTitle + " \u2014 " + dict.elencoCompleto + " (" + allItems.length + ")";
       ovPanel.appendChild(ovHeading);
 
       const ovGrid = document.createElement("div");
@@ -1754,6 +1703,7 @@ FILE: index.html
       document.body.classList.toggle("mobile-lite", forceLiteMobile);
       document.body.classList.toggle("force-desktop", !forceLiteMobile);
       renderHomeCubes();
+      renderHomeUnfoldStage();
     }
 
     function updateRequiredAttributes() {
@@ -1767,72 +1717,72 @@ FILE: index.html
     function applyTranslations() {
       const dict = i18n[currentLang] || i18n.it;
       document.documentElement.lang = currentLang;
-      document.getElementById("pageTitle").textContent = dict.pageTitle;
+      document.getElementById("pageTitle").innerHTML = dict.pageTitle;
       document.getElementById("metaDesc").setAttribute("content", dict.metaDesc);
-      document.getElementById("topRightsText").textContent = dict.topRightsText;
+      document.getElementById("topRightsText").innerHTML = dict.topRightsText;
       document.getElementById("maintenanceWrap").style.display = SHOW_MAINTENANCE_BANNER ? "block" : "none";
-      document.getElementById("maintenanceTitle").textContent = dict.maintenanceTitle;
-      document.getElementById("maintenanceSub").textContent = dict.maintenanceSub;
-      document.getElementById("mainTitle").textContent = dict.mainTitle;
-      document.getElementById("mainSubtitle").textContent = dict.mainSubtitle;
+      document.getElementById("maintenanceTitle").innerHTML = dict.maintenanceTitle;
+      document.getElementById("maintenanceSub").innerHTML = dict.maintenanceSub;
+      document.getElementById("mainTitle").innerHTML = dict.mainTitle;
+      document.getElementById("mainSubtitle").innerHTML = dict.mainSubtitle;
 
-      document.getElementById("info1Title").textContent = dict.info1Title;
-      document.getElementById("info1Body").textContent = dict.info1Body;
-      document.getElementById("info2Title").textContent = dict.info2Title;
-      document.getElementById("info2Body").textContent = dict.info2Body;
-      document.getElementById("info3Title").textContent = dict.info3Title;
-      document.getElementById("info3Body").textContent = dict.info3Body;
+      document.getElementById("info1Title").innerHTML = dict.info1Title;
+      document.getElementById("info1Body").innerHTML = dict.info1Body;
+      document.getElementById("info2Title").innerHTML = dict.info2Title;
+      document.getElementById("info2Body").innerHTML = dict.info2Body;
+      document.getElementById("info3Title").innerHTML = dict.info3Title;
+      document.getElementById("info3Body").innerHTML = dict.info3Body;
 
-      document.getElementById("privacyTitle").textContent = dict.privacyTitle;
-      document.getElementById("privacyBody1").textContent = dict.privacyBody1;
-      document.getElementById("privacyBody2").textContent = dict.privacyBody2;
-      document.getElementById("cookieBody").textContent = dict.cookieBody;
-      document.getElementById("linkExtendedPolicy").textContent = dict.linkExtendedPolicy;
-      document.getElementById("linkPrivacyMail").textContent = dict.linkPrivacyMail;
+      document.getElementById("privacyTitle").innerHTML = dict.privacyTitle;
+      document.getElementById("privacyBody1").innerHTML = dict.privacyBody1;
+      document.getElementById("privacyBody2").innerHTML = dict.privacyBody2;
+      document.getElementById("cookieBody").innerHTML = dict.cookieBody;
+      document.getElementById("linkExtendedPolicy").innerHTML = dict.linkExtendedPolicy;
+      document.getElementById("linkPrivacyMail").innerHTML = dict.linkPrivacyMail;
 
       document.getElementById("cookieBannerText").innerHTML =
         dict.cookieBannerText + ' <a href="privacy-cookies.html" id="cookieBannerLink">' + dict.cookieBannerLink + "</a>.";
 
-      document.getElementById("secTabTitle").textContent = dict.secTabTitle;
-      document.getElementById("secSenderTitle").textContent = dict.secSenderTitle;
-      document.getElementById("secMsgTitle").textContent = dict.secMsgTitle;
+      document.getElementById("secTabTitle").innerHTML = dict.secTabTitle;
+      document.getElementById("secSenderTitle").innerHTML = dict.secSenderTitle;
+      document.getElementById("secMsgTitle").innerHTML = dict.secMsgTitle;
 
-      document.getElementById("lblOggetto").textContent = dict.lblOggetto;
+      document.getElementById("lblOggetto").innerHTML = dict.lblOggetto;
       document.getElementById("oggetto_contatto").placeholder = dict.phOggetto;
-      document.getElementById("lblChiaveLic").textContent = dict.lblChiaveLic;
+      document.getElementById("lblChiaveLic").innerHTML = dict.lblChiaveLic;
       document.getElementById("chiave_licenza").placeholder = dict.phChiaveLic;
-      document.getElementById("lblAmbito").textContent = dict.lblAmbito;
+      document.getElementById("lblAmbito").innerHTML = dict.lblAmbito;
       document.getElementById("ambito").placeholder = dict.phAmbito;
-      document.getElementById("lblDiritti").textContent = dict.lblDiritti;
-      document.getElementById("optNonEscl").textContent = dict.optNonEscl;
-      document.getElementById("optEscl").textContent = dict.optEscl;
-      document.getElementById("lblScriptRichiesto").textContent = dict.lblScriptRichiesto;
+      document.getElementById("lblDiritti").innerHTML = dict.lblDiritti;
+      document.getElementById("optNonEscl").innerHTML = dict.optNonEscl;
+      document.getElementById("optEscl").innerHTML = dict.optEscl;
+      document.getElementById("lblScriptRichiesto").innerHTML = dict.lblScriptRichiesto;
       document.getElementById("script_richiesto").placeholder = dict.phScriptRichiesto;
-      document.getElementById("lblNumPostazioni").textContent = dict.lblNumPostazioni;
+      document.getElementById("lblNumPostazioni").innerHTML = dict.lblNumPostazioni;
 
-      document.getElementById("lblSoggetto").textContent = dict.lblSoggetto;
-      document.getElementById("optAzienda").textContent = dict.optAzienda;
-      document.getElementById("optPrivato").textContent = dict.optPrivato;
-      document.getElementById("lblNome").textContent = dict.lblNome;
+      document.getElementById("lblSoggetto").innerHTML = dict.lblSoggetto;
+      document.getElementById("optAzienda").innerHTML = dict.optAzienda;
+      document.getElementById("optPrivato").innerHTML = dict.optPrivato;
+      document.getElementById("lblNome").innerHTML = dict.lblNome;
       document.getElementById("nome").placeholder = dict.phNome;
-      document.getElementById("lblEmail").textContent = dict.lblEmail;
+      document.getElementById("lblEmail").innerHTML = dict.lblEmail;
       document.getElementById("email").placeholder = dict.phEmail;
-      document.getElementById("lblOs").textContent = dict.lblOs;
+      document.getElementById("lblOs").innerHTML = dict.lblOs;
       document.getElementById("os").placeholder = dict.phOs;
-      document.getElementById("lblMessaggio").textContent = dict.lblMessaggio;
-      document.getElementById("lblMailingList").textContent = dict.lblMailingList;
-      document.getElementById("btnSubscribeQuick").textContent = dict.btnSubscribeQuick;
+      document.getElementById("lblMessaggio").innerHTML = dict.lblMessaggio;
+      document.getElementById("lblMailingList").innerHTML = dict.lblMailingList;
+      document.getElementById("btnSubscribeQuick").innerHTML = dict.btnSubscribeQuick;
 
       const btn = document.getElementById("submitBtn");
-      if (!btn.disabled) btn.textContent = dict.btnSubmit;
+      if (!btn.disabled) btn.innerHTML = dict.btnSubmit;
 
       Object.keys(dict.tabs).forEach(key => {
         const tabEl = document.getElementById("tab_" + key);
-        if (tabEl) tabEl.textContent = dict.tabs[key].label;
+        if (tabEl) tabEl.innerHTML = dict.tabs[key].label;
       });
 
       const tMeta = dict.tabs[currentTipo];
-      document.getElementById("tabDescription").textContent = tMeta.desc;
+      document.getElementById("tabDescription").innerHTML = tMeta.desc;
       document.getElementById("messaggio").placeholder = tMeta.msgPh;
 
       renderHomeCubes();
