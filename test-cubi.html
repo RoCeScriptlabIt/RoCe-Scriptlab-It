@@ -1,7 +1,7 @@
 <!--
 ================================================================================
-PROGETTO: RoCe ScriptLab It - 4 Cubi 3D (Griglia 2x2 <-> Colonna Sinistra + Svolto 90°)
-FILE: test-cubi.html
+PROGETTO: RoCe ScriptLab It - Home Vetrina 4 Cubi 3D Snelli & Modulo Richieste
+FILE: index.html
 ================================================================================
 -->
 <!DOCTYPE html>
@@ -9,7 +9,10 @@ FILE: test-cubi.html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">RoCe ScriptLab It — 4 Cubi Interattivi</title>
+  <title id="pageTitle">RoCe ScriptLab It — Routine per Automazione CAD &amp; OFFICE &amp; Sviluppo su Misura</title>
+  <meta id="metaDesc" name="description" content="RoCe ScriptLab It: routine AutoLISP e automazioni CAD pronte all'uso o sviluppate su misura, gestione licenze per postazione e supporto tecnico rapido.">
+  <meta name="keywords" content="AutoLISP, script AutoCAD, automazione CAD, routine LISP, sviluppo LISP su misura, assistenza ticket CAD, RoCe ScriptLab It">
+  <meta name="robots" content="index, follow">
 
   <style>
     :root {
@@ -21,8 +24,17 @@ FILE: test-cubi.html
       --accent: #38bdf8;
       --accent-dark: #0284c7;
       --border: #334155;
+      --ok-bg: #064e3b;
+      --ok-text: #a7f3d0;
+      --err-bg: #7f1d1d;
+      --err-text: #fecaca;
+      --warn-bg: #451a03;
+      --warn-text: #fde68a;
+      --warn-border: #d97706;
       --work-border: #f59e0b;
       --work-text: #fde68a;
+      --header-h: 46px;
+      --form-w: 312px;
     }
 
     * { box-sizing: border-box; }
@@ -36,91 +48,175 @@ FILE: test-cubi.html
       line-height: 1.45;
     }
 
-    .test-bar {
-      position: sticky;
+    .top-strip {
+      position: fixed;
       top: 0;
-      z-index: 60;
-      background: rgba(11, 18, 32, 0.96);
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      z-index: 100;
       border-bottom: 1px solid var(--border);
+      background: rgba(11, 18, 32, 0.97);
       backdrop-filter: blur(8px);
-      padding: 10px 18px;
+      display: flex;
+      align-items: center;
     }
 
-    .test-bar-inner {
-      max-width: 1220px;
+    .top-strip-inner {
+      width: 100%;
+      max-width: 1380px;
       margin: 0 auto;
+      padding: 0 20px;
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 10px;
       font-size: 0.82rem;
     }
 
-    .brand-tag {
-      color: var(--accent);
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      font-size: 0.72rem;
+    .rights-line {
+      color: #cbd5e1;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .controls {
+    .support-right {
       display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .support-mail {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .support-mail:hover { text-decoration: underline; }
+
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .lang-btn {
+      padding: 3px 9px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    .page-shell {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: calc(var(--header-h) + 18px) 20px 96px;
+    }
+
+    .content-col {
+      margin-right: calc(var(--form-w) + 20px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .maintenance-box {
+      background: var(--warn-bg);
+      border: 2px solid var(--warn-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+    }
+
+    .maintenance-title {
+      margin: 0 0 3px;
+      font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fef3c7;
+      line-height: 1.15;
+    }
+
+    .maintenance-sub {
+      margin: 0;
+      font-size: 0.86rem;
+      color: var(--warn-text);
+    }
+
+    /* =========================================================================
+       VETRINA 4 CUBI 3D SNELLI (GRIGLIA 2x2 <-> COLONNA STRETTA + 90°)
+       ========================================================================= */
+    .rc-home-showcase {
+      padding: 8px 2px 4px;
+    }
+
+    .rc-showcase-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .rc-showcase-heading-wrap .brand {
+      margin-bottom: 2px;
+    }
+
+    .rc-showcase-title {
+      margin: 0;
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      line-height: 1.2;
+    }
+
+    .rc-showcase-sub {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .rc-showcase-actions {
+      display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .btn-mini {
+    .rc-mini-btn {
       padding: 5px 10px;
-      border-radius: 6px;
+      border-radius: 7px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
       transition: border-color 0.15s ease, background 0.15s ease;
     }
 
-    .btn-mini:hover { border-color: var(--accent); }
-    .btn-mini.active { background: var(--accent); color: #062033; border-color: var(--accent); }
+    .rc-mini-btn:hover { border-color: var(--accent); }
+    .rc-mini-btn.active { background: var(--accent); color: #062033; border-color: var(--accent); }
 
-    .wrap {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 22px 18px 64px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .intro-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 20px;
-    }
-
-    .intro-box h1 {
-      margin: 4px 0 6px;
-      font-size: clamp(1.2rem, 2.2vw, 1.55rem);
-    }
-
-    .intro-box p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    /* =========================================================================
-       WORKSPACE: GRIGLIA 2x2 QUANDO TUTTI CHIUSI -> COLONNA SINISTRA + PALCO
-       ========================================================================= */
     .rc-workspace {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      gap: 16px;
       align-items: start;
       transition: grid-template-columns 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -129,222 +225,209 @@ FILE: test-cubi.html
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 18px 14px;
+      justify-items: center;
+      padding: 6px 0;
     }
 
+    /* Colonna snella quando il cubo è svolto */
     .rc-workspace.is-unfolding {
-      grid-template-columns: 236px minmax(0, 1fr);
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: 14px;
     }
 
     .rc-workspace.is-unfolding .rc-cubes-col {
       grid-column: 1;
       grid-template-columns: 1fr;
       gap: 12px;
+      justify-items: center;
+      padding: 0;
     }
 
-    .rc-cube-tile {
-      position: relative;
+    /* Cubo 3D libero senza riquadro */
+    .rc-cube-trigger {
       appearance: none;
-      text-align: left;
-      background: radial-gradient(circle at 50% 25%, #26354d 0%, var(--surface) 68%, var(--surface-2) 100%);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 16px 16px;
+      background: transparent;
+      border: none;
+      padding: 5px 6px;
       color: var(--text);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transition:
-        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.25s ease,
-        box-shadow 0.32s ease,
-        padding 0.3s ease;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      gap: 5px;
+      text-align: center;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .rc-workspace.is-unfolding .rc-cube-tile {
-      padding: 13px 12px;
-      gap: 8px;
-    }
-
-    .rc-cube-tile:hover {
+    .rc-cube-trigger:hover {
       transform: translateY(-3px);
-      border-color: var(--accent);
-      box-shadow: 0 16px 32px rgba(2, 132, 199, 0.22);
     }
 
-    .rc-cube-tile.is-active {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4), 0 16px 32px rgba(2, 132, 199, 0.28);
-      background: radial-gradient(circle at 50% 25%, #1d3b58 0%, var(--surface) 70%, var(--surface-2) 100%);
-      transform: translateX(4px);
+    .rc-cube-trigger.is-active {
+      transform: translateX(2px);
     }
 
-    .rc-tile-top {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .rc-tile-badge {
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 3px 8px;
-      border-radius: 999px;
-    }
-
-    .rc-tile-count {
-      font-size: 0.74rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    /* Cubo 3D CSS isometrico */
     .rc-cube-scene {
-      width: 120px;
-      height: 120px;
-      perspective: 520px;
+      --cube-size: 62px;
+      --half: 31px;
+      width: 100px;
+      height: 100px;
+      perspective: 480px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 2px 0;
       transition: width 0.3s ease, height 0.3s ease;
     }
 
     .rc-workspace.is-unfolding .rc-cube-scene {
-      width: 84px;
-      height: 84px;
+      --cube-size: 44px;
+      --half: 22px;
+      width: 72px;
+      height: 72px;
     }
 
     .rc-cube-3d {
-      width: 72px;
-      height: 72px;
+      width: var(--cube-size);
+      height: var(--cube-size);
       position: relative;
       transform-style: preserve-3d;
       transform: rotateX(-32deg) rotateY(-42deg);
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .rc-workspace.is-unfolding .rc-cube-3d {
-      transform: rotateX(-32deg) rotateY(-42deg) scale(0.72);
+    .rc-cube-trigger:hover .rc-cube-3d {
+      transform: rotateX(-27deg) rotateY(-34deg) scale(1.06);
     }
 
-    .rc-cube-tile:hover .rc-cube-3d {
-      transform: rotateX(-26deg) rotateY(-34deg) scale(1.06);
-    }
-
-    .rc-workspace.is-unfolding .rc-cube-tile:hover .rc-cube-3d {
-      transform: rotateX(-26deg) rotateY(-34deg) scale(0.78);
-    }
-
-    .rc-cube-tile.is-active .rc-cube-3d {
-      transform: rotateX(-16deg) rotateY(-18deg) scale(0.8);
+    /* Evidenziazione diretta sul cubo 3D aperto */
+    .rc-cube-trigger.is-active .rc-cube-3d {
+      transform: rotateX(-22deg) rotateY(-24deg) scale(1.14);
+      filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
     }
 
     .rc-cface {
       position: absolute;
-      width: 72px;
-      height: 72px;
-      border-radius: 6px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
+      width: var(--cube-size);
+      height: var(--cube-size);
+      border-radius: 5px;
+      border: 1px solid rgba(148, 163, 184, 0.42);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.66rem;
+      font-size: 0.56rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
       backface-visibility: visible;
-      box-shadow: inset 0 0 14px rgba(15, 23, 42, 0.45);
+      transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
     }
 
     .rc-cface-top {
       background: linear-gradient(135deg, #64748b 0%, #475569 100%);
       color: #f8fafc;
-      transform: rotateX(90deg) translateZ(36px);
+      transform: rotateX(90deg) translateZ(var(--half));
     }
 
     .rc-cface-front {
       background: linear-gradient(160deg, #334155 0%, #1e293b 100%);
       color: var(--accent);
-      transform: translateZ(36px);
+      transform: translateZ(var(--half));
     }
 
     .rc-cface-right {
       background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
       color: #cbd5e1;
-      transform: rotateY(90deg) translateZ(36px);
+      transform: rotateY(90deg) translateZ(var(--half));
     }
 
     .rc-cface-back {
       background: #0f172a;
-      transform: rotateY(180deg) translateZ(36px);
+      transform: rotateY(180deg) translateZ(var(--half));
     }
 
     .rc-cface-left {
       background: #1e293b;
-      transform: rotateY(-90deg) translateZ(36px);
+      transform: rotateY(-90deg) translateZ(var(--half));
     }
 
     .rc-cface-bottom {
-      background: #0b1220;
-      transform: rotateX(-90deg) translateZ(36px);
-      box-shadow: 0 18px 28px rgba(0, 0, 0, 0.65);
+      background: #090e1a;
+      transform: rotateX(-90deg) translateZ(var(--half));
+      box-shadow: 0 14px 22px rgba(0, 0, 0, 0.68);
     }
 
-    .rc-tile-footer {
-      text-align: center;
+    .rc-cube-trigger.is-active .rc-cface {
+      border-color: var(--accent);
     }
 
-    .rc-tile-title {
-      margin: 0 0 2px;
-      font-size: 1rem;
+    .rc-cube-trigger.is-active .rc-cface-top {
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      color: #062033;
+    }
+
+    .rc-cube-trigger.is-active .rc-cface-front {
+      background: linear-gradient(160deg, #0c4a6e 0%, #082f49 100%);
+      color: #7dd3fc;
+    }
+
+    .rc-cube-trigger.is-active .rc-cface-right {
+      background: linear-gradient(160deg, #082f49 0%, #0f172a 100%);
+      color: #bae6fd;
+    }
+
+    .rc-cube-label {
+      font-size: 0.88rem;
       font-weight: 800;
       color: var(--text);
+      line-height: 1.2;
+      transition: color 0.2s ease;
     }
 
-    .rc-workspace.is-unfolding .rc-tile-title {
-      font-size: 0.9rem;
+    .rc-workspace.is-unfolding .rc-cube-label {
+      font-size: 0.72rem;
+      max-width: 118px;
     }
 
-    .rc-tile-hint {
-      font-size: 0.74rem;
+    .rc-cube-trigger.is-active .rc-cube-label {
       color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .rc-cube-sub {
+      font-size: 0.68rem;
+      color: var(--muted);
       font-weight: 600;
     }
 
+    .rc-workspace.is-unfolding .rc-cube-sub {
+      font-size: 0.62rem;
+    }
+
+    .rc-cube-trigger.is-active .rc-cube-sub {
+      color: #7dd3fc;
+    }
+
     /* =========================================================================
-       PALCO DELLO SVILUPPO A 90°
+       PALCO SVILUPPO RUOTATO DI 90° CON ANTEPRIMA RIALZATA
        ========================================================================= */
     .rc-unfold-stage {
       display: none;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 16px;
       opacity: 0;
       transform: translateY(8px) scale(0.985);
-      transition:
-        opacity 0.36s ease,
-        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.25s ease;
+      transition: opacity 0.34s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .rc-workspace.is-unfolding .rc-unfold-stage {
       display: block;
       grid-column: 2;
-      border-color: var(--accent);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      border-color: rgba(56, 189, 248, 0.65);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
     }
 
     .rc-workspace.is-unfolding .rc-unfold-stage.is-visible {
@@ -356,33 +439,26 @@ FILE: test-cubi.html
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding-bottom: 12px;
-      margin-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rc-stage-title-wrap {
-      display: flex;
-      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
     .rc-stage-title {
       margin: 0;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       color: var(--text);
     }
 
     .rc-close-btn {
-      padding: 6px 12px;
-      border-radius: 7px;
+      padding: 5px 10px;
+      border-radius: 6px;
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: var(--text);
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -396,16 +472,22 @@ FILE: test-cubi.html
       width: 100%;
       overflow-x: auto;
       overflow-y: visible;
-      padding: 18px 14px 20px;
+      padding: 16px 12px 18px;
       display: flex;
       justify-content: center;
     }
 
-    /* Schema a 6 facce ruotato di 90° */
+    /*
+      Schema ruotato di 90° (3 colonne larghe x 4 righe):
+      Riga 1: [ Faccia 5 ] [ vuoto ]    [ vuoto ]
+      Riga 2: [ Faccia 1 ] [ Faccia 2 ] [ Faccia 3 ]
+      Riga 3: [ vuoto ]    [ Faccia 4 ] [ Faccia 6 ]
+      Riga 4: [ vuoto ]    [ vuoto ]    [ vuoto ]
+    */
     .rc-net-90 {
       display: grid;
-      grid-template-columns: repeat(4, minmax(120px, 140px));
-      grid-template-rows: repeat(3, minmax(120px, 140px));
+      grid-template-columns: repeat(3, minmax(116px, 142px));
+      grid-template-rows: repeat(3, minmax(116px, 142px));
       gap: 8px;
       justify-content: center;
     }
@@ -414,31 +496,28 @@ FILE: test-cubi.html
     .rc-slot-1 { grid-column: 1; grid-row: 2; }
     .rc-slot-2 { grid-column: 2; grid-row: 2; }
     .rc-slot-3 { grid-column: 3; grid-row: 2; }
-    .rc-slot-4 { grid-column: 4; grid-row: 2; }
-    .rc-slot-6 { grid-column: 4; grid-row: 3; }
+    .rc-slot-4 { grid-column: 2; grid-row: 3; }
+    .rc-slot-6 { grid-column: 3; grid-row: 3; }
 
     .rc-face-card {
       position: relative;
-      border-radius: 11px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--surface-2);
       overflow: hidden;
       z-index: 1;
       opacity: 0;
-      transform: scale(0.84) rotate(-6deg);
-      animation: unfoldFace 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      transition:
-        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.22s ease,
-        box-shadow 0.28s ease;
+      transform: scale(0.84) rotate(-5deg);
+      animation: unfoldFace 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.26s ease;
     }
 
-    .rc-face-card:nth-child(1) { animation-delay: 0.03s; }
-    .rc-face-card:nth-child(2) { animation-delay: 0.08s; }
-    .rc-face-card:nth-child(3) { animation-delay: 0.13s; }
-    .rc-face-card:nth-child(4) { animation-delay: 0.18s; }
-    .rc-face-card:nth-child(5) { animation-delay: 0.23s; }
-    .rc-face-card:nth-child(6) { animation-delay: 0.28s; }
+    .rc-face-card:nth-child(1) { animation-delay: 0.02s; }
+    .rc-face-card:nth-child(2) { animation-delay: 0.06s; }
+    .rc-face-card:nth-child(3) { animation-delay: 0.1s; }
+    .rc-face-card:nth-child(4) { animation-delay: 0.14s; }
+    .rc-face-card:nth-child(5) { animation-delay: 0.18s; }
+    .rc-face-card:nth-child(6) { animation-delay: 0.22s; }
 
     @keyframes unfoldFace {
       to {
@@ -455,49 +534,46 @@ FILE: test-cubi.html
 
     .rc-face-card.is-settled:hover,
     .rc-face-card.is-settled:focus-within {
-      transform: translateY(-7px) scale(1.24);
+      transform: translateY(-6px) scale(1.24);
       border-color: var(--accent);
-      box-shadow: 0 20px 36px rgba(2, 6, 23, 0.78), 0 0 0 1px rgba(56, 189, 248, 0.55);
+      box-shadow: 0 18px 32px rgba(2, 6, 23, 0.8), 0 0 0 1px rgba(56, 189, 248, 0.55);
       z-index: 25;
     }
 
     .rc-face-preview-tag {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: 5px;
+      right: 5px;
       z-index: 4;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 999px;
       background: rgba(56, 189, 248, 0.92);
       color: #062033;
-      font-size: 0.6rem;
+      font-size: 0.56rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
       text-transform: uppercase;
       opacity: 0;
-      transform: translateY(-2px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.2s ease;
       pointer-events: none;
     }
 
     .rc-face-card.is-settled:hover .rc-face-preview-tag,
     .rc-face-card.is-settled:focus-within .rc-face-preview-tag {
       opacity: 1;
-      transform: translateY(0);
     }
 
     .rc-face-num {
       position: absolute;
-      top: 6px;
-      left: 6px;
+      top: 5px;
+      left: 5px;
       z-index: 3;
-      width: 20px;
-      height: 20px;
-      border-radius: 5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
       background: rgba(11, 18, 32, 0.85);
       border: 1px solid var(--border);
       color: var(--accent);
-      font-size: 0.66rem;
+      font-size: 0.62rem;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -522,46 +598,38 @@ FILE: test-cubi.html
       height: 100%;
       object-fit: cover;
       opacity: 0.65;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    .rc-face-card:hover .rc-face-link img {
-      transform: scale(1.06);
-      opacity: 0.82;
     }
 
     .rc-face-caption {
       position: relative;
       z-index: 2;
-      padding: 8px;
+      padding: 7px;
       background: linear-gradient(to top, rgba(2, 6, 23, 0.96) 0%, rgba(2, 6, 23, 0.55) 70%, transparent 100%);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
-      line-height: 1.25;
+      line-height: 1.2;
     }
 
     .rc-face-work {
       width: 100%;
       height: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 12px;
+      padding: 8px;
       background: repeating-linear-gradient(
         -45deg,
         rgba(15, 23, 42, 0.95),
-        rgba(15, 23, 42, 0.95) 10px,
-        rgba(30, 41, 59, 0.85) 10px,
-        rgba(30, 41, 59, 0.85) 20px
+        rgba(15, 23, 42, 0.95) 9px,
+        rgba(30, 41, 59, 0.85) 9px,
+        rgba(30, 41, 59, 0.85) 18px
       );
       border: 1px dashed var(--work-border);
-      border-radius: 10px;
+      border-radius: 9px;
       color: var(--work-text);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
-      gap: 4px;
     }
 
     .rc-face-more-btn {
@@ -575,31 +643,31 @@ FILE: test-cubi.html
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 8px;
       text-align: center;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 800;
-      gap: 6px;
+      gap: 5px;
     }
 
     .rc-more-plus {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 999px;
       background: var(--accent);
       color: #062033;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.92rem;
       font-weight: 900;
     }
 
     .rc-overflow-panel {
       display: none;
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 12px;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
       background: var(--surface-2);
       border: 1px solid var(--border);
     }
@@ -608,20 +676,20 @@ FILE: test-cubi.html
 
     .rc-overflow-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 8px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 7px;
+      margin-top: 8px;
     }
 
     .rc-overflow-item {
       display: block;
-      padding: 8px 11px;
-      border-radius: 7px;
+      padding: 7px 10px;
+      border-radius: 6px;
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 600;
     }
 
@@ -630,9 +698,6 @@ FILE: test-cubi.html
       color: var(--accent);
     }
 
-    /* =========================================================================
-       MODALITÀ LEGGERA PER SMARTPHONE
-       ========================================================================= */
     body.mobile-lite .rc-workspace.is-unfolding {
       grid-template-columns: 1fr;
     }
@@ -655,12 +720,12 @@ FILE: test-cubi.html
     body.mobile-lite .rc-face-card {
       grid-column: auto !important;
       grid-row: auto !important;
-      min-height: 116px;
+      min-height: 104px;
     }
 
     body.mobile-lite .rc-face-card.is-settled:hover,
     body.mobile-lite .rc-face-card.is-settled:focus-within {
-      transform: translateY(-4px) scale(1.1);
+      transform: translateY(-3px) scale(1.08);
     }
 
     @media (max-width: 820px) {
@@ -680,407 +745,8 @@ FILE: test-cubi.html
         grid-column: 1 / -1;
       }
 
-      .rc-cube-tile,
-      .rc-workspace.is-unfolding .rc-cube-tile {
-        padding: 12px 10px;
-      }
-
       .rc-cube-scene,
       .rc-workspace.is-unfolding .rc-cube-scene {
-        width: 86px;
-        height: 86px;
-      }
-
-      .rc-cube-3d,
-      .rc-cface {
-        width: 56px;
-        height: 56px;
-      }
-
-      .rc-cface-top { transform: rotateX(90deg) translateZ(28px); }
-      .rc-cface-front { transform: translateZ(28px); }
-      .rc-cface-right { transform: rotateY(90deg) translateZ(28px); }
-      .rc-cface-back { transform: rotateY(180deg) translateZ(28px); }
-      .rc-cface-left { transform: rotateY(-90deg) translateZ(28px); }
-      .rc-cface-bottom { transform: rotateX(-90deg) translateZ(28px); }
-
-      body:not(.force-desktop) .rc-net-90 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: auto;
-        width: 100%;
-      }
-
-      body:not(.force-desktop) .rc-face-card {
-        grid-column: auto !important;
-        grid-row: auto !important;
-        min-height: 116px;
-      }
-
-      body:not(.force-desktop) .rc-face-card.is-settled:hover,
-      body:not(.force-desktop) .rc-face-card.is-settled:focus-within {
-        transform: translateY(-4px) scale(1.1);
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="test-bar">
-    <div class="test-bar-inner">
-      <div>
-        <span class="brand-tag">RoCe ScriptLab It</span>
-        <strong id="barSubtitle">4 Cubi 3D (Griglia 2×2 ↔ Colonna Sinistra + 90°)</strong>
-      </div>
-      <div class="controls">
-        <button type="button" class="btn-mini" id="btnCloseAll" onclick="closeAllCubes()">Chiudi cubo</button>
-        <button type="button" class="btn-mini" id="btnModeToggle" onclick="toggleViewMode()">Modalità smartphone leggera</button>
-        <button type="button" class="btn-mini active" id="btnIT" onclick="setLang('it')">IT</button>
-        <button type="button" class="btn-mini" id="btnEN" onclick="setLang('en')">EN</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <section class="intro-box">
-      <span class="brand-tag">Anteprima Interattiva</span>
-      <h1 id="mainHeading">Catalogo Categorie — Griglia 2×2 e Svolgimento a 90°</h1>
-      <p id="mainDesc">All'avvio i 4 cubi sono in griglia 2×2; aprendone uno si dispongono in colonna a sinistra evidenziando quello aperto, e chiudendolo tornano alla griglia.</p>
-    </section>
-
-    <section id="rcWorkspace" class="rc-workspace" aria-label="Categorie e sviluppo">
-      <div id="rcCubesDock" class="rc-cubes-col"></div>
-      <div id="rcUnfoldStage" class="rc-unfold-stage" aria-live="polite"></div>
-    </section>
-  </main>
-
-  <script src="catalogo.js"></script>
-  <script>
-    const FALLBACK_CATEGORIE = [
-      { id: "AUTOCAD", it: "AutoCAD", en: "AutoCAD", sigla: "CAD" },
-      { id: "OFFICE", it: "Office", en: "Office", sigla: "OFF" },
-      { id: "MODELLI_EW", it: "Modelli Excel e Word", en: "Excel & Word Templates", sigla: "XLS/DOC" },
-      { id: "ALTRI", it: "Altri programmi", en: "Other Software", sigla: "3D/APP" }
-    ];
-
-    const FALLBACK_CATALOGO = [
-      {
-        id: "gestione-blocchi",
-        categoria: "AUTOCAD",
-        stato: "pronto",
-        immagine: "img/schede/autocad-blocchi.jpg",
-        titolo: { it: "Gestione Blocchi", en: "Block Manager" }
-      },
-      {
-        id: "automazione-cartigli",
-        categoria: "AUTOCAD",
-        stato: "pronto",
-        immagine: "img/schede/autocad-cartigli.jpg",
-        titolo: { it: "Automazione Cartigli", en: "Title Block Automation" }
-      },
-      {
-        id: "report-distinte-office",
-        categoria: "OFFICE",
-        stato: "pronto",
-        immagine: "img/schede/office-report.jpg",
-        titolo: { it: "Distinte Office", en: "Office Schedule" }
-      },
-      {
-        id: "modello-preventivo-licenze",
-        categoria: "MODELLI_EW",
-        stato: "pronto",
-        immagine: "img/schede/modello-offerta.jpg",
-        titolo: { it: "Modello Offerta", en: "Quote Template" }
-      },
-      {
-        id: "rhino-estrazione-curve",
-        categoria: "ALTRI",
-        stato: "pronto",
-        immagine: "img/schede/rhino-curve.jpg",
-        titolo: { it: "Curve Rhino", en: "Rhino Curves" }
-      }
-    ];
-
-    const CATEGORIE_DATA = (typeof CATEGORIE_ROCE !== "undefined" && Array.isArray(CATEGORIE_ROCE) && CATEGORIE_ROCE.length)
-      ? CATEGORIE_ROCE
-      : FALLBACK_CATEGORIE;
-
-    const CATALOGO_DATA = (typeof CATALOGO_ROCE !== "undefined" && Array.isArray(CATALOGO_ROCE) && CATALOGO_ROCE.length)
-      ? CATALOGO_ROCE
-      : FALLBACK_CATALOGO;
-
-    let currentLang = "it";
-    let openCubeId = null;
-    let forceLiteMobile = false;
-
-    const labels = {
-      it: {
-        mainHeading: "Catalogo Categorie — Griglia 2×2 e Svolgimento a 90°",
-        mainDesc: "All'avvio i 4 cubi sono in griglia 2×2; aprendone uno si dispongono in colonna a sinistra evidenziando quello aperto, e chiudendolo tornano alla griglia.",
-        closeAll: "Chiudi cubo",
-        openCube: "Premi per svolgere",
-        openedHint: "Aperto — premi per chiudere",
-        inLavorazione: "In lavorazione",
-        apriElenco: "Apri elenco completo",
-        totVoci: "schede",
-        modeLite: "Modalità smartphone leggera",
-        modeDesktop: "Forza vista desktop",
-        previewTag: "Anteprima"
-      },
-      en: {
-        mainHeading: "Category Catalog — 2×2 Grid & 90° Unfolding",
-        mainDesc: "On load, the 4 cubes sit in a 2×2 grid; opening one aligns them in a left column highlighting the active cube, and closing returns to the grid.",
-        closeAll: "Close cube",
-        openCube: "Click to unfold",
-        openedHint: "Open — click to close",
-        inLavorazione: "In lavorazione",
-        apriElenco: "Open full list",
-        totVoci: "items",
-        modeLite: "Mobile lite mode",
-        modeDesktop: "Force desktop view",
-        previewTag: "Preview"
-      }
-    };
-
-    const slotClasses = ["rc-slot-1", "rc-slot-2", "rc-slot-3", "rc-slot-4", "rc-slot-5", "rc-slot-6"];
-
-    function getCatSigla(cat) {
-      if (cat.sigla) return cat.sigla;
-      if (cat.id === "AUTOCAD") return "CAD";
-      if (cat.id === "OFFICE") return "OFF";
-      if (cat.id === "MODELLI_EW") return "XLS/DOC";
-      return "APP";
-    }
-
-    function syncWorkspaceMode() {
-      const ws = document.getElementById("rcWorkspace");
-      ws.classList.toggle("is-unfolding", Boolean(openCubeId));
-    }
-
-    function renderDock() {
-      const t = labels[currentLang] || labels.it;
-      const dock = document.getElementById("rcCubesDock");
-      dock.innerHTML = "";
-
-      document.getElementById("mainHeading").textContent = t.mainHeading;
-      document.getElementById("mainDesc").textContent = t.mainDesc;
-      document.getElementById("btnCloseAll").textContent = t.closeAll;
-      document.getElementById("btnModeToggle").textContent = forceLiteMobile ? t.modeDesktop : t.modeLite;
-
-      CATEGORIE_DATA.forEach((cat, idx) => {
-        const catTitle = cat[currentLang] || cat.it;
-        const count = CATALOGO_DATA.filter(x => x.categoria === cat.id).length;
-        const isOpen = (openCubeId === cat.id);
-        const sigla = getCatSigla(cat);
-
-        const tile = document.createElement("button");
-        tile.type = "button";
-        tile.className = "rc-cube-tile" + (isOpen ? " is-active" : "");
-        tile.setAttribute("aria-expanded", isOpen ? "true" : "false");
-        tile.onclick = () => selectCube(cat.id);
-
-        tile.innerHTML = `
-          <div class="rc-tile-top">
-            <span class="rc-tile-badge">0${idx + 1} · ${escapeHtml(sigla)}</span>
-            <span class="rc-tile-count">${count} ${escapeHtml(t.totVoci)}</span>
-          </div>
-          <div class="rc-cube-scene" aria-hidden="true">
-            <div class="rc-cube-3d">
-              <div class="rc-cface rc-cface-top">${escapeHtml(sigla)}</div>
-              <div class="rc-cface rc-cface-front">6</div>
-              <div class="rc-cface rc-cface-right">90°</div>
-              <div class="rc-cface rc-cface-back"></div>
-              <div class="rc-cface rc-cface-left"></div>
-              <div class="rc-cface rc-cface-bottom"></div>
-            </div>
-          </div>
-          <div class="rc-tile-footer">
-            <h2 class="rc-tile-title">${escapeHtml(catTitle)}</h2>
-            <span class="rc-tile-hint">${escapeHtml(isOpen ? t.openedHint : t.openCube)}</span>
-          </div>
-        `;
-
-        dock.appendChild(tile);
-      });
-    }
-
-    function renderUnfoldStage() {
-      const t = labels[currentLang] || labels.it;
-      const stage = document.getElementById("rcUnfoldStage");
-
-      if (!openCubeId) {
-        stage.classList.remove("is-visible");
-        stage.innerHTML = "";
-        return;
-      }
-
-      const cat = CATEGORIE_DATA.find(c => c.id === openCubeId);
-      if (!cat) return;
-
-      const catTitle = cat[currentLang] || cat.it;
-      const allItems = CATALOGO_DATA.filter(x => x.categoria === cat.id);
-      const hasOverflow = allItems.length > 6;
-
-      stage.classList.remove("is-visible");
-      stage.innerHTML = "";
-
-      const header = document.createElement("div");
-      header.className = "rc-stage-header";
-      header.innerHTML = `
-        <div class="rc-stage-title-wrap">
-          <span class="rc-tile-badge">${escapeHtml(getCatSigla(cat))} · 90°</span>
-          <h2 class="rc-stage-title">${escapeHtml(catTitle)}</h2>
-        </div>
-      `;
-
-      const closeBtn = document.createElement("button");
-      closeBtn.type = "button";
-      closeBtn.className = "rc-close-btn";
-      closeBtn.textContent = t.closeAll;
-      closeBtn.onclick = () => closeAllCubes();
-      header.appendChild(closeBtn);
-      stage.appendChild(header);
-
-      const scrollWrap = document.createElement("div");
-      scrollWrap.className = "rc-net-scroll";
-
-      const netGrid = document.createElement("div");
-      netGrid.className = "rc-net-90";
-
-      for (let i = 0; i < 6; i++) {
-        const card = document.createElement("div");
-        card.className = "rc-face-card " + slotClasses[i];
-
-        const badgeNum = document.createElement("span");
-        badgeNum.className = "rc-face-num";
-        badgeNum.textContent = String(i + 1);
-        card.appendChild(badgeNum);
-
-        const previewTag = document.createElement("span");
-        previewTag.className = "rc-face-preview-tag";
-        previewTag.textContent = t.previewTag;
-        card.appendChild(previewTag);
-
-        card.addEventListener("animationend", () => {
-          card.classList.add("is-settled");
-        }, { once: true });
-
-        if (i === 5 && hasOverflow) {
-          const moreBtn = document.createElement("button");
-          moreBtn.type = "button";
-          moreBtn.className = "rc-face-more-btn";
-          moreBtn.innerHTML = `<span class="rc-more-plus">+</span><span>${escapeHtml(t.apriElenco)}</span>`;
-          moreBtn.onclick = () => toggleOverflowList();
-          card.appendChild(moreBtn);
-        } else {
-          const entry = allItems[i];
-          const isReady = entry && entry.stato !== "in_lavorazione" && entry.titolo && (entry.titolo.it || entry.titolo.en);
-
-          if (isReady) {
-            const titleText = entry.titolo[currentLang] || entry.titolo.it;
-            const a = document.createElement("a");
-            a.className = "rc-face-link";
-            a.href = "scheda.html?id=" + encodeURIComponent(entry.id);
-
-            if (entry.immagine) {
-              const img = document.createElement("img");
-              img.src = entry.immagine;
-              img.alt = titleText;
-              img.loading = "lazy";
-              a.appendChild(img);
-            }
-
-            const cap = document.createElement("span");
-            cap.className = "rc-face-caption";
-            cap.textContent = titleText;
-            a.appendChild(cap);
-            card.appendChild(a);
-          } else {
-            const work = document.createElement("div");
-            work.className = "rc-face-work";
-            work.textContent = t.inLavorazione;
-            card.appendChild(work);
-          }
-        }
-
-        netGrid.appendChild(card);
-      }
-
-      scrollWrap.appendChild(netGrid);
-      stage.appendChild(scrollWrap);
-
-      const ovPanel = document.createElement("div");
-      ovPanel.className = "rc-overflow-panel";
-      ovPanel.id = "rcOverflowPanel";
-
-      const ovHeading = document.createElement("strong");
-      ovHeading.textContent = catTitle + " — " + t.apriElenco;
-      ovPanel.appendChild(ovHeading);
-
-      const ovGrid = document.createElement("div");
-      ovGrid.className = "rc-overflow-grid";
-
-      allItems.forEach(item => {
-        const titleText = (item.titolo && (item.titolo[currentLang] || item.titolo.it)) || item.id;
-        const link = document.createElement("a");
-        link.className = "rc-overflow-item";
-        link.href = "scheda.html?id=" + encodeURIComponent(item.id);
-        link.textContent = titleText + (item.stato === "in_lavorazione" ? " (" + t.inLavorazione + ")" : "");
-        ovGrid.appendChild(link);
-      });
-
-      ovPanel.appendChild(ovGrid);
-      stage.appendChild(ovPanel);
-
-      requestAnimationFrame(() => {
-        stage.classList.add("is-visible");
-      });
-    }
-
-    function selectCube(catId) {
-      openCubeId = (openCubeId === catId) ? null : catId;
-      syncWorkspaceMode();
-      renderDock();
-      renderUnfoldStage();
-    }
-
-    function closeAllCubes() {
-      openCubeId = null;
-      syncWorkspaceMode();
-      renderDock();
-      renderUnfoldStage();
-    }
-
-    function toggleOverflowList() {
-      const panel = document.getElementById("rcOverflowPanel");
-      if (panel) panel.classList.toggle("open");
-    }
-
-    function toggleViewMode() {
-      forceLiteMobile = !forceLiteMobile;
-      document.body.classList.toggle("mobile-lite", forceLiteMobile);
-      document.body.classList.toggle("force-desktop", !forceLiteMobile);
-      renderDock();
-    }
-
-    function setLang(lang) {
-      currentLang = (lang === "en") ? "en" : "it";
-      document.documentElement.lang = currentLang;
-      document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
-      document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
-      renderDock();
-      renderUnfoldStage();
-    }
-
-    function escapeHtml(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    syncWorkspaceMode();
-    renderDock();
-    renderUnfoldStage();
-  </script>
-</body>
-</html>
+        --cube-size: 48px;
+        --half: 24px;
+        width: 7
