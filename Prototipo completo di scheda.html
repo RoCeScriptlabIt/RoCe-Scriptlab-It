@@ -1,0 +1,1123 @@
+<!--
+================================================================================
+PROGETTO: RoCe ScriptLab It - Prototipo Scheda Prodotto
+FILE: scheda.html
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">RoCe ScriptLab It &mdash; Scheda Routine</title>
+  <meta id="metaDesc" name="description" content="Scheda tecnica della routine RoCe ScriptLab It e modulo contatti.">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --border: #334155;
+      --ok-bg: #064e3b;
+      --ok-text: #a7f3d0;
+      --err-bg: #7f1d1d;
+      --err-text: #fecaca;
+      --warn-bg: #451a03;
+      --warn-text: #fde68a;
+      --warn-border: #d97706;
+      --header-h: 46px;
+      --form-w: 312px;
+      --left-w: 224px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .top-strip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 18, 32, 0.97);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+    }
+
+    .top-strip-inner {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+
+    .rights-line {
+      color: #cbd5e1;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .support-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .support-mail {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .support-mail:hover { text-decoration: underline; }
+
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .lang-btn {
+      padding: 3px 9px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    .page-shell {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: calc(var(--header-h) + 18px) 20px 104px;
+    }
+
+    /* Layout desktop: colonna sinistra in flusso + scheda centrale + colonna destra fissa */
+    .main-grid {
+      margin-right: calc(var(--form-w) + 20px);
+      display: grid;
+      grid-template-columns: var(--left-w) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .cat-sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .home-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: var(--surface-2);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .home-nav-btn:hover {
+      background: var(--accent);
+      color: #062033;
+    }
+
+    .cat-list-heading {
+      margin: 0;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-weight: 700;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cat-script-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cat-script-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.25;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .cat-script-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cat-script-link.is-current {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+    }
+
+    .cat-script-badge {
+      font-size: 0.66rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--warn-bg);
+      color: var(--warn-text);
+      border: 1px solid rgba(217, 119, 6, 0.45);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .sheet-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .product-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .meta-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+    }
+
+    .meta-pill.wip {
+      background: var(--warn-bg);
+      border-color: var(--warn-border);
+      color: var(--warn-text);
+    }
+
+    .product-title {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+      line-height: 1.2;
+    }
+
+    .product-preview {
+      width: 100%;
+      max-height: 290px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      margin: 12px 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-preview img {
+      width: 100%;
+      height: 100%;
+      max-height: 290px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-preview-placeholder {
+      padding: 28px 16px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .product-desc {
+      margin: 0 0 12px;
+      color: #e2e8f0;
+      font-size: 0.93rem;
+    }
+
+    .product-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* Colonna destra fissa per contatti */
+    .form-col {
+      position: fixed;
+      top: calc(var(--header-h) + 18px);
+      right: max(20px, calc((100vw - 1380px) / 2 + 20px));
+      width: var(--form-w);
+      max-height: calc(100vh - var(--header-h) - 32px);
+      overflow-y: auto;
+      z-index: 90;
+    }
+
+    .form-col .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .tab-btn {
+      min-height: 36px;
+      padding: 7px 9px;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover { border-color: var(--accent); }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #062033;
+      border-color: var(--accent);
+    }
+
+    .tab-desc {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .section-title {
+      font-size: 0.69rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 11px 0 6px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title:first-of-type { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .full { grid-column: 1 / -1; }
+    .tab-fields { display: none; }
+    .tab-fields.active { display: grid; grid-template-columns: 1fr; gap: 8px; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: #e2e8f0;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 6px 9px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-family: inherit;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      margin: 2px 0 0 0;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 7px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .checkbox-label {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: #cbd5e1;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 11px;
+      min-height: 38px;
+      width: 100%;
+      padding: 9px 14px;
+      background: var(--accent-dark);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover { background: var(--accent); color: #062033; }
+
+    .feedback {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      display: none;
+      font-size: 0.8rem;
+    }
+
+    .feedback.ok { display: block; background: var(--ok-bg); color: var(--ok-text); }
+    .feedback.err { display: block; background: var(--err-bg); color: var(--err-text); }
+
+    /* Bottoni scorrevoli non invasivi */
+    .floating-nav {
+      position: fixed;
+      right: 16px;
+      bottom: 18px;
+      z-index: 110;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .float-pill-btn {
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(6px);
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      opacity: 0.84;
+      box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
+      transition: opacity 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    .float-pill-btn:hover,
+    .float-pill-btn:focus-visible {
+      opacity: 1;
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Solo su telefono nelle schede */
+    .mobile-only-home {
+      display: none;
+    }
+
+    @media (max-width: 920px) {
+      .top-strip {
+        position: static;
+        height: auto;
+        padding: 8px 0;
+      }
+
+      .top-strip-inner { flex-wrap: wrap; }
+      .rights-line { white-space: normal; }
+      .page-shell { padding-top: 16px; padding-bottom: 92px; }
+
+      .main-grid {
+        margin-right: 0;
+        grid-template-columns: 1fr;
+      }
+
+      .cat-sidebar .home-nav-btn {
+        display: none;
+      }
+
+      .mobile-only-home {
+        display: inline-flex;
+      }
+
+      .form-col {
+        position: static;
+        width: 100%;
+        max-height: none;
+        margin-top: 18px;
+        overflow-y: visible;
+      }
+
+      .floating-nav {
+        right: 12px;
+        bottom: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <span id="topRightsText" class="rights-line">RoCe ScriptLab It &mdash; Cessione &amp; Concessione Diritti d'Autore per Ottimizzazioni Software</span>
+      <div class="support-right">
+        <a class="support-mail" href="mailto:RoCe.ScriptLab.It@gmail.com">Supporto: RoCe.ScriptLab.It@gmail.com</a>
+        <div class="lang-switch" role="group" aria-label="Language selector">
+          <button type="button" id="btnIT" class="lang-btn active" onclick="setLanguage('it')">IT</button>
+          <button type="button" id="btnEN" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-shell">
+    <div class="main-grid">
+      <aside class="cat-sidebar" aria-label="Navigazione categoria">
+        <a href="index.html" id="sidebarHomeBtn" class="home-nav-btn">Home</a>
+        <h2 id="catListTitle" class="cat-list-heading">Altri script della categoria</h2>
+        <ul id="catScriptList" class="cat-script-list"></ul>
+      </aside>
+
+      <main class="sheet-col" aria-label="Dettaglio scheda">
+        <article class="product-card">
+          <span class="brand">RoCe ScriptLab It</span>
+          <div class="product-meta-row">
+            <span id="badgeCategory" class="meta-pill">Categoria</span>
+            <span id="badgeStatus" class="meta-pill">Stato</span>
+          </div>
+          <h1 id="productTitle" class="product-title">Scheda Routine</h1>
+
+          <div id="productPreview" class="product-preview"></div>
+
+          <p id="productDesc" class="product-desc"></p>
+          <p id="productNote" class="product-note"></p>
+        </article>
+      </main>
+    </div>
+
+    <aside id="formCol" class="form-col" aria-label="Modulo contatti">
+      <section class="card">
+        <nav class="tabs" aria-label="Request sections">
+          <button type="button" class="tab-btn active" data-tab="PRIMO_CONTATTO" onclick="selectTab(this)" id="tab_PRIMO_CONTATTO">Primo contatto</button>
+          <button type="button" class="tab-btn" data-tab="ASSISTENZA" onclick="selectTab(this)" id="tab_ASSISTENZA">Assistenza</button>
+          <button type="button" class="tab-btn" data-tab="SVILUPPO_PERSONALIZZATO" onclick="selectTab(this)" id="tab_SVILUPPO_PERSONALIZZATO">Sviluppo personalizzato</button>
+          <button type="button" class="tab-btn" data-tab="LICENZA" onclick="selectTab(this)" id="tab_LICENZA">Licenza</button>
+        </nav>
+
+        <p id="tabDescription" class="tab-desc"></p>
+
+        <form id="roceForm" onsubmit="submitForm(event)">
+          <div id="secTabTitle" class="section-title">Dettagli Categoria</div>
+
+          <div id="fields_PRIMO_CONTATTO" class="tab-fields active">
+            <div class="full">
+              <label id="lblOggetto" for="oggetto_contatto">Oggetto / Argomento *</label>
+              <input type="text" id="oggetto_contatto">
+            </div>
+          </div>
+
+          <div id="fields_ASSISTENZA" class="tab-fields">
+            <div class="full">
+              <label id="lblChiaveLic" for="chiave_licenza">Numero / Chiave Licenza *</label>
+              <input type="text" id="chiave_licenza" placeholder="Es. 2026_11_20_01">
+            </div>
+          </div>
+
+          <div id="fields_SVILUPPO_PERSONALIZZATO" class="tab-fields">
+            <div>
+              <label id="lblAmbito" for="ambito">Ambito / Software Target *</label>
+              <input type="text" id="ambito">
+            </div>
+            <div>
+              <label id="lblDiritti" for="tipo_diritti">Tipologia Diritti d'Autore</label>
+              <select id="tipo_diritti">
+                <option value="Non Esclusivo" id="optNonEscl">Non Esclusivo (Licenza d'uso)</option>
+                <option value="Esclusivo" id="optEscl">Esclusivo (Cessione ad personam)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="fields_LICENZA" class="tab-fields">
+            <div>
+              <label id="lblScriptRichiesto" for="script_richiesto">Nome Script / Routine *</label>
+              <input type="text" id="script_richiesto">
+            </div>
+            <div>
+              <label id="lblNumPostazioni" for="num_postazioni">Numero Postazioni / PC *</label>
+              <input type="number" id="num_postazioni" value="1" min="1">
+            </div>
+          </div>
+
+          <div id="secSenderTitle" class="section-title">Dati dello Scrivente</div>
+          <div class="grid">
+            <div>
+              <label id="lblSoggetto" for="tipo_soggetto">Tipologia *</label>
+              <select id="tipo_soggetto">
+                <option value="Azienda" id="optAzienda" selected>Azienda / Studio Professionale</option>
+                <option value="Privato" id="optPrivato">Privato</option>
+              </select>
+            </div>
+
+            <div>
+              <label id="lblNome" for="nome">Nome / Ragione Sociale *</label>
+              <input type="text" id="nome" required placeholder="Es. Studio Rossi Srl / Mario Rossi">
+            </div>
+
+            <div>
+              <label id="lblEmail" for="email">Email di Riscontro *</label>
+              <input type="email" id="email" required placeholder="nome@studio.it">
+            </div>
+
+            <div class="full">
+              <div class="checkbox-wrap">
+                <input type="checkbox" id="consenso_mailing_list" name="consenso_mailing_list">
+                <label for="consenso_mailing_list" id="lblMailingList" class="checkbox-label">
+                  Desidero iscrivermi alla mailing list di RoCe ScriptLab It (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label id="lblOs" for="os">Ambiente CAD / Sistema Operativo *</label>
+              <input type="text" id="os" required placeholder="Es. AutoCAD 2025 / Windows 11">
+            </div>
+          </div>
+
+          <div id="secMsgTitle" class="section-title">Messaggio</div>
+          <div class="grid">
+            <div class="full">
+              <label id="lblMessaggio" for="messaggio">Descrizione *</label>
+              <textarea id="messaggio" required placeholder="Scrivi qui il tuo messaggio..."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="submit-btn">Invia Richiesta</button>
+          <div id="feedback" class="feedback" role="status"></div>
+        </form>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Bottoni scorrevoli non invasivi -->
+  <div class="floating-nav" aria-label="Scorciatoie navigazione">
+    <a href="index.html" id="floatHomeBtn" class="float-pill-btn mobile-only-home">Home</a>
+    <button type="button" id="floatContactBtn" class="float-pill-btn" onclick="scrollToContact()">Contatti</button>
+  </div>
+
+  <script src="catalogo.js"></script>
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6jJGPAIzVHJ-aogjHg5cUrS2_FXZ7nnTts2Iqr6dh4iLj2iuuOr4Jcl-9Z21Tk_w0ig/exec";
+
+    const FALLBACK_CATEGORIE = [
+      { id: "AUTOCAD", it: "AutoCAD", en: "AutoCAD" },
+      { id: "OFFICE", it: "Office", en: "Office" },
+      { id: "MODELLI_EW", it: "Modelli Excel e Word", en: "Excel & Word Templates" },
+      { id: "ALTRI", it: "Altri programmi", en: "Other Software" }
+    ];
+
+    const FALLBACK_CATALOGO = [
+      {
+        id: "gestione-blocchi",
+        categoria: "AUTOCAD",
+        stato: "pronto",
+        immagine: "img/schede/autocad-blocchi.jpg",
+        titolo: { it: "Gestione Blocchi", en: "Block Manager" },
+        descrizione: {
+          it: "Ispezione, rinomina e pulizia guidata dei blocchi nel disegno CAD con riepilogo strutturato.",
+          en: "Guided inspection, renaming, and cleanup of CAD drawing blocks with structured summary."
+        }
+      },
+      {
+        id: "automazione-cartigli",
+        categoria: "AUTOCAD",
+        stato: "pronto",
+        immagine: "img/schede/autocad-cartigli.jpg",
+        titolo: { it: "Automazione Cartigli", en: "Title Block Automation" },
+        descrizione: {
+          it: "Compilazione e aggiornamento sincronizzato degli attributi nei cartigli di tavola.",
+          en: "Synchronized filling and updating of drawing title block attributes."
+        }
+      },
+      {
+        id: "report-distinte-office",
+        categoria: "OFFICE",
+        stato: "pronto",
+        immagine: "img/schede/office-report.jpg",
+        titolo: { it: "Distinte Office", en: "Office Schedule" },
+        descrizione: {
+          it: "Raccolta e formattazione rapida di distinte e tabelle di controllo in ambiente Office.",
+          en: "Fast collection and formatting of schedules and tracking tables in Office."
+        }
+      },
+      {
+        id: "modello-preventivo-licenze",
+        categoria: "MODELLI_EW",
+        stato: "pronto",
+        immagine: "img/schede/modello-offerta.jpg",
+        titolo: { it: "Modello Offerta", en: "Quote Template" },
+        descrizione: {
+          it: "Struttura standardizzata per schede tecniche e documenti di riepilogo.",
+          en: "Standardized structure for technical sheets and summary documents."
+        }
+      },
+      {
+        id: "rhino-estrazione-curve",
+        categoria: "ALTRI",
+        stato: "pronto",
+        immagine: "img/schede/rhino-curve.jpg",
+        titolo: { it: "Curve Rhino", en: "Rhino Curves" },
+        descrizione: {
+          it: "Estrazione e organizzazione di profili e curve per flussi di modellazione.",
+          en: "Extraction and organization of profiles and curves for modeling workflows."
+        }
+      }
+    ];
+
+    const CATEGORIE_DATA = (typeof CATEGORIE_ROCE !== "undefined" && Array.isArray(CATEGORIE_ROCE) && CATEGORIE_ROCE.length)
+      ? CATEGORIE_ROCE
+      : FALLBACK_CATEGORIE;
+
+    const CATALOGO_DATA = (typeof CATALOGO_ROCE !== "undefined" && Array.isArray(CATALOGO_ROCE) && CATALOGO_ROCE.length)
+      ? CATALOGO_ROCE
+      : FALLBACK_CATALOGO;
+
+    function detectLanguage() {
+      try {
+        const saved = localStorage.getItem("roce_lang");
+        if (saved === "en" || saved === "it") return saved;
+      } catch (e) {}
+      const langParam = new URLSearchParams(window.location.search).get("lang");
+      if (langParam === "en" || langParam === "it") return langParam;
+      return String(navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
+    }
+
+    let currentLang = detectLanguage();
+    let currentTipo = "PRIMO_CONTATTO";
+
+    const i18n = {
+      it: {
+        topRightsText: "RoCe ScriptLab It &mdash; Cessione & Concessione Diritti d'Autore per Ottimizzazioni Software",
+        homeBtn: "Home",
+        contactBtn: "Contatti",
+        catListTitle: "Altri script della categoria",
+        noOtherScripts: "Nessun altro script presente in questa categoria.",
+        statusReady: "Scheda disponibile",
+        statusWip: "In lavorazione",
+        defaultDesc: "Scheda informativa della routine. Per chiarimenti, supporto o informazioni su misura puoi scrivere tramite la maschera di contatto.",
+        defaultNote: "Per qualsiasi domanda tecnica o operativa su questa routine utilizza la maschera di contatto.",
+        noPreview: "Anteprima non ancora caricata per questa scheda.",
+        secTabTitle: "Dettagli Categoria",
+        secSenderTitle: "Dati dello Scrivente",
+        secMsgTitle: "Messaggio",
+        lblOggetto: "Oggetto / Argomento *",
+        lblChiaveLic: "Numero / Chiave Licenza *",
+        lblAmbito: "Ambito / Software Target *",
+        lblDiritti: "Tipologia Diritti d'Autore",
+        optNonEscl: "Non Esclusivo (Licenza d'uso)",
+        optEscl: "Esclusivo (Cessione ad personam)",
+        lblScriptRichiesto: "Nome Script / Routine *",
+        lblNumPostazioni: "Numero Postazioni / PC *",
+        lblSoggetto: "Tipologia *",
+        optAzienda: "Azienda / Studio Professionale",
+        optPrivato: "Privato",
+        lblNome: "Nome / Ragione Sociale *",
+        lblEmail: "Email di Riscontro *",
+        lblOs: "Ambiente CAD / Sistema Operativo *",
+        lblMessaggio: "Descrizione *",
+        lblMailingList: "Desidero iscrivermi alla mailing list di RoCe ScriptLab It (facoltativo; alla data successiva dello scadere dei 90 giorni dalla disiscrizione i dati verranno eliminati dalla banca dati di RoCe ScriptLab It).",
+        btnSubmit: "Invia Richiesta",
+        btnSending: "Invio in corso...",
+        msgMissingUrl: "Configura prima WEB_APP_URL con l'indirizzo /exec della Web App di Google Apps Script.",
+        msgSentOk: "Richiesta inviata correttamente. Riceverai riscontro all'indirizzo indicato.",
+        msgSentErr: "Errore durante l'invio: ",
+        tabs: {
+          PRIMO_CONTATTO: { label: "Primo contatto", desc: "Chiedi informazioni o chiarimenti su questa routine." },
+          ASSISTENZA: { label: "Assistenza", desc: "Indica il numero/chiave licenza per segnalare un comportamento o chiedere supporto." },
+          SVILUPPO_PERSONALIZZATO: { label: "Sviluppo personalizzato", desc: "Descrivi eventuali varianti o automazioni su misura legate a questo ambito." },
+          LICENZA: { label: "Licenza", desc: "Indica la routine e il numero di postazioni per ricevere informazioni." }
+        }
+      },
+      en: {
+        topRightsText: "RoCe ScriptLab It &mdash; Copyright Licensing & Assignment for Software Optimizations",
+        homeBtn: "Home",
+        contactBtn: "Contact",
+        catListTitle: "Other scripts in category",
+        noOtherScripts: "No other scripts in this category.",
+        statusReady: "Available sheet",
+        statusWip: "In lavorazione",
+        defaultDesc: "Informational sheet for this routine. For questions, support, or custom requests, use the contact form.",
+        defaultNote: "For any technical or operational question about this routine, use the contact form.",
+        noPreview: "Preview image not yet available for this sheet.",
+        secTabTitle: "Request Details",
+        secSenderTitle: "Sender Information",
+        secMsgTitle: "Message",
+        lblOggetto: "Subject / Topic *",
+        lblChiaveLic: "License Number / Key *",
+        lblAmbito: "Scope / Target Software *",
+        lblDiritti: "Copyright / Licensing Type",
+        optNonEscl: "Non-Exclusive (Usage License)",
+        optEscl: "Exclusive (Custom Copyright Assignment)",
+        lblScriptRichiesto: "Script / Routine Name *",
+        lblNumPostazioni: "Number of Seats / PCs *",
+        lblSoggetto: "Account Type *",
+        optAzienda: "Company / Engineering Studio",
+        optPrivato: "Private Individual",
+        lblNome: "Name / Company Name *",
+        lblEmail: "Reply Email *",
+        lblOs: "CAD Environment / Operating System *",
+        lblMessaggio: "Description *",
+        lblMailingList: "I would like to subscribe to the RoCe ScriptLab It mailing list (optional; on the day following the expiry of 90 days from unsubscription, your data will be deleted from the RoCe ScriptLab It database).",
+        btnSubmit: "Send Request",
+        btnSending: "Sending...",
+        msgMissingUrl: "Please set WEB_APP_URL to your Google Apps Script /exec Web App URL first.",
+        msgSentOk: "Request sent successfully. We will reply to your email address.",
+        msgSentErr: "Error while sending: ",
+        tabs: {
+          PRIMO_CONTATTO: { label: "First contact", desc: "Ask for general information or details about this routine." },
+          ASSISTENZA: { label: "Support", desc: "Enter your license number/key for technical assistance." },
+          SVILUPPO_PERSONALIZZATO: { label: "Custom development", desc: "Describe tailored adaptations or workflow automations in this area." },
+          LICENZA: { label: "License", desc: "Specify the routine and number of seats for license information." }
+        }
+      }
+    };
+
+    function getActiveItem() {
+      const idParam = new URLSearchParams(window.location.search).get("id");
+      if (idParam) {
+        const found = CATALOGO_DATA.find(item => item.id === idParam);
+        if (found) return found;
+      }
+      return CATALOGO_DATA[0] || FALLBACK_CATALOGO[0];
+    }
+
+    function getCategoryLabel(catId) {
+      const cat = CATEGORIE_DATA.find(c => c.id === catId);
+      return cat ? (cat[currentLang] || cat.it) : (catId || "");
+    }
+
+    function renderSheetAndSidebar() {
+      const dict = i18n[currentLang] || i18n.it;
+      const item = getActiveItem();
+      const titleText = (item.titolo && (item.titolo[currentLang] || item.titolo.it)) || item.id;
+      const catLabel = getCategoryLabel(item.categoria);
+      const isWip = item.stato === "in_lavorazione";
+
+      document.getElementById("pageTitle").innerHTML = "RoCe ScriptLab It &mdash; " + escapeHtml(titleText);
+      document.getElementById("productTitle").textContent = titleText;
+      document.getElementById("badgeCategory").textContent = catLabel;
+
+      const statusBadge = document.getElementById("badgeStatus");
+      statusBadge.textContent = isWip ? dict.statusWip : dict.statusReady;
+      statusBadge.classList.toggle("wip", isWip);
+
+      const previewBox = document.getElementById("productPreview");
+      if (item.immagine) {
+        previewBox.innerHTML = `<img src="${escapeHtml(item.immagine)}" alt="${escapeHtml(titleText)}">`;
+      } else {
+        previewBox.innerHTML = `<div class="product-preview-placeholder">${escapeHtml(dict.noPreview)}</div>`;
+      }
+
+      const descText = (item.descrizione && (item.descrizione[currentLang] || item.descrizione.it)) || dict.defaultDesc;
+      document.getElementById("productDesc").textContent = descText;
+      document.getElementById("productNote").textContent = dict.defaultNote;
+
+      // Elenco altri script della stessa categoria a sinistra
+      document.getElementById("catListTitle").textContent = dict.catListTitle + (catLabel ? " (" + catLabel + ")" : "");
+      const listEl = document.getElementById("catScriptList");
+      listEl.innerHTML = "";
+
+      const peers = CATALOGO_DATA.filter(entry => entry.categoria === item.categoria);
+      if (!peers.length) {
+        const li = document.createElement("li");
+        li.className = "product-note";
+        li.textContent = dict.noOtherScripts;
+        listEl.appendChild(li);
+      } else {
+        peers.forEach(peer => {
+          const peerTitle = (peer.titolo && (peer.titolo[currentLang] || peer.titolo.it)) || peer.id;
+          const isCurrent = peer.id === item.id;
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.className = "cat-script-link" + (isCurrent ? " is-current" : "");
+          a.href = "scheda.html?id=" + encodeURIComponent(peer.id);
+          a.textContent = peerTitle;
+
+          if (peer.stato === "in_lavorazione") {
+            const badge = document.createElement("span");
+            badge.className = "cat-script-badge";
+            badge.textContent = dict.statusWip;
+            a.appendChild(badge);
+          }
+
+          li.appendChild(a);
+          listEl.appendChild(li);
+        });
+      }
+    }
+
+    function updateRequiredAttributes() {
+      document.getElementById("oggetto_contatto").required = (currentTipo === "PRIMO_CONTATTO");
+      document.getElementById("chiave_licenza").required = (currentTipo === "ASSISTENZA");
+      document.getElementById("ambito").required = (currentTipo === "SVILUPPO_PERSONALIZZATO");
+      document.getElementById("script_richiesto").required = (currentTipo === "LICENZA");
+      document.getElementById("num_postazioni").required = (currentTipo === "LICENZA");
+    }
+
+    function applyTranslations() {
+      const dict = i18n[currentLang] || i18n.it;
+      document.documentElement.lang = currentLang;
+      document.getElementById("topRightsText").innerHTML = dict.topRightsText;
+      document.getElementById("sidebarHomeBtn").textContent = dict.homeBtn;
+      document.getElementById("floatHomeBtn").textContent = dict.homeBtn;
+      document.getElementById("floatContactBtn").textContent = dict.contactBtn;
+
+      document.getElementById("secTabTitle").textContent = dict.secTabTitle;
+      document.getElementById("secSenderTitle").textContent = dict.secSenderTitle;
+      document.getElementById("secMsgTitle").textContent = dict.secMsgTitle;
+
+      document.getElementById("lblOggetto").textContent = dict.lblOggetto;
+      document.getElementById("lblChiaveLic").textContent = dict.lblChiaveLic;
+      document.getElementById("lblAmbito").textContent = dict.lblAmbito;
+      document.getElementById("lblDiritti").textContent = dict.lblDiritti;
+      document.getElementById("optNonEscl").textContent = dict.optNonEscl;
+      document.getElementById("optEscl").textContent = dict.optEscl;
+      document.getElementById("lblScriptRichiesto").textContent = dict.lblScriptRichiesto;
+      document.getElementById("lblNumPostazioni").textContent = dict.lblNumPostazioni;
+
+      document.getElementById("lblSoggetto").textContent = dict.lblSoggetto;
+      document.getElementById("optAzienda").textContent = dict.optAzienda;
+      document.getElementById("optPrivato").textContent = dict.optPrivato;
+      document.getElementById("lblNome").textContent = dict.lblNome;
+      document.getElementById("lblEmail").textContent = dict.lblEmail;
+      document.getElementById("lblOs").textContent = dict.lblOs;
+      document.getElementById("lblMessaggio").textContent = dict.lblMessaggio;
+      document.getElementById("lblMailingList").textContent = dict.lblMailingList;
+
+      const btn = document.getElementById("submitBtn");
+      if (!btn.disabled) btn.textContent = dict.btnSubmit;
+
+      Object.keys(dict.tabs).forEach(key => {
+        const tabEl = document.getElementById("tab_" + key);
+        if (tabEl) tabEl.textContent = dict.tabs[key].label;
+      });
+
+      document.getElementById("tabDescription").textContent = dict.tabs[currentTipo].desc;
+      renderSheetAndSidebar();
+    }
+
+    function setLanguage(lang) {
+      currentLang = (lang === "en") ? "en" : "it";
+      document.getElementById("btnIT").classList.toggle("active", currentLang === "it");
+      document.getElementById("btnEN").classList.toggle("active", currentLang === "en");
+      try {
+        localStorage.setItem("roce_lang", currentLang);
+      } catch (e) {}
+      hideFeedback();
+      applyTranslations();
+    }
+
+    function selectTab(btn) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentTipo = btn.dataset.tab;
+
+      document.querySelectorAll(".tab-fields").forEach(el => el.classList.remove("active"));
+      const activeBox = document.getElementById("fields_" + currentTipo);
+      if (activeBox) activeBox.classList.add("active");
+
+      updateRequiredAttributes();
+      hideFeedback();
+      applyTranslations();
+    }
+
+    function scrollToContact() {
+      const formCol = document.getElementById("formCol");
+      if (formCol) {
+        formCol.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function hideFeedback() {
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback";
+      fb.textContent = "";
+    }
+
+    function showFeedback(type, text) {
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback " + type;
+      fb.textContent = text;
+    }
+
+    async function submitForm(event) {
+      event.preventDefault();
+      hideFeedback();
+      const dict = i18n[currentLang] || i18n.it;
+
+      if (!WEB_APP_URL || !WEB_APP_URL.startsWith("https://script.google.com/macros/s/")) {
+        showFeedback("err", dict.msgMissingUrl);
+        return;
+      }
+
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.textContent = dict.btnSending;
+
+      const activeItem = getActiveItem();
+      const payload = {
+        azione: "RICHIESTA_WEB",
+        tipo_richiesta: currentTipo,
+        lingua: currentLang,
+        scheda_id: activeItem ? activeItem.id : "",
+        oggetto_contatto: document.getElementById("oggetto_contatto").value.trim(),
+        chiave_licenza: document.getElementById("chiave_licenza").value.trim(),
+        ambito: document.getElementById("ambito").value.trim(),
+        tipo_diritti: document.getElementById("tipo_diritti").value,
+        script_richiesto: document.getElementById("script_richiesto").value.trim(),
+        num_postazioni: document.getElementById("num_postazioni").value,
+        tipo_soggetto: document.getElementById("tipo_soggetto").value,
+        nome: document.getElementById("nome").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        os: document.getElementById("os").value.trim(),
+        messaggio: document.getElementById("messaggio").value.trim(),
+        consenso_mailing_list: document.getElementById("consenso_mailing_list").checked
+      };
+
+      try {
+        await fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        showFeedback("ok", dict.msgSentOk);
+        document.getElementById("roceForm").reset();
+        document.getElementById("tipo_soggetto").value = "Azienda";
+      } catch (err) {
+        showFeedback("err", dict.msgSentErr + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = dict.btnSubmit;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    updateRequiredAttributes();
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>
